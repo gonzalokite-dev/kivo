@@ -438,32 +438,29 @@ try {
     if (!ok) errores.push(`Móvil y conversión: falla «${nombre}» (${det})`);
   }
 
-  // --- 5b) el formulario del hero en dos pasos ------------------------------
-  console.log('\n  Formulario en dos pasos');
+  // --- 5b) el formulario principal: matrícula opcional -------------------
+  console.log('\n  Formulario principal sin matrícula');
   await cdp.goto(`http://127.0.0.1:${PUERTO}/`);
-  const pasos = await cdp.eval(`(async () => {
+  const antesHero = recibidas.length;
+  const sinMat = await cdp.eval(`(async () => {
     const $ = (id) => document.getElementById(id);
-    const r = { alEmpezar: !$('h-paso1').hidden && $('h-paso2').hidden };
-    $('h-matricula').value = 'XX';
-    $('h-seguir').click();
-    r.errorMatricula = !$('h-err1').hidden && $('h-paso2').hidden;
-    $('h-matricula').value = '1234 MBC';
-    $('h-seguir').click();
-    r.pasa = $('h-paso1').hidden && !$('h-paso2').hidden && document.activeElement.id === 'h-nombre';
-    r.barra = $('h-pasoBar').style.width;
-    $('h-volver').click();
-    r.vuelve = !$('h-paso1').hidden;
-    return r;
+    // El orden: contacto primero, matrícula al final y opcional.
+    const orden = [...$('h-formView').querySelectorAll('input[id^="h-"]:not([type=radio]):not(.trampa)')].map(i => i.id);
+    $('h-nombre').value = 'Ana López'; $('h-tel').value = '611222333'; $('h-email').value = 'ana@ejemplo.es';
+    $('h-matricula').value = ''; $('h-rgpd').checked = true;
+    $('h-formView').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await new Promise(r => setTimeout(r, 300));
+    return { orden, exito: !$('h-doneView').hidden, sinPlaca: $('h-donePlateBox').hidden };
   })()`);
-  const pruebasPasos = [
-    ['empieza en el paso 1', pasos.alEmpezar, ''],
-    ['no avanza con la matrícula mal', pasos.errorMatricula, ''],
-    ['avanza al paso 2 y enfoca el nombre', pasos.pasa, `barra ${pasos.barra}`],
-    ['vuelve al paso 1', pasos.vuelve, ''],
+  const envioHero = recibidas[antesHero];
+  const pruebasSinMat = [
+    ['contacto primero, matrícula al final', sinMat.orden[0] === 'h-nombre' && sinMat.orden.indexOf('h-matricula') > sinMat.orden.indexOf('h-email'), sinMat.orden.join(' > ')],
+    ['se envía sin matrícula', sinMat.exito && envioHero && envioHero.matricula === '' && envioHero.email === 'ana@ejemplo.es', envioHero ? 'llega a /api/solicitud' : 'no llega'],
+    ['sin matrícula no la enseña en el «gracias»', sinMat.sinPlaca, ''],
   ];
-  for (const [nombre, ok, det] of pruebasPasos) {
+  for (const [nombre, ok, det] of pruebasSinMat) {
     console.log(`    ${ok ? 'ok ' : 'NO '} ${nombre.padEnd(44)} ${det}`);
-    if (!ok) errores.push(`Dos pasos: falla «${nombre}»`);
+    if (!ok) errores.push(`Formulario principal: falla «${nombre}»`);
   }
 
   // --- 6) la versión en inglés ---------------------------------------------

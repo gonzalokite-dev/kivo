@@ -51,10 +51,6 @@ const TEXTOS = {
     docs: 'Ver qué documentos hacen falta',
     docsHref: '/documentacion-traspaso-coche/',
     otra: 'Enviar otra solicitud',
-    paso1: 'Paso 1 de 2 · Tu vehículo',
-    paso2: 'Paso 2 de 2 · Cómo te escribimos',
-    seguir: 'Continuar',
-    volver: 'Cambiar la matrícula',
   },
   en: {
     titulo: 'Request your transfer',
@@ -87,10 +83,6 @@ const TEXTOS = {
     docs: 'See which documents you need',
     docsHref: '/en/#documents',
     otra: 'Send another request',
-    paso1: 'Step 1 of 2 · Your vehicle',
-    paso2: 'Step 2 of 2 · How we reach you',
-    seguir: 'Continue',
-    volver: 'Change the number plate',
   },
 };
 const T = TEXTOS[lang];
@@ -105,8 +97,6 @@ const titulo = Astro.props.titulo ?? T.titulo;
   data-enviar={T.enviar}
   data-enviando={T.enviando}
   data-fallo={T.fallo}
-  data-paso1={T.paso1}
-  data-paso2={T.paso2}
 >
   <form id="h-formView" class="lead" novalidate>
     <div class="calc-head">
@@ -114,13 +104,8 @@ const titulo = Astro.props.titulo ?? T.titulo;
       <span class="badge">{T.badge}</span>
     </div>
 
-    {/* Progreso: dos pasos cortos convierten mejor que un formulario largo. */}
-    <div class="pasos-form" aria-hidden="true">
-      <span id="h-pasoTxt">{T.paso1}</span>
-      <div class="pasos-bar"><i id="h-pasoBar"></i></div>
-    </div>
-
-    <div id="h-paso1" class="paso-form">
+    {/* Primero lo imprescindible para contactar; la matrícula es opcional
+        (se pide después por email si no la ponen). Menos fricción. */}
     <div class="field">
       <span class="flbl" id="h-rolLbl">{T.rol}</span>
       <div class="seg seg2" role="radiogroup" aria-labelledby="h-rolLbl">
@@ -131,29 +116,6 @@ const titulo = Astro.props.titulo ?? T.titulo;
       </div>
     </div>
 
-    <div class="field">
-      <label for="h-matricula">{T.matricula}</label>
-      <input
-        id="h-matricula"
-        name="matricula"
-        autocomplete="off"
-        autocapitalize="characters"
-        spellcheck="false"
-        enterkeyhint="next"
-        maxlength="10"
-        placeholder="1234 MBC"
-        style="text-transform:uppercase;letter-spacing:2px;font-weight:700"
-      />
-    </div>
-
-    <p class="err" id="h-err1" hidden></p>
-    <button class="btn btn-primary btn-block" type="button" id="h-seguir">
-      {T.seguir} <Icono name="flecha" size={18} sw={2.5} class="arrow" />
-    </button>
-    </div>
-
-    <div id="h-paso2" class="paso-form" hidden>
-    <button class="link-btn paso-volver" type="button" id="h-volver">← {T.volver}</button>
     <div class="field">
       <label for="h-nombre">{T.nombre}</label>
       <input id="h-nombre" name="nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder={T.nombrePh} />
@@ -171,6 +133,21 @@ const titulo = Astro.props.titulo ?? T.titulo;
       </div>
     </div>
     <span class="hint">{T.ayuda}</span>
+
+    <div class="field">
+      <label for="h-matricula">{T.matricula} <span class="opt">{T.opcional}</span></label>
+      <input
+        id="h-matricula"
+        name="matricula"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        enterkeyhint="next"
+        maxlength="10"
+        placeholder="1234 MBC"
+        style="text-transform:uppercase;letter-spacing:2px;font-weight:700"
+      />
+    </div>
 
     <!-- El comentario es opcional: plegado para que el formulario no se alargue. -->
     <details class="mas" id="h-mas">
@@ -192,7 +169,6 @@ const titulo = Astro.props.titulo ?? T.titulo;
     <p class="err" id="h-leadErr" hidden></p>
 
     <button class="btn btn-primary btn-block" type="submit" id="h-send">{T.enviar}</button>
-    </div>
 
     <div class="trust">
       <span>{T.trust[0]}</span>
@@ -205,7 +181,7 @@ const titulo = Astro.props.titulo ?? T.titulo;
 
   <div id="h-doneView" class="fin" hidden>
     <span class="chip-dgt"><Icono name="check" size={14} sw={3.2} />{T.recibida}</span>
-    <span class="plate" style="font-size:18px"><i></i><span id="h-donePlate">1234 MBC</span></span>
+    <span class="plate" id="h-donePlateBox" style="font-size:18px"><i></i><span id="h-donePlate">1234 MBC</span></span>
     <h2 style="font-size:24px">{T.gracias} <span id="h-doneName"></span></h2>
     <p style="color:var(--tinta-suave)">
       {T.finTxt1}<b>{T.finTxtB}</b>{T.finTxt2}
@@ -240,68 +216,19 @@ const titulo = Astro.props.titulo ?? T.titulo;
 
     $('h-restart').addEventListener('click', () => {
       ($('h-formView') as HTMLFormElement).reset();
-      irPaso(1);
       show('form');
     });
 
     limpiarAlEscribir($('h-formView'), $('h-leadErr'));
-    limpiarAlEscribir($('h-formView'), $('h-err1'));
     formatearMatricula($('h-matricula') as HTMLInputElement);
-
-    // --- dos pasos: vehículo y contacto ------------------------------------
-    let paso = 1;
-    function irPaso(n: 1 | 2) {
-      paso = n;
-      $('h-paso1').hidden = n !== 1;
-      $('h-paso2').hidden = n !== 2;
-      $('h-pasoTxt').textContent = n === 1 ? raiz!.dataset.paso1! : raiz!.dataset.paso2!;
-      $('h-pasoBar').style.width = n === 1 ? '50%' : '100%';
-    }
-    /** Valida solo la matrícula. Devuelve true si se puede seguir. */
-    function pasoUnoOk() {
-      const { err, campo } = validarLead('h-', lang);
-      const malMatricula = campo === 'h-matricula';
-      const box = $('h-err1');
-      box.hidden = !malMatricula;
-      box.textContent = malMatricula ? err : '';
-      marcarError($('h-formView'), malMatricula ? campo : '', box);
-      return !malMatricula;
-    }
-    $('h-seguir').addEventListener('click', () => {
-      if (!pasoUnoOk()) return;
-      irPaso(2);
-      ($('h-nombre') as HTMLInputElement).focus();
-    });
-    $('h-volver').addEventListener('click', () => {
-      irPaso(1);
-      ($('h-matricula') as HTMLInputElement).focus();
-    });
 
     $('h-formView').addEventListener('submit', async (e) => {
       e.preventDefault();
       const val = (id: string) => ($(id) as HTMLInputElement).value;
 
-      // Intro en el paso 1 = «Continuar». Si el navegador ya ha rellenado el
-      // paso 2 (autocompletar), se sigue con la validación completa.
-      if (paso === 1) {
-        if (!pasoUnoOk()) return;
-        irPaso(2);
-        if (!val('h-nombre') && !val('h-tel') && !val('h-email')) {
-          ($('h-nombre') as HTMLInputElement).focus();
-          return;
-        }
-      }
-
-      const { datos: lead, err, campo } = validarLead('h-', lang);
+      const { datos: lead, err, campo } = validarLead('h-', lang, { matriculaOpcional: true });
       const { matricula: m, nombre: n, telefono: t, email: em } = lead;
       const rol = (document.querySelector('input[name="h-rol"]:checked') as HTMLInputElement).value;
-
-      // Un error en la matrícula se enseña en el paso 1, donde está el campo.
-      if (campo === 'h-matricula') {
-        irPaso(1);
-        pasoUnoOk();
-        return;
-      }
 
       const box = $('h-leadErr');
       box.hidden = !err;
@@ -350,6 +277,7 @@ const titulo = Astro.props.titulo ?? T.titulo;
         );
       }
 
+      $('h-donePlateBox').hidden = !m;
       $('h-donePlate').textContent = m.replace(/^(\d{4})\s?([A-Z]{3})$/, '$1 $2');
       $('h-doneName').textContent = n.split(' ')[0];
       show('done');

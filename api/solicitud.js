@@ -136,7 +136,7 @@ function fichaLead(d) {
     {
       titulo: 'Vehículo',
       filas: [
-        ['Matrícula', d.matricula],
+        ['Matrícula', d.matricula || 'Sin indicar (pedírsela al cliente)'],
         ['Tipo', VEHICULOS[d.vehiculo] ?? ''],
         ['Comunidad del comprador', d.comunidad],
         ['ITP estimado', d.itp_estimado],
@@ -163,11 +163,12 @@ function fichaLead(d) {
     .join(' · ');
 
   return {
-    asunto: `Nueva solicitud de traspaso · ${d.matricula} · ${d.nombre} (${quien})`,
+    asunto: `Nueva solicitud de traspaso · ${d.matricula || 'sin matrícula'} · ${d.nombre} (${quien})`,
     resumen,
     secciones,
-    siguiente:
-      'Escribir al cliente en menos de 24 h para confirmar el precio exacto con la matrícula y pedirle las fotos de los documentos.',
+    siguiente: d.matricula
+      ? 'Escribir al cliente en menos de 24 h para confirmar el precio exacto con la matrícula y pedirle las fotos de los documentos.'
+      : 'Escribir al cliente en menos de 24 h para pedirle la matrícula, confirmar el precio exacto y pedirle las fotos de los documentos.',
   };
 }
 
@@ -192,7 +193,7 @@ function emailEquipo(d) {
   <div style="font-family:Arial,sans-serif;color:#0e1630;max-width:600px">
     <div style="background:#3d5afe;color:#fff;padding:16px 20px;border-radius:12px 12px 0 0">
       <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85">Nueva solicitud de traspaso</div>
-      <div style="font-size:20px;font-weight:bold;margin-top:4px">${esc(d.matricula)} · ${esc(d.nombre)}</div>
+      <div style="font-size:20px;font-weight:bold;margin-top:4px">${d.matricula ? esc(d.matricula) + ' · ' : ''}${esc(d.nombre)}</div>
     </div>
     <div style="border:1px solid #e3e7f2;border-top:0;border-radius:0 0 12px 12px;padding:6px 8px 14px">
       <table style="border-collapse:collapse;width:100%">${bloques}</table>
@@ -224,10 +225,10 @@ function emailCliente(d) {
 
   const T = en
     ? {
-        asunto: `We've received your request · ${d.matricula}`,
+        asunto: d.matricula ? `We've received your request · ${d.matricula}` : `We've received your request`,
         parrafos: [
           `Hi ${nombre},`,
-          `Thank you for choosing Kivo. We've received your request for the transfer of vehicle <b>${esc(d.matricula)}</b>, and the Kivo team is already working on it.`,
+          `Thank you for choosing Kivo. We've received your request for the transfer of ${d.matricula ? `vehicle <b>${esc(d.matricula)}</b>` : 'your vehicle'}, and the Kivo team is already working on it.`,
           `Within 24 hours we'll email you to confirm the exact price with the number plate and explain the next steps. There's nothing to pay until then.`,
           `In the meantime you can get these photos ready: ID (DNI, NIE or TIE) of buyer and seller, both sides; the registration certificate (<i>permiso de circulación</i>); and the technical sheet (<i>ficha técnica</i>) with a valid ITV.`,
           `If you want to add anything, just reply to this email${wa}.`,
@@ -236,10 +237,10 @@ function emailCliente(d) {
         pie: `${RAZON_SOCIAL} · ${DOMICILIO_TEXTO}. You're receiving this email because you sent a request at ${SITE_URL.replace('https://', '')}.`,
       }
     : {
-        asunto: `Hemos recibido tu solicitud · ${d.matricula}`,
+        asunto: d.matricula ? `Hemos recibido tu solicitud · ${d.matricula}` : 'Hemos recibido tu solicitud',
         parrafos: [
           `Hola ${nombre}:`,
-          `Gracias por confiar en Kivo. Hemos recibido tu solicitud para el traspaso del vehículo <b>${esc(d.matricula)}</b> y el equipo de Kivo ya está gestionando tu petición.`,
+          `Gracias por confiar en Kivo. Hemos recibido tu solicitud para el traspaso ${d.matricula ? `del vehículo <b>${esc(d.matricula)}</b>` : 'de tu vehículo'} y el equipo de Kivo ya está gestionando tu petición.`,
           `En menos de 24 horas te escribiremos para confirmarte el precio exacto con la matrícula y explicarte los siguientes pasos. No tienes que pagar nada hasta entonces.`,
           `Mientras, puedes ir preparando las fotos: DNI o NIE de comprador y vendedor (por las dos caras), el permiso de circulación y la ficha técnica con la ITV en vigor.`,
           `Si quieres añadir algo, responde a este email${wa}.`,
@@ -301,7 +302,9 @@ export default async function handler(req, res) {
     pagina: campo(body.pagina, 200),
   };
 
-  if (!d.matricula || d.nombre.length < 2 || !d.telefono || !RE_EMAIL.test(d.email)) {
+  // La matrícula es opcional en el formulario principal: si falta, se pide
+  // después por email.
+  if (d.nombre.length < 2 || !d.telefono || !RE_EMAIL.test(d.email)) {
     return res.status(400).json({ ok: false, error: 'Faltan datos de la solicitud' });
   }
 

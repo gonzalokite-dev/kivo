@@ -38,7 +38,10 @@ const MENSAJES = {
 /** Lee y valida. Devuelve el primer error y el id del campo que lo tiene. */
 export function validarLead(
   p: string,
-  lang: 'es' | 'en' = 'es'
+  lang: 'es' | 'en' = 'es',
+  /** En el formulario principal la matrícula es opcional: si la escriben,
+   *  se comprueba el formato; si no, no se pide. */
+  opciones: { matriculaOpcional?: boolean } = {}
 ): { datos: Lead; err: string; campo: string } {
   const M = MENSAJES[lang];
   const val = (id: string) => (document.getElementById(p + id) as HTMLInputElement).value;
@@ -49,28 +52,34 @@ export function validarLead(
     email: val('email').trim(),
   };
 
-  let err = '';
-  let campo = '';
-  if (!RE_MATRICULA.test(datos.matricula)) {
-    err = M.matricula;
-    campo = 'matricula';
-  } else if (datos.nombre.length < 2) {
-    err = M.nombre;
-    campo = 'nombre';
-  } else if (
-    !RE_MOVIL.test(datos.telefono) &&
-    !(lang === 'en' && RE_MOVIL_INT.test(datos.telefono))
-  ) {
-    err = M.tel;
-    campo = 'tel';
-  } else if (!RE_EMAIL.test(datos.email)) {
-    err = M.email;
-    campo = 'email';
-  } else if (!(document.getElementById(p + 'rgpd') as HTMLInputElement).checked) {
-    err = M.rgpd;
-    campo = 'rgpd';
-  }
-  return { datos, err, campo: campo && p + campo };
+  // Cada comprobación: [campo, ¿está mal?, mensaje]. Se avisa del primer
+  // error en el orden en que se ven los campos en el formulario.
+  const matriculaMal = opciones.matriculaOpcional
+    ? datos.matricula !== '' && !RE_MATRICULA.test(datos.matricula)
+    : !RE_MATRICULA.test(datos.matricula);
+  const nombreMal = datos.nombre.length < 2;
+  const telMal =
+    !RE_MOVIL.test(datos.telefono) && !(lang === 'en' && RE_MOVIL_INT.test(datos.telefono));
+  const emailMal = !RE_EMAIL.test(datos.email);
+  const rgpdMal = !(document.getElementById(p + 'rgpd') as HTMLInputElement).checked;
+
+  const comprobaciones: [string, boolean, string][] = opciones.matriculaOpcional
+    ? [
+        ['nombre', nombreMal, M.nombre],
+        ['tel', telMal, M.tel],
+        ['email', emailMal, M.email],
+        ['matricula', matriculaMal, M.matricula],
+        ['rgpd', rgpdMal, M.rgpd],
+      ]
+    : [
+        ['matricula', matriculaMal, M.matricula],
+        ['nombre', nombreMal, M.nombre],
+        ['tel', telMal, M.tel],
+        ['email', emailMal, M.email],
+        ['rgpd', rgpdMal, M.rgpd],
+      ];
+  const fallo = comprobaciones.find(([, mal]) => mal);
+  return { datos, err: fallo ? fallo[2] : '', campo: fallo ? p + fallo[0] : '' };
 }
 
 /**
