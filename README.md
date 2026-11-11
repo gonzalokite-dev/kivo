@@ -125,9 +125,9 @@ código. Para verlos:
 grep -rn "VALIDAR" src/ public/ site.config.mjs
 ```
 
-Hoy son seis cosas: el usuario de redes, la colegiación de los
-gestores, la garantía de devolución, el rango de precios de las gestorías
-físicas, la imagen para compartir (hay que exportarla a PNG) y la revisión de las
+Hoy son cinco cosas: el usuario de redes, la colegiación de los
+gestores, las dos garantías (devolución y cobertura frente a errores), la
+imagen para compartir (hay que exportarla a PNG) y la revisión de las
 tres páginas legales, ya redactadas con los datos de la sociedad pero pendientes
 de revisar y de los datos del Registro Mercantil.
 

@@ -1,9 +1,7 @@
 ---
-/** Kivo, gestoría de barrio o hacerlo tú.
- * En escritorio es una tabla; por debajo de 640 px cada fila se convierte en
- * una tarjeta con Kivo primero, para que no haya que desplazar en horizontal
- * para ver nuestra columna (ver `.cmp` en global.css).
- * VALIDAR: el rango de 100–160 € de la gestoría física. */
+/** Kivo o hacerlo tú: tabla de tres columnas (concepto, por tu cuenta, Kivo).
+ * En escritorio es una tabla estrecha y centrada; por debajo de 640 px cada
+ * fila se convierte en una tarjeta con Kivo primero (ver `.cmp` en global.css). */
 interface Props {
   /** Solo la tabla y la nota, para páginas que ya tienen su propio H2.
    *  El .wrap lo pone siempre la página. */
@@ -11,13 +9,13 @@ interface Props {
 }
 const { soloTabla = false } = Astro.props;
 
-const COLS = ['Por tu cuenta en la DGT', 'Gestoría de barrio', 'Kivo, online'];
-const FILAS: [string, string, string, string][] = [
-  ['Honorarios', '0 €', '100–160 €', '89 €, IVA incluido'],
-  ['Desplazamientos', 'Jefatura de Tráfico con cita, o trámite online', 'Una o dos visitas', 'Ninguno'],
-  ['Certificado digital', 'Lo necesitáis los dos para hacerlo online', 'No', 'No'],
-  ['Cálculo del ITP', 'Lo haces tú con las tablas de Hacienda', 'Incluido', 'Incluido y visible antes de pagar'],
-  ['Seguimiento', 'Consultas tú en la DGT', 'Llamando a la oficina', 'Te escribimos por email en cada paso'],
+const COLS = ['Por tu cuenta en la DGT', 'Kivo, online'];
+const FILAS: [string, string, string][] = [
+  ['Honorarios', '0 €', '89 €, IVA incluido'],
+  ['Desplazamientos', 'Jefatura de Tráfico con cita, o trámite online', 'Ninguno'],
+  ['Certificado digital', 'Lo necesitáis los dos para hacerlo online', 'No hace falta'],
+  ['Cálculo del ITP', 'Lo haces tú con las tablas de Hacienda', 'Incluido y visible antes de pagar'],
+  ['Seguimiento', 'Consultas tú en la DGT', 'Te escribimos por email en cada paso'],
 ];
 ---
 
@@ -25,39 +23,54 @@ const FILAS: [string, string, string, string][] = [
   !soloTabla && (
     <div class="sec-head">
       <span class="eyebrow">Compara</span>
-      <h2>Transferir un coche: tus tres opciones</h2>
+      <h2>Hacerlo tú o con Kivo</h2>
       <p>Hacerlo tú sale más barato si los dos tenéis certificado digital y tiempo.</p>
     </div>
   )
 }
-<div class="tbl cmp">
-  <table>
-    <thead>
-      <tr>
-        <th scope="col"><span class="visually-hidden">Concepto</span></th>
-        <th scope="col">{COLS[0]}</th>
-        <th scope="col">{COLS[1]}</th>
-        <th scope="col" class="us">{COLS[2]}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        FILAS.map(([concepto, tu, gestoria, kivo]) => (
-          <tr>
-            <th scope="row">{concepto}</th>
-            <td data-col={COLS[0]}>{tu}</td>
-            <td data-col={COLS[1]}>{gestoria}</td>
-            <td data-col="Kivo" class="us">{kivo}</td>
-          </tr>
-        ))
-      }
-    </tbody>
-  </table>
+<div class="cmp-caja">
+  <div class="tbl cmp">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span class="visually-hidden">Concepto</span></th>
+          <th scope="col">{COLS[0]}</th>
+          <th scope="col" class="us">{COLS[1]}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          FILAS.map(([concepto, tu, kivo]) => (
+            <tr>
+              <th scope="row">{concepto}</th>
+              <td data-col={COLS[0]}>{tu}</td>
+              <td data-col="Kivo" class="us">{kivo}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="src">La tasa de la DGT y el impuesto son los mismos en las dos opciones.</p>
 </div>
-<p class="src">
-  {/* VALIDAR: el rango de 100-160 euros de la gestoria de barrio. Hay que
-      sustituirlo por una fuente citable o por precios que hayamos
-      comprobado nosotros, y poner aqui la fuente y la fecha. */}
-  Rango orientativo de honorarios de una gestoría física en 2026. La tasa de la DGT y el
-  impuesto son iguales en las tres opciones.
-</p>
+
+<style>
+  .cmp-caja {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+  .cmp-caja .src {
+    text-align: center;
+  }
+  /* En escritorio, tabla estrecha con columnas proporcionadas. En móvil
+     manda el diseño de tarjetas de global.css. */
+  @media (min-width: 641px) {
+    .cmp-caja :global(table) {
+      min-width: 0;
+      table-layout: fixed;
+    }
+    .cmp-caja :global(th:first-child) {
+      width: 26%;
+    }
+  }
+</style>
