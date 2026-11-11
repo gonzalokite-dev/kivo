@@ -1,5 +1,21 @@
 ---
+/**
+ * Aviso legal (LSSI, art. 10). Borrador redactado con los datos de la
+ * sociedad: lo tiene que revisar el responsable legal antes de quitarlo de
+ * DRAFT_PATHS.
+ */
 import LegalLayout from '../layouts/LegalLayout.astro';
+import {
+  SITE_URL,
+  RAZON_SOCIAL,
+  CIF,
+  DOMICILIO_TEXTO,
+  EMAIL,
+  TELEFONO,
+  REGISTRO_MERCANTIL,
+} from '../../site.config.mjs';
+
+const dominio = SITE_URL.replace(/^https?:\/\//, '');
 ---
 
 <LegalLayout
@@ -10,29 +26,144 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   etiqueta="Aviso legal"
 >
   <h2>Titular del sitio web</h2>
-  <p>Pendiente de redactar: razón social, CIF, domicilio social, datos de inscripción registral y email de contacto.</p>
+  <p>
+    En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de servicios de la sociedad de
+    la información y de comercio electrónico (LSSI), te informamos de que el sitio web{' '}
+    <b>{dominio}</b> y la marca comercial <b>Kivo</b> son titularidad de:
+  </p>
+  <ul>
+    <li><b>Razón social:</b> {RAZON_SOCIAL}</li>
+    <li><b>CIF:</b> {CIF}</li>
+    <li><b>Domicilio social:</b> {DOMICILIO_TEXTO}</li>
+    {EMAIL && <li><b>Email:</b> <a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>}
+    {TELEFONO && <li><b>Teléfono:</b> {TELEFONO}</li>}
+    <li>
+      <b>Datos registrales:</b>{' '}
+      {
+        REGISTRO_MERCANTIL ?? (
+          // VALIDAR: tomo, folio, hoja e inscripción en el Registro Mercantil.
+          <mark>[pendiente: inscripción en el Registro Mercantil, tomo, folio y hoja]</mark>
+        )
+      }
+    </li>
+  </ul>
+  <p>En este texto, «Kivo», «nosotros» o «la empresa» se refieren a {RAZON_SOCIAL}.</p>
 
   <h2>Objeto y ámbito de aplicación</h2>
-  <p>Pendiente de redactar: qué servicio se presta a través de la web y a quién se dirige.</p>
+  <p>
+    Kivo es un servicio online de gestión de transferencias de vehículos en España. A través de esta
+    web puedes calcular una estimación del coste de la transferencia de un coche, una moto o un
+    ciclomotor (honorarios, tasa de la DGT e impuesto de transmisiones patrimoniales) y enviarnos una
+    solicitud para que gestionemos el cambio de titular.
+  </p>
+  <p>
+    Este aviso legal regula el acceso y el uso de la web. Al navegar por ella aceptas estas
+    condiciones. La contratación del servicio de transferencia se rige, además, por las condiciones
+    que te enviamos antes de empezar y por el mandato que firmáis comprador y vendedor.
+  </p>
 
   <h2>Condiciones de uso</h2>
-  <p>Pendiente de redactar: obligaciones del usuario, usos prohibidos y veracidad de los datos aportados.</p>
+  <p>Al usar la web te comprometes a:</p>
+  <ul>
+    <li>Facilitar datos verdaderos, exactos y actualizados, y solo los tuyos o los de personas que te hayan autorizado.</li>
+    <li>No usar la web con fines ilícitos, fraudulentos o que puedan dañar a Kivo o a terceros.</li>
+    <li>No intentar acceder a zonas restringidas ni interferir en el funcionamiento técnico de la web.</li>
+  </ul>
+  <p>
+    El servicio está dirigido a personas mayores de edad. Si nos envías una solicitud en nombre de
+    una empresa, declaras que tienes facultades para hacerlo.
+  </p>
 
   <h2>El servicio de transferencia</h2>
-  <p>Pendiente de redactar: naturaleza del mandato, qué incluye y qué no incluye los honorarios, condiciones de la garantía de devolución y colegiación del gestor administrativo que presenta los trámites.</p>
+  <p>
+    Enviar el formulario de solicitud no tiene coste ni te obliga a contratar. En menos de 24 horas
+    te escribe una persona del equipo para confirmar el precio exacto con la matrícula y explicarte
+    cómo seguir.
+  </p>
+  <ul>
+    <li>
+      <b>Honorarios:</b> 89 € (IVA incluido) por transferencia, iguales para cualquier coche o moto.
+      Incluyen el informe del vehículo, el contrato de compraventa, el mandato, la liquidación del
+      impuesto y la presentación del cambio de titular ante la DGT.
+    </li>
+    <li>
+      <b>Tasas e impuestos:</b> la tasa de la DGT y el impuesto de transmisiones patrimoniales (ITP)
+      no forman parte de los honorarios. Los pagamos en tu nombre por el importe exacto, sin recargo,
+      y te enviamos el justificante de cada pago.
+    </li>
+    <li>
+      <b>Mandato:</b> la transferencia se presenta ante la DGT y la administración tributaria en
+      virtud del mandato que firmáis comprador y vendedor, a través de un gestor administrativo
+      colegiado.
+      {/* VALIDAR: nombre del gestor o gestoría colegiada, colegio profesional y número de colegiado (LSSI, art. 10.1.f). */}
+    </li>
+    <li>
+      <b>Garantía:</b> antes de pagar nada en tu nombre revisamos el informe del vehículo en la DGT. Si
+      una carga, un embargo u otra limitación impide hacer la transferencia, te lo comunicamos y te
+      devolvemos los 89 € de honorarios.
+    </li>
+    <li>
+      <b>Plazos:</b> presentamos la transferencia en cuanto tenemos los documentos y las firmas. El
+      tiempo que tarde después depende de la DGT y de la administración tributaria.
+    </li>
+  </ul>
 
   <h2>Propiedad intelectual e industrial</h2>
-  <p>Pendiente de redactar: titularidad de la marca, el logotipo, los textos y las ilustraciones.</p>
+  <p>
+    La marca y el logotipo de Kivo, los textos, las ilustraciones, el diseño de la web y su código
+    son titularidad de {RAZON_SOCIAL} o se usan con autorización de sus titulares. No puedes
+    reproducirlos, distribuirlos ni transformarlos sin nuestro permiso por escrito, salvo para tu uso
+    personal y privado.
+  </p>
+  <p>
+    Las ilustraciones de documentos (DNI, permiso de circulación y ficha técnica) son ejemplos
+    ficticios, marcados como tales, y no contienen datos de personas reales.
+  </p>
 
   <h2>Exclusión de responsabilidad</h2>
-  <p>Pendiente de redactar: carácter orientativo de la calculadora, disponibilidad del sitio y plazos que dependen de la DGT o de la Agencia Tributaria.</p>
+  <ul>
+    <li>
+      <b>Calculadora:</b> el total que muestra es una estimación orientativa. Hacienda calcula el
+      impuesto sobre el mayor entre el precio del contrato y el valor de tablas del vehículo, por lo
+      que la cifra definitiva te la confirmamos con la matrícula antes de pagar el impuesto.
+    </li>
+    <li>
+      <b>Información de las guías:</b> procuramos que sea exacta y esté actualizada a la fecha que
+      indica cada guía, pero es informativa y no sustituye al asesoramiento sobre un caso concreto.
+      Las normas, tasas y tipos pueden cambiar.
+    </li>
+    <li>
+      <b>Disponibilidad:</b> intentamos que la web esté siempre disponible y sin errores, pero no
+      podemos garantizarlo. Podemos interrumpirla por mantenimiento o por causas ajenas a nosotros.
+    </li>
+    <li>
+      <b>Organismos públicos:</b> no respondemos de los retrasos o decisiones de la DGT, la Agencia
+      Tributaria o las administraciones tributarias autonómicas.
+    </li>
+  </ul>
 
   <h2>Enlaces a sitios de terceros</h2>
-  <p>Pendiente de redactar: tratamiento de los enlaces a la DGT, el BOE y la Agencia Tributaria.</p>
+  <p>
+    En las guías enlazamos a fuentes oficiales (la DGT, el BOE, la Agencia Tributaria, el Consejo
+    General de Gestores Administrativos o el RACE) para que puedas comprobar los datos. No
+    controlamos esas webs ni respondemos de su contenido o de su disponibilidad.
+  </p>
 
   <h2>Protección de datos</h2>
-  <p>Pendiente de redactar, con remisión a la <a href="/privacidad/">política de privacidad</a>.</p>
+  <p>
+    Tratamos los datos personales que nos facilitas según lo explicado en la <a
+      href="/privacidad/">política de privacidad</a
+    >. La web no instala cookies; los detalles están en la <a href="/cookies/">política de cookies</a>.
+  </p>
 
   <h2>Legislación aplicable y jurisdicción</h2>
-  <p>Pendiente de redactar.</p>
+  <p>
+    Este aviso legal se rige por la legislación española. Si eres consumidor, para cualquier
+    controversia serán competentes los juzgados y tribunales de tu domicilio. En los demás casos,
+    las partes se someten a los juzgados y tribunales de Palma (Illes Balears).
+  </p>
+  <p>
+    Si eres consumidor, también puedes acudir a las juntas arbitrales de consumo o a otros sistemas
+    de resolución extrajudicial de conflictos.
+  </p>
 </LegalLayout>

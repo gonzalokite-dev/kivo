@@ -1,5 +1,12 @@
 ---
+/**
+ * Política de cookies (LSSI, art. 22.2). Hoy la web no instala cookies ni
+ * usa almacenamiento local: no hay analítica, ni píxeles, ni fuentes o
+ * scripts de terceros. Si eso cambia, hay que actualizar la tabla y añadir
+ * un banner de consentimiento previo antes de cargar nada.
+ */
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { RAZON_SOCIAL } from '../../site.config.mjs';
 ---
 
 <LegalLayout
@@ -10,20 +17,51 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   etiqueta="Cookies"
 >
   <h2>Qué es una cookie</h2>
-  <p>Pendiente de redactar.</p>
+  <p>
+    Una cookie es un pequeño archivo que una web guarda en tu navegador cuando la visitas. Sirve, por
+    ejemplo, para recordar tus preferencias, mantener una sesión abierta o medir cuántas personas
+    visitan una página. Hay tecnologías parecidas, como el almacenamiento local del navegador, a las
+    que se aplican las mismas reglas.
+  </p>
 
   <h2>Qué cookies usa esta web</h2>
-  <p>Pendiente de redactar. A día de hoy la web no carga ninguna librería de terceros ni ninguna herramienta de analítica, así que no instala cookies propias ni de terceros. Si se añade analítica o píxeles de publicidad, hay que actualizar esta tabla y poner un banner de consentimiento previo.</p>
+  <p>
+    <b>Ninguna.</b> La web de Kivo, cuyo titular es {RAZON_SOCIAL}, no instala cookies propias ni de
+    terceros y no guarda información en el almacenamiento local de tu navegador:
+  </p>
+  <ul>
+    <li>No usamos herramientas de analítica ni de medición de audiencia.</li>
+    <li>No usamos píxeles ni cookies de publicidad o de redes sociales.</li>
+    <li>Las fuentes tipográficas se sirven desde nuestro propio servidor, no desde servicios externos.</li>
+    <li>
+      La calculadora y el formulario funcionan en tu navegador sin guardar nada: los datos del
+      formulario solo se envían cuando pulsas «Enviar solicitud».
+    </li>
+  </ul>
+  <p>Por eso no te mostramos ningún aviso ni te pedimos consentimiento para cookies.</p>
 
-  <h2>Cookies técnicas necesarias</h2>
-  <p>Pendiente de redactar.</p>
-
-  <h2>Cookies de analítica</h2>
-  <p>Pendiente de redactar.</p>
+  <h2>Enlaces a otras webs</h2>
+  <p>
+    Si sigues un enlace a otra web (por ejemplo, a la DGT, al BOE o a WhatsApp), esa web puede
+    instalar sus propias cookies según su política, que no controlamos. Te recomendamos revisarla.
+  </p>
 
   <h2>Cómo configurar o desactivar las cookies</h2>
-  <p>Pendiente de redactar: instrucciones por navegador.</p>
+  <p>
+    Aunque esta web no las use, puedes permitir, bloquear o borrar las cookies de cualquier web desde
+    la configuración de tu navegador:
+  </p>
+  <ul>
+    <li><b>Chrome:</b> Configuración › Privacidad y seguridad › Cookies de terceros.</li>
+    <li><b>Safari:</b> Ajustes › Privacidad (en iPhone, Ajustes › Safari).</li>
+    <li><b>Firefox:</b> Ajustes › Privacidad y seguridad › Cookies y datos del sitio.</li>
+    <li><b>Edge:</b> Configuración › Cookies y permisos del sitio.</li>
+  </ul>
 
   <h2>Cambios en esta política</h2>
-  <p>Pendiente de redactar.</p>
+  <p>
+    Si en el futuro incorporamos cookies que no sean técnicas (por ejemplo, de analítica), lo
+    indicaremos aquí con una tabla de cada cookie, su finalidad y su duración, y te pediremos el
+    consentimiento antes de instalarlas.
+  </p>
 </LegalLayout>

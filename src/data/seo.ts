@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_NAME, TELEFONO, EMAIL, CIF, DOMICILIO } from '../../site.config.mjs';
+import { SITE_URL, SITE_NAME, TELEFONO, EMAIL, CIF, DOMICILIO, RAZON_SOCIAL } from '../../site.config.mjs';
 
 export { SITE_URL, SITE_NAME };
 
@@ -31,7 +31,8 @@ export const ORG = {
  * JSON-LD de Organization para la portada.
  *
  * Doble tipo Organization + ProfessionalService: es gestoría, no solo marca.
- * `telephone`, `email`, `taxID` y `address` solo se añaden si están rellenos
+ * `legalName`, `taxID` y `address` salen de site.config.mjs. `telephone` y
+ * `email` solo se añaden si están rellenos
  * en site.config.mjs — mientras sean VALIDAR (null), no se inventan.
  * Fundada por Benavides (benavidesasociados.com).
  */
@@ -49,8 +50,16 @@ export const organizationLd = () => ({
   founder: { '@type': 'Organization', name: 'Benavides', url: 'https://benavidesasociados.com' },
   ...(TELEFONO ? { telephone: TELEFONO } : {}),
   ...(EMAIL ? { email: EMAIL } : {}),
+  legalName: RAZON_SOCIAL,
   ...(CIF ? { taxID: CIF } : {}),
-  ...(DOMICILIO ? { address: { '@type': 'PostalAddress', streetAddress: DOMICILIO, addressCountry: 'ES' } } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: DOMICILIO.calle,
+    postalCode: DOMICILIO.cp,
+    addressLocality: DOMICILIO.localidad,
+    addressRegion: DOMICILIO.provincia,
+    addressCountry: 'ES',
+  },
 });
 
 /** JSON-LD de Service con la oferta de 89 € para la portada. */

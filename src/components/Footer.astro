@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
+import { RAZON_SOCIAL, CIF, DOMICILIO_TEXTO } from '../../site.config.mjs';
 ---
 
 <footer>
@@ -35,8 +36,8 @@ import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
 
     <div class="foot-legal">
       <p>
-        Kivo · Traspaso de coche online, sin ir a Tráfico.
-        <!-- VALIDAR: razón social, CIF, domicilio y número de colegiado del gestor administrativo. -->
+        Kivo es una marca de {RAZON_SOCIAL} · CIF {CIF} · {DOMICILIO_TEXTO}.
+        <!-- VALIDAR: número de colegiado del gestor administrativo que presenta los expedientes. -->
       </p>
       <p>
         Las tasas e impuestos se pagan íntegros a la DGT y a Hacienda, sin recargo.

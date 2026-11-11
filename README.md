@@ -40,7 +40,7 @@ node scripts/check-lighthouse.mjs /vender-coche/        # rutas concretas
 
 | Dónde | Qué |
 | --- | --- |
-| `site.config.mjs` | Dominio para canónicas, Open Graph, sitemap y robots. **Pendiente de comprar.** |
+| `site.config.mjs` | Dominio (`gestoriakivo.com`) para canónicas, Open Graph, sitemap y robots. |
 | `.env` | `PUBLIC_FORM_ENDPOINT`, el endpoint del formulario (Formspree o similar). Copia `.env.example`. |
 | `src/data/tarifas.ts` | Honorarios, tasas de la DGT y el ITP de las 19 comunidades. |
 | `src/data/nav.ts` | Menú, pie y las fuentes oficiales a las que enlazamos. |
@@ -100,10 +100,11 @@ código. Para verlos:
 grep -rn "VALIDAR" src/ public/ site.config.mjs
 ```
 
-Hoy son siete cosas: el dominio, el usuario de redes, la colegiación de los
+Hoy son seis cosas: el usuario de redes, la colegiación de los
 gestores, la garantía de devolución, el rango de precios de las gestorías
-físicas, la imagen para compartir (hay que exportarla a PNG) y las tres páginas
-legales, que están montadas pero sin redactar.
+físicas, la imagen para compartir (hay que exportarla a PNG) y la revisión de las
+tres páginas legales, ya redactadas con los datos de la sociedad pero pendientes
+de revisar y de los datos del Registro Mercantil.
 
 Las páginas legales van en `noindex` y fuera del sitemap mientras sean borrador.
 La lista está en `DRAFT_PATHS`, en `site.config.mjs`: cuando se publiquen, se

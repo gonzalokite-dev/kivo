@@ -1,5 +1,12 @@
 ---
+/**
+ * Política de privacidad (RGPD, arts. 13 y 14, y LOPDGDD). Borrador
+ * redactado con los datos de la sociedad y con lo que la web recoge de
+ * verdad: el formulario de solicitud y, después, los documentos del
+ * expediente. Lo tiene que revisar el responsable legal.
+ */
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { RAZON_SOCIAL, CIF, DOMICILIO_TEXTO, EMAIL } from '../../site.config.mjs';
 ---
 
 <LegalLayout
@@ -9,27 +16,155 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   h1="Política de privacidad"
   etiqueta="Privacidad"
 >
+  <p>
+    Aquí te explicamos qué datos personales tratamos cuando usas Kivo, para qué, durante cuánto
+    tiempo y qué derechos tienes, según el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018
+    de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD).
+  </p>
+
   <h2>Responsable del tratamiento</h2>
-  <p>Pendiente de redactar: identidad, CIF, domicilio, email de contacto y, si procede, delegado de protección de datos.</p>
+  <ul>
+    <li><b>Responsable:</b> {RAZON_SOCIAL}, que presta el servicio con la marca Kivo</li>
+    <li><b>CIF:</b> {CIF}</li>
+    <li><b>Domicilio:</b> {DOMICILIO_TEXTO}</li>
+    {EMAIL && <li><b>Email de contacto:</b> <a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>}
+  </ul>
+  <p>
+    No hemos designado un delegado de protección de datos porque no estamos obligados a ello. Para
+    cualquier cuestión sobre tus datos puedes escribirnos a las direcciones de este apartado.
+    {/* VALIDAR: confirmar que no se requiere DPO (art. 37 RGPD y art. 34 LOPDGDD). */}
+  </p>
 
   <h2>Qué datos tratamos</h2>
-  <p>Pendiente de redactar: datos del formulario de solicitud (rol, matrícula, nombre, móvil, email y comentario) y documentos que envían comprador y vendedor (DNI o NIE, permiso de circulación y ficha técnica).</p>
+  <ul>
+    <li>
+      <b>Al enviar el formulario de solicitud:</b> si compras o vendes, la matrícula del vehículo, tu
+      nombre, tu móvil, tu email, el comentario que quieras añadir y, si usas la calculadora, la
+      estimación (tipo de vehículo, comunidad, impuesto y total).
+    </li>
+    <li>
+      <b>Si contratas la transferencia:</b> las imágenes del DNI, NIE, TIE o pasaporte de comprador
+      y vendedor, el permiso de circulación y la ficha técnica del vehículo, los datos del contrato
+      de compraventa y del mandato, la firma electrónica y los justificantes de pago de la tasa y del
+      impuesto.
+    </li>
+    <li>
+      <b>Si nos escribes por email o WhatsApp:</b> los datos que incluyas en el mensaje.
+    </li>
+  </ul>
+  <p>
+    Si nos facilitas datos de otra persona (por ejemplo, del comprador o del vendedor), declaras que
+    la has informado y que está de acuerdo. No tratamos categorías especiales de datos.
+  </p>
 
   <h2>Para qué los tratamos y con qué base jurídica</h2>
-  <p>Pendiente de redactar: ejecución del mandato, cumplimiento de obligaciones legales ante la DGT y la Agencia Tributaria, y consentimiento para el contacto comercial si lo hubiera.</p>
+  <ul>
+    <li>
+      <b>Atender tu solicitud y darte el precio exacto.</b> Base jurídica: la aplicación de medidas
+      precontractuales a petición tuya (art. 6.1.b RGPD).
+    </li>
+    <li>
+      <b>Gestionar la transferencia</b>: redactar el contrato y el mandato, liquidar el impuesto,
+      pagar la tasa, presentar el cambio de titular y avisarte de cada paso. Base jurídica: la
+      ejecución del contrato (art. 6.1.b RGPD).
+    </li>
+    <li>
+      <b>Cumplir obligaciones legales</b> ante la DGT, la administración tributaria y en materia
+      contable y fiscal. Base jurídica: obligación legal (art. 6.1.c RGPD).
+    </li>
+    <li>
+      <b>Atender reclamaciones y defender nuestros derechos.</b> Base jurídica: interés legítimo
+      (art. 6.1.f RGPD).
+    </li>
+  </ul>
+  <p>
+    No te enviamos comunicaciones comerciales ni elaboramos perfiles. Si algún día quisiéramos
+    hacerlo, te pediríamos antes el consentimiento.
+  </p>
 
   <h2>Cuánto tiempo los conservamos</h2>
-  <p>Pendiente de redactar: plazos de conservación del expediente y de los documentos de identidad.</p>
+  <ul>
+    <li>
+      <b>Solicitudes que no llegan a contratarse:</b> 12 meses desde el último contacto, por si
+      retomas la transferencia. Después se suprimen.
+    </li>
+    <li>
+      <b>Expedientes de transferencia:</b> mientras dure el servicio y, después, durante los plazos
+      de prescripción de las obligaciones legales y de las posibles responsabilidades (en general,
+      hasta 6 años por la normativa mercantil y 4 años por la tributaria).
+    </li>
+    <li>
+      <b>Imágenes de los documentos de identidad:</b> solo el tiempo necesario para presentar la
+      transferencia y resolver incidencias; luego se conservan bloqueadas en el expediente durante
+      los plazos anteriores.
+    </li>
+  </ul>
+  {/* VALIDAR: plazos de conservación definitivos según la política interna de la sociedad. */}
 
   <h2>A quién se los comunicamos</h2>
-  <p>Pendiente de redactar: DGT, administración tributaria autonómica, gestor administrativo colegiado y proveedores que actúan como encargados del tratamiento (alojamiento, email, firma electrónica y recepción del formulario).</p>
+  <ul>
+    <li>
+      <b>Administraciones públicas</b>, cuando es necesario para la transferencia: la Dirección
+      General de Tráfico y la administración tributaria de la comunidad autónoma del comprador.
+    </li>
+    <li>
+      <b>El gestor administrativo colegiado</b> que presenta el expediente en virtud del mandato.
+    </li>
+    <li>
+      <b>Proveedores que nos prestan servicios</b> (alojamiento web, recepción del formulario,
+      correo electrónico y firma electrónica), que tratan los datos por cuenta nuestra, con un
+      contrato de encargo del tratamiento y sin usarlos para fines propios.
+    </li>
+  </ul>
+  <p>No vendemos ni cedemos tus datos a terceros con fines comerciales.</p>
 
   <h2>Transferencias internacionales</h2>
-  <p>Pendiente de redactar: si algún proveedor está fuera del Espacio Económico Europeo y con qué garantías.</p>
+  <p>
+    Algunos proveedores pueden estar fuera del Espacio Económico Europeo. En ese caso, solo
+    trabajamos con los que ofrecen garantías adecuadas: una decisión de adecuación de la Comisión
+    Europea (como el Marco de Privacidad de Datos UE-EE. UU.) o cláusulas contractuales tipo.
+  </p>
+  {/* VALIDAR: lista de proveedores reales (hosting, formulario, email, firma) y su ubicación. */}
 
   <h2>Tus derechos</h2>
-  <p>Pendiente de redactar: acceso, rectificación, supresión, limitación, oposición y portabilidad; cómo ejercerlos y reclamación ante la Agencia Española de Protección de Datos.</p>
+  <p>Puedes ejercer en cualquier momento, sin coste, los derechos de:</p>
+  <ul>
+    <li><b>Acceso</b> a tus datos.</li>
+    <li><b>Rectificación</b> de los datos inexactos.</li>
+    <li><b>Supresión</b> cuando ya no sean necesarios.</li>
+    <li><b>Limitación</b> del tratamiento.</li>
+    <li><b>Oposición</b> al tratamiento basado en nuestro interés legítimo.</li>
+    <li><b>Portabilidad</b> de los datos que nos has facilitado.</li>
+  </ul>
+  <p>
+    Para ejercerlos, escríbenos {
+      EMAIL ? (
+        <>
+          a <a href={`mailto:${EMAIL}`}>{EMAIL}</a> o
+        </>
+      ) : null
+    } por correo postal a {RAZON_SOCIAL}, {DOMICILIO_TEXTO}, indicando qué derecho quieres ejercer
+    y adjuntando una copia de un documento que te identifique. Te responderemos en el plazo de un
+    mes.
+  </p>
+  <p>
+    Si crees que no hemos tratado bien tus datos, puedes presentar una reclamación ante la <a
+      href="https://www.aepd.es"
+      target="_blank"
+      rel="noopener">Agencia Española de Protección de Datos</a
+    >.
+  </p>
 
   <h2>Medidas de seguridad</h2>
-  <p>Pendiente de redactar.</p>
+  <p>
+    Aplicamos medidas técnicas y organizativas adecuadas al riesgo para proteger tus datos: la web
+    funciona siempre con conexión cifrada (HTTPS), el acceso a los expedientes está limitado a las
+    personas que los gestionan y los documentos solo se usan para tu transferencia.
+  </p>
+
+  <h2>Cambios en esta política</h2>
+  <p>
+    Si cambiamos esta política, publicaremos aquí la nueva versión con su fecha. Si el cambio es
+    importante, te avisaremos por email si tienes una transferencia en curso.
+  </p>
 </LegalLayout>
