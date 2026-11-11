@@ -29,6 +29,7 @@ import Opiniones from '../components/Opiniones.astro';
 import TuGestor from '../components/TuGestor.astro';
 import Compromisos from '../components/Compromisos.astro';
 import { VALORACION, WHATSAPP, TELEFONO } from '../../site.config.mjs';
+import { waLink } from '../data/whatsapp';
 import { organizationLd, serviceLd, faqLd } from '../data/seo';
 import FaqLado from '../components/FaqLado.astro';
 
@@ -115,7 +116,7 @@ const preguntas: Pregunta[] = [
 const val = VALORACION as { nota: number; total?: number; fuente?: string; url?: string } | null;
 // Segundo canal junto al formulario: «o escríbenos por WhatsApp».
 const contacto = WHATSAPP
-  ? { href: `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, quiero hacer el traspaso de mi coche con Kivo.')}`, label: 'escríbenos por WhatsApp' }
+  ? { href: waLink()!, label: 'escríbenos por WhatsApp' }
   : TELEFONO
     ? { href: `tel:${TELEFONO}`, label: `llámanos al ${TELEFONO}` }
     : null;

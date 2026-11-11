@@ -3,7 +3,7 @@
  * Cierre de página: bloque asfalto con el icono, el titular y una sola
  * acción. Sobre asfalto, el botón principal es amarillo (brandbook, cap. 10).
  */
-import { WHATSAPP } from '../../site.config.mjs';
+import { waLink } from '../data/whatsapp';
 
 interface Props {
   titulo?: string;
@@ -12,6 +12,7 @@ interface Props {
   etiqueta?: string;
   /** Texto del enlace a WhatsApp (solo sale si hay número). */
   alt?: string;
+  lang?: 'es' | 'en';
 }
 const {
   titulo = 'Haz tu transferencia sin ir a Tráfico',
@@ -19,8 +20,9 @@ const {
   cta = '/#calculadora',
   etiqueta = 'Calcular mi precio',
   alt = 'o escríbenos por WhatsApp',
+  lang = 'es',
 } = Astro.props;
-const wa = WHATSAPP ? `https://wa.me/${WHATSAPP}` : null;
+const wa = waLink(lang);
 ---
 
 <section class="final">

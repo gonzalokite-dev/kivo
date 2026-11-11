@@ -24,7 +24,14 @@ export const SITE_NAME = 'Kivo';
 // teléfono/email en el JSON-LD de Organization, sin tocar más código.
 export const TELEFONO = null;
 export const EMAIL = null;
-export const WHATSAPP = null;
+export const WHATSAPP = '34663482301'; // +34 663 48 23 01
+
+// Mensaje que aparece ya escrito al abrir WhatsApp desde la web. El usuario
+// lo puede cambiar antes de enviarlo. Uno por idioma (/en/ usa el inglés).
+export const WHATSAPP_MENSAJE = {
+  es: 'Hola, quiero hacer el traspaso de mi coche con Kivo.',
+  en: "Hi, I'd like to transfer a car with Kivo.",
+};
 
 // VALIDAR: horario de atención. Si hay algún canal (teléfono, email o
 // WhatsApp), sale en el pie: «Te atendemos de lunes a viernes de 9 a 18 h por…».

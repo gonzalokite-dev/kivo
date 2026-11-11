@@ -5,7 +5,8 @@
  * de servicio online tipo Taxfix). Los canales extra (WhatsApp, teléfono,
  * email) solo salen si están en site.config.mjs.
  */
-import { WHATSAPP, TELEFONO, EMAIL } from '../../site.config.mjs';
+import { TELEFONO, EMAIL } from '../../site.config.mjs';
+import { waLink } from '../data/whatsapp';
 import Icono from './Icono.astro';
 
 interface Props {
@@ -13,9 +14,7 @@ interface Props {
   etiqueta?: string;
 }
 const { cta = '/#solicitud', etiqueta = 'Pedir mi traspaso' } = Astro.props;
-const wa = WHATSAPP
-  ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, tengo una duda sobre el traspaso de mi coche.')}`
-  : null;
+const wa = waLink('es', 'Hola, tengo una duda sobre el traspaso de mi coche con Kivo.');
 ---
 
 <div class="faq-lado">

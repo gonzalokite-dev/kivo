@@ -1,6 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import Sellos from './Sellos.astro';
+import { waLink } from '../data/whatsapp';
 import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
 import {
   RAZON_SOCIAL,
@@ -8,7 +9,6 @@ import {
   DOMICILIO_TEXTO,
   SOCIAL,
   HORARIO,
-  WHATSAPP,
   TELEFONO,
   EMAIL,
 } from '../../site.config.mjs';
@@ -36,7 +36,8 @@ const redes = Object.entries((SOCIAL ?? {}) as Record<string, string | null>).fi
 ) as [string, string][];
 
 const canales: { label: string; href: string }[] = [];
-if (WHATSAPP) canales.push({ label: 'WhatsApp', href: `https://wa.me/${WHATSAPP}` });
+const wa = waLink(lang);
+if (wa) canales.push({ label: 'WhatsApp', href: wa });
 if (EMAIL) canales.push({ label: 'email', href: `mailto:${EMAIL}` });
 if (TELEFONO) canales.push({ label: en ? 'phone' : 'teléfono', href: `tel:${TELEFONO}` });
 ---
