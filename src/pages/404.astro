@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { COMERCIALES } from '../data/nav';
+
+const title = 'Página no encontrada | Kivo';
+const description =
+  'Esta página no existe o ha cambiado de sitio. Te dejamos los enlaces a la calculadora de precio, los documentos de la transferencia y las guías de Kivo.';
+---
+
+<BaseLayout {title} {description} path="/404/" noindex>
+  <section class="nf">
+    <div class="wrap">
+      <span class="eyebrow">Error 404</span>
+      <h1>Esta página se ha salido de la carretera</h1>
+      <p>
+        El enlace no existe o ha cambiado de sitio. Desde aquí llegas a todo lo demás en un clic.
+      </p>
+      <a class="btn btn-primary" href="/#calculadora">Calcular mi precio</a>
+      <div class="fl">
+        {COMERCIALES.map((e) => <a href={e.href}>{e.label}</a>)}
+        <a href="/guias/">Guías</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

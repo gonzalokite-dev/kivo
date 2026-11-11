@@ -1,0 +1,26 @@
+---
+/**
+ * Migas de pan: Inicio › Guías › Título.
+ * El JSON-LD de BreadcrumbList lo monta la página con `breadcrumbLd()`.
+ */
+import type { Miga } from '../data/seo';
+
+interface Props {
+  migas: Miga[];
+}
+const { migas } = Astro.props;
+---
+
+<nav class="crumbs" aria-label="Migas de pan">
+  <ol>
+    {
+      migas.map((m, i) =>
+        i === migas.length - 1 ? (
+          <li><span aria-current="page">{m.label}</span></li>
+        ) : (
+          <li><a href={m.href}>{m.label}</a></li>
+        )
+      )
+    }
+  </ol>
+</nav>

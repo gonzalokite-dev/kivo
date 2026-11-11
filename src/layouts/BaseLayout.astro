@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+// Los dos ficheros latinos que usa toda la web: se precargan para que el
+// texto no espere a que el navegador acabe de leer la hoja de estilos.
+import jakartaLatin from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import dmSansLatin from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarraFija from '../components/BarraFija.astro';
+import BotonWhatsapp from '../components/BotonWhatsapp.astro';
+import { abs, OG_IMAGE, OG_IMAGE_W, OG_IMAGE_H, SITE_NAME } from '../data/seo';
+
+interface Props {
+  /** Etiqueta <title>. */
+  title: string;
+  /** Meta description, de 140 a 155 caracteres. */
+  description: string;
+  /** Ruta de esta página, en minúscula y con barra final. */
+  path: string;
+  /** Borradores y 404: fuera del índice de Google. */
+  noindex?: boolean;
+  /** Datos estructurados ya listos para serializar. */
+  jsonld?: unknown[];
+  /** Destino del botón principal del menú y de la barra fija. */
+  cta?: string;
+  /** Destino, importe y etiqueta de la barra fija. */
+  sticky?: { cta?: string; importe?: string; etiqueta?: string; texto?: string };
+}
+
+const {
+  title,
+  description,
+  path,
+  noindex = false,
+  jsonld = [],
+  cta = '/#calculadora',
+  sticky = {},
+} = Astro.props;
+
+const canonical = abs(path);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+
+    <link rel="preload" href={jakartaLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSansLatin} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="theme-color" content="#3D5AFE" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={abs(OG_IMAGE)} />
+    <meta property="og:image:width" content={String(OG_IMAGE_W)} />
+    <meta property="og:image:height" content={String(OG_IMAGE_H)} />
+    <meta property="og:image:alt" content="Kivo · Transferencia de coche online, sin ir a Tráfico" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={abs(OG_IMAGE)} />
+
+    {
+      jsonld.map((d) => (
+        <script type="application/ld+json" set:html={JSON.stringify(d)} is:inline />
+      ))
+    }
+  </head>
+
+  <body>
+    <a class="skip" href="#inicio">Saltar al contenido</a>
+    <Header actual={path} cta={cta} />
+    <main id="inicio">
+      <slot />
+    </main>
+    <Footer />
+    <BarraFija cta={cta} {...sticky} />
+    <BotonWhatsapp />
+  </body>
+</html>

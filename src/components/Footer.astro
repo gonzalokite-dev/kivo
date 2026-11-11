@@ -1,0 +1,46 @@
+---
+import Logo from './Logo.astro';
+import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
+---
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="/" aria-label="Kivo, inicio"><Logo /></a>
+        <p>Traspaso de coches y motos online en toda España. 89 € de honorarios.</p>
+        <p class="foot-equipo">
+          Fundada por <a href="https://benavidesasociados.com" target="_blank" rel="noopener">Benavides</a>.
+          El traspaso lo presenta un gestor administrativo colegiado.
+          <!-- VALIDAR: confirmar el nombre del gestor o gestoría colegiada que presenta los expedientes. -->
+        </p>
+      </div>
+
+      <nav aria-label="Servicio">
+        <b>Traspasos</b>
+        {COMERCIALES.map((e) => <a href={e.href}>{e.label}</a>)}
+      </nav>
+
+      <nav aria-label="Guías">
+        <b>Guías</b>
+        <a href="/guias/">Todas las guías</a>
+        {GUIAS_PIE.map((e) => <a href={e.href}>{e.label}</a>)}
+      </nav>
+
+      <nav aria-label="Legal">
+        <b>Legal</b>
+        {LEGALES.map((e) => <a href={e.href}>{e.label}</a>)}
+      </nav>
+    </div>
+
+    <div class="foot-legal">
+      <p>
+        Kivo · Traspaso de coche online, sin ir a Tráfico.
+        <!-- VALIDAR: razón social, CIF, domicilio y número de colegiado del gestor administrativo. -->
+      </p>
+      <p>
+        Las tasas e impuestos se pagan íntegros a la DGT y a Hacienda, sin recargo.
+      </p>
+    </div>
+  </div>
+</footer>

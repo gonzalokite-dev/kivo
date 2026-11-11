@@ -1,0 +1,56 @@
+---
+/**
+ * Ilustraciones de los documentos: DNI por las dos caras, con los datos del
+ * espécimen oficial (99999999R / CARMEN ESPAÑOLA ESPAÑOLA) y la marca
+ * «EJEMPLO» encima. Son SVG en línea, como en la referencia, para que no haya
+ * ninguna petición de imagen.
+ *
+ * Para usar fotos reales: sustituye cada <svg> de .shot por <img src alt>.
+ */
+---
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="g-dni" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9ebf2"/><stop offset=".5" stop-color="#f2e6ee"/><stop offset="1" stop-color="#e1eedd"/></linearGradient>
+        <linearGradient id="g-chip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d991"/><stop offset="1" stop-color="#c39536"/></linearGradient>
+        <clipPath id="c-card"><rect width="856" height="540" rx="34"/></clipPath>
+        <path id="wv" d="M-20 0C120-42 260 42 430 0S720-42 880 0" fill="none" stroke-width="1.6"/>
+        <pattern id="p-qr" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#1b2a52"/><rect x="12" y="12" width="12" height="12" fill="#1b2a52"/><rect x="12" width="6" height="6" fill="#1b2a52"/><rect y="18" width="6" height="6" fill="#1b2a52"/></pattern>
+        <radialGradient id="g-glare"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        <filter id="f-blur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="7"/></filter>
+      </defs>
+      <symbol id="dni-a" viewBox="0 0 856 540">
+        <g clip-path="url(#c-card)" font-family="'DM Sans',Arial,sans-serif">
+          <rect width="856" height="540" fill="url(#g-dni)"/>
+          <g stroke="#93bfcd" opacity=".55"><use href="#wv" y="150"/><use href="#wv" y="190"/><use href="#wv" y="230"/><use href="#wv" y="270"/><use href="#wv" y="310"/><use href="#wv" y="350"/><use href="#wv" y="390"/><use href="#wv" y="430"/><use href="#wv" y="470"/></g>
+          <rect width="856" height="96" fill="#1b2a52" opacity=".07"/>
+          <text x="40" y="66" font-size="44" font-weight="800" fill="#1b2a52" letter-spacing="2">ESPAÑA</text>
+          <text x="262" y="62" font-size="22" font-weight="700" fill="#1b2a52" letter-spacing="1.5">DOCUMENTO NACIONAL DE IDENTIDAD</text>
+          <text x="40" y="128" font-size="24" font-weight="800" fill="#1b2a52" letter-spacing="1">DNI 99999999R</text>
+          <rect x="40" y="146" width="212" height="272" rx="10" fill="#d3dae5"/>
+          <circle cx="146" cy="248" r="50" fill="#a6b1c3"/>
+          <path d="M62 418C66 330 226 330 230 418Z" fill="#a6b1c3"/>
+          <path d="M52 478c18-34 36-34 46 0s28 8 44-22 26 22 52 4 22-6 40-12" fill="none" stroke="#22305a" stroke-width="3" stroke-linecap="round"/>
+          <g fill="#4f6283" font-size="15" font-weight="700" letter-spacing="1"><text x="290" y="160">APELLIDOS</text><text x="290" y="262">NOMBRE</text><text x="290" y="330">SEXO</text><text x="390" y="330">NACIONALIDAD</text><text x="290" y="398">FECHA DE NACIMIENTO</text><text x="580" y="398">VALIDEZ</text></g>
+          <g fill="#0e1630" font-size="27" font-weight="700"><text x="290" y="192">ESPAÑOLA</text><text x="290" y="224">ESPAÑOLA</text><text x="290" y="294">CARMEN</text><text x="290" y="362">F</text><text x="390" y="362">ESP</text><text x="290" y="430">01 01 1980</text><text x="580" y="430">01 01 2031</text></g>
+          <rect x="660" y="140" width="112" height="86" rx="14" fill="url(#g-chip)"/>
+          <path d="M660 183h112M716 140v86M688 140v30M744 196v30" stroke="#a37a22" stroke-width="2.5" fill="none"/>
+          <rect x="740" y="440" width="72" height="88" rx="6" fill="#a6b1c3" opacity=".35"/>
+          <text x="428" y="330" transform="rotate(-16 428 300)" text-anchor="middle" font-size="128" font-weight="800" fill="#c62f22" opacity=".16" letter-spacing="8">EJEMPLO</text>
+        </g>
+      </symbol>
+      <symbol id="dni-b" viewBox="0 0 856 540">
+        <g clip-path="url(#c-card)" font-family="'DM Sans',Arial,sans-serif">
+          <rect width="856" height="540" fill="url(#g-dni)"/>
+          <g stroke="#93bfcd" opacity=".55"><use href="#wv" y="60"/><use href="#wv" y="100"/><use href="#wv" y="140"/><use href="#wv" y="180"/><use href="#wv" y="220"/><use href="#wv" y="260"/><use href="#wv" y="300"/></g>
+          <g fill="#4f6283" font-size="15" font-weight="700" letter-spacing="1"><text x="40" y="58">DOMICILIO</text><text x="40" y="196">LUGAR DE NACIMIENTO</text><text x="40" y="270">HIJA DE</text></g>
+          <g fill="#0e1630" font-size="25" font-weight="700"><text x="40" y="90">C. ARTÍCULO 2</text><text x="40" y="120">MADRID</text><text x="40" y="150">MADRID</text><text x="40" y="228">MADRID</text><text x="40" y="302">JUAN / CARMEN</text></g>
+          <rect x="626" y="36" width="190" height="190" rx="8" fill="#fff"/>
+          <rect x="640" y="50" width="162" height="162" fill="url(#p-qr)"/>
+          <g fill="#fff" stroke="#1b2a52" stroke-width="10"><rect x="645" y="55" width="44" height="44"/><rect x="753" y="55" width="44" height="44"/><rect x="645" y="163" width="44" height="44"/></g>
+          <rect x="0" y="352" width="856" height="188" fill="#fff" opacity=".62"/>
+          <g font-family="'DM Mono','Courier New',monospace" font-size="33" font-weight="500" fill="#0e1630" letter-spacing="4.6"><text x="40" y="408">IDESPBAA000589599999999R&lt;&lt;&lt;&lt;&lt;&lt;</text><text x="40" y="454">8001014F3101015ESP&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;6</text><text x="40" y="500">ESPANOLA&lt;ESPANOLA&lt;&lt;CARMEN&lt;&lt;&lt;&lt;&lt;</text></g>
+          <text x="428" y="290" transform="rotate(-16 428 260)" text-anchor="middle" font-size="128" font-weight="800" fill="#c62f22" opacity=".16" letter-spacing="8">EJEMPLO</text>
+        </g>
+      </symbol>
+    </svg>

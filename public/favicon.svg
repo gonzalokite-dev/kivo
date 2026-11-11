@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="Kivo">
+  <rect width="256" height="256" rx="61.4" fill="#3D5AFE"/>
+  <path d="M56.3 102.4C76.8 46.1 179.2 46.1 199.7 92.2" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round"/>
+  <path d="M174.1 87.0L202.2 97.3L212.5 69.1" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M79.4 143.4L97.3 115.2Q101.1 110.1 107.5 110.1L148.5 110.1Q154.9 110.1 158.7 115.2L176.6 143.4Z" fill="#FFFFFF"/>
+  <rect x="41.0" y="138.2" width="174.1" height="41.0" rx="17.9" fill="#FFFFFF"/>
+  <circle cx="81.9" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"/>
+  <circle cx="174.1" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"/>
+  <path d="M93.4 138.2L104.4 120.8L124.2 120.8L124.2 138.2Z M131.8 138.2L131.8 120.8L151.6 120.8L162.6 138.2Z" fill="#3D5AFE"/>
+</svg>

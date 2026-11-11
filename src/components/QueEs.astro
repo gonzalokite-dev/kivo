@@ -1,0 +1,129 @@
+---
+/**
+ * Qué es una transferencia: la respuesta directa (para Google y los
+ * asistentes de IA), la explicación con las tres cifras que importan y los
+ * cuatro nombres con los que se busca el mismo trámite.
+ *
+ * Antes eran tres secciones sueltas en la portada; juntas se leen como una
+ * sola idea y la página respira más. El texto de las palabras clave
+ * (traspaso, cambio de nombre, gestoría de traspasos) se mantiene.
+ */
+import RespuestaDirecta from './RespuestaDirecta.astro';
+
+interface Props {
+  respuesta: string;
+}
+const { respuesta } = Astro.props;
+---
+
+<div class="wrap">
+  <div class="que-es-resp"><RespuestaDirecta texto={respuesta} /></div>
+
+  <div class="what">
+    <div class="sec-head" style="margin:0">
+      <span class="eyebrow">Qué es una transferencia</span>
+      <h2>Cuando un coche cambia de dueño, hay que cambiar el titular.</h2>
+      <p class="big">
+        Al comprar un coche de segunda mano a un particular, <b
+          >la DGT tiene que registrar al nuevo titular</b
+        > y el comprador tiene que <b>pagar el impuesto de la compraventa (ITP)</b> en su comunidad.
+        Eso es la transferencia. Nosotros la hacemos entera, online.
+      </p>
+    </div>
+    <div class="facts">
+      <div class="fact">
+        <strong>55,70 €</strong><span
+          >Tasa de la DGT en 2026 para coches y motos. La pagamos por ti, sin recargo.</span
+        >
+      </div>
+      <div class="fact">
+        <strong>3–6 %</strong><span
+          >ITP según tu comunidad, sobre el valor del coche. Lo calculamos antes de pagar.</span
+        >
+      </div>
+      <div class="fact">
+        <strong>30 días</strong><span>Plazo legal desde la compra para poner el coche a tu nombre.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nombres" id="cambio-de-nombre">
+    <h3>Traspaso, cambio de nombre, transferencia: es lo mismo</h3>
+    <p>
+      Mucha gente lo busca como <b>traspaso de coche</b> o como <b>cambio de nombre del coche</b>, y
+      la DGT y los gestores lo llaman transferencia o cambio de titularidad. Es el mismo trámite.
+      Dicho en una frase: <b>Kivo es una gestoría de traspasos de coche online</b>: tramitamos el
+      cambio de titular en la DGT y pagamos el impuesto por ti, sin que tengas que ir a Tráfico.
+    </p>
+    <ul>
+      <li><b>Traspaso</b><span>Como lo dice la gente, sobre todo entre particulares.</span></li>
+      <li><b>Cambio de nombre</b><span>Como también se busca en Google.</span></li>
+      <li><b>Transferencia</b><span>Como lo llaman la DGT y los gestores.</span></li>
+      <li><b>Cambio de titular</b><span>El nombre técnico del trámite.</span></li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .que-es-resp {
+    max-width: 820px;
+    margin: 0 auto 72px;
+  }
+  .nombres {
+    margin-top: 64px;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 32px;
+    display: grid;
+    gap: 14px;
+  }
+  .nombres h3 {
+    font-size: 22px;
+    letter-spacing: -0.02em;
+  }
+  .nombres > p {
+    color: var(--tinta-suave);
+    max-width: 80ch;
+  }
+  .nombres > p b {
+    color: var(--tinta);
+  }
+  .nombres ul {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .nombres li {
+    background: var(--bg);
+    border-radius: var(--r-md);
+    padding: 16px 18px;
+    display: grid;
+    gap: 4px;
+  }
+  .nombres li b {
+    font: 800 18px/1.2 var(--f-d);
+  }
+  .nombres li span {
+    font-size: 14px;
+    color: var(--tinta-suave);
+  }
+  @media (max-width: 860px) {
+    .nombres ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .que-es-resp {
+      margin-bottom: 48px;
+    }
+  }
+  @media (max-width: 520px) {
+    .nombres {
+      padding: 22px;
+    }
+    .nombres ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

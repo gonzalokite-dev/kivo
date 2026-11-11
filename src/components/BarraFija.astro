@@ -1,0 +1,53 @@
+---
+/**
+ * Barra fija de móvil. Aparece a partir del primer scroll
+ * (brandbook, cap. 8 · Web). En las páginas con calculadora, el total
+ * lo actualiza `calculadora.js`; en el resto se queda con los honorarios.
+ */
+interface Props {
+  cta?: string;
+  etiqueta?: string;
+  importe?: string;
+  texto?: string;
+}
+const {
+  cta = '/#calculadora',
+  etiqueta = 'honorarios, IVA incluido',
+  importe = '89 €',
+  texto = 'Calcular mi precio',
+} = Astro.props;
+---
+
+<div class="sticky" id="sticky" aria-hidden="true">
+  <div class="p">
+    <b id="stickyTotal">{importe}</b>
+    <span id="stickyLbl">{etiqueta}</span>
+  </div>
+  <a class="btn btn-primary" href={cta} tabindex="-1">{texto}</a>
+</div>
+
+<script>
+  // La barra se muestra tras 320 px de scroll y se esconde mientras la
+  // calculadora o el formulario están a la vista, para no duplicar la acción
+  // ni tapar el botón de enviar.
+  const sticky = document.getElementById('sticky');
+  if (sticky) {
+    const tapan = ['calculadora', 'solicitud']
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    const link = sticky.querySelector('a');
+    const onScroll = () => {
+      const tapada = tapan.some((el) => {
+        const r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < window.innerHeight;
+      });
+      const ver = window.scrollY > 320 && !tapada;
+      sticky.classList.toggle('show', ver);
+      sticky.setAttribute('aria-hidden', String(!ver));
+      // Fuera de pantalla no debe recibir el foco del tabulador.
+      if (link) link.tabIndex = ver ? 0 : -1;
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+</script>

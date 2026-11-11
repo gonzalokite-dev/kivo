@@ -1,0 +1,244 @@
+---
+/**
+ * Motos.
+ * Palabra clave: traspaso moto.
+ * Secundarias: transferencia moto, cambio de nombre moto, traspaso ciclomotor.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import RespuestaDirecta from '../components/RespuestaDirecta.astro';
+import Calculadora from '../components/Calculadora.astro';
+import Pasos from '../components/Pasos.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icono from '../components/Icono.astro';
+import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
+import { FEE, TASA, eur } from '../data/tarifas';
+
+const path = '/traspaso-moto/';
+const title = 'Traspaso de moto online, sin ir a Tráfico | Kivo';
+const description =
+  'Cambio de nombre de tu moto sin ir a Tráfico: cambiamos el titular en la DGT, impuesto y papeleo por 89 €. Tasa de 55,70 €, y 27,85 € en ciclomotores.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Traspaso de moto', href: path },
+];
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Cuánto cuesta la tasa de la DGT para una moto?',
+    a: 'La misma que para un coche: 55,70 € en 2026, la tasa 1.5. En ciclomotores de hasta 50 cc es la tasa 1.2, de 27,85 €.',
+    html:
+      'La misma que para un coche: 55,70 € en 2026, la tasa 1.5. En ciclomotores de hasta 50 cc es la tasa 1.2, de 27,85 €. Lo tienes desglosado en la guía de la <a href="/guias/tasa-dgt-transferencia/">tasa de la DGT de transferencia</a>.',
+  },
+  {
+    q: '¿Los ciclomotores pagan ITP?',
+    a: 'Depende de la comunidad. En Illes Balears y en Navarra los ciclomotores están exentos del ITP. En el resto se paga el tipo general de la comunidad del comprador sobre el valor del ciclomotor.',
+  },
+  {
+    q: '¿Hacen falta los mismos documentos que para un coche?',
+    a: 'Sí: DNI o NIE de comprador y vendedor por las dos caras, permiso de circulación de la moto y ficha técnica con la ITV en vigor cuando le corresponda.',
+    html:
+      'Sí: DNI o NIE de comprador y vendedor por las dos caras, permiso de circulación de la moto y ficha técnica con la ITV en vigor cuando le corresponda. Los tienes con ejemplos en <a href="/documentacion-traspaso-coche/">los documentos de la transferencia</a>.',
+  },
+  {
+    q: 'Mi ciclomotor tiene placa pero no ITV, ¿se puede transferir?',
+    a: 'Sí. Los ciclomotores tienen su propio calendario de inspección. Mándanos la matrícula y comprobamos en el informe de la DGT qué le toca antes de empezar.',
+  },
+  {
+    q: '¿Mi moto de más de 25 años es un vehículo histórico?',
+    a: 'Solo si está catalogada como histórica en la DGT, que es un trámite aparte. Si lo está, escríbenos antes: la documentación y el impuesto cambian.',
+  },
+  {
+    q: '¿Cuánto tarda la transferencia de una moto?',
+    a: 'La presentamos en cuanto tenemos las firmas y el impuesto pagado. Lo que tarde después depende de Tráfico; te escribimos por email en cada paso.',
+  },
+];
+
+const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {path}
+  {jsonld}
+  cta="#calculadora"
+  sticky={{ importe: eur(FEE + TASA.moto), etiqueta: 'honorarios + tasa, sin el impuesto' }}
+>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Traspaso de moto online</h1>
+      <p class="lede">
+        Motos y ciclomotores, con los <b>mismos 89 € de honorarios</b> que un coche. Cambiamos el
+        titular en la DGT y pagamos el impuesto por ti.
+      </p>
+      <RespuestaDirecta
+        texto="El traspaso de una moto cuesta igual que el de un coche: <b>89 € de honorarios</b>. La tasa de la DGT es de 55,70 €, y de 27,85 € en ciclomotores de hasta 50 cc. El ITP depende de la comunidad del comprador."
+      />
+      <ul class="checks">
+        <li><Icono name="check" size={16} sw={3} />Motos y ciclomotores</li>
+        <li><Icono name="check" size={16} sw={3} />Sin certificado digital</li>
+        <li><Icono name="check" size={16} sw={3} />Toda España</li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="padding-top:48px">
+    <div class="wrap calc-layout">
+      <div>
+      <div class="sec-head">
+        <span class="eyebrow">Calculadora</span>
+        <h2>Calcula el total de tu moto</h2>
+        <p>
+          Viene con «Moto» puesto. Si es un ciclomotor de hasta 50 cc, cámbialo: la tasa baja a
+          {eur(TASA.ciclo)} y en algunas comunidades no se paga impuesto.
+        </p>
+      </div>
+        <ul class="calc-points">
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Tasa e impuesto al céntimo</b>Los pagamos por ti, sin margen, con el justificante de
+              cada pago.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Con las reglas de tu comunidad</b>Tipos, cuotas fijas y exenciones de las 19
+              comunidades, también para ciclomotores.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Cifra exacta antes de pagar</b>Te la confirmamos con la matrícula antes de
+              liquidar el impuesto.</span
+            >
+          </li>
+        </ul>
+      </div>
+      <Calculadora veh="moto" titulo="¿Cuánto cuesta tu transferencia de moto?" />
+    </div>
+  </section>
+
+  <section id="como" style="background:var(--surface)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>Cómo funciona con una moto</h2>
+        <p>
+          Igual que con un coche: ni cita en Tráfico, ni colas, ni certificado digital. Comprador y
+          vendedor firman desde el móvil, cada uno desde donde esté.
+        </p>
+      </div>
+      <Pasos sinCabecera />
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Documentación</span>
+        <h2>Documentos</h2>
+        <p>Tres fotos y una firma. Los mismos que para un coche.</p>
+      </div>
+
+      <div class="doc-mini">
+        <ul>
+          <li>
+            <Icono name="documento" />
+            <span class="who-tag">Comprador y vendedor</span>
+            <b>DNI o NIE de los dos</b>
+            <span>Por las dos caras y en vigor. También vale la TIE o el pasaporte con NIE.</span>
+          </li>
+          <li>
+            <Icono name="tarjeta" />
+            <span class="who-tag">Vendedor</span>
+            <b>Permiso de circulación de la moto</b>
+            <span>El documento entero. Confirma quién es hoy el titular.</span>
+          </li>
+          <li>
+            <Icono name="sincargas" />
+            <span class="who-tag">Vendedor</span>
+            <b>Ficha técnica</b>
+            <span>Con la ITV en vigor si a la moto ya le toca pasarla.</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="alt" style="margin-top:24px">
+        <b>Los ciclomotores, igual.</b> Si tu ciclomotor tiene placa y permiso, los documentos son
+        los mismos. Tienes los ejemplos ilustrados y cómo hacer las fotos en <a
+          href="/documentacion-traspaso-coche/">los documentos de la transferencia</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Precio</span>
+        <h2>Cuánto cuesta</h2>
+        <p>Honorarios cerrados, la tasa de Tráfico y el impuesto de tu comunidad.</p>
+      </div>
+
+      <div class="opts">
+        <div class="opt-card mine">
+          <b>Honorarios de Kivo</b>
+          <span class="p">{eur(FEE)}</span>
+          <span>IVA incluido. Lo mismo para una moto de 125 cc que para un coche.</span>
+        </div>
+        <div class="opt-card">
+          <b>Tasa DGT · moto</b>
+          <span class="p">{eur(TASA.moto)}</span>
+          <span>
+            Tasa 1.5, la misma que para los coches. Va íntegra a Tráfico y te damos el justificante.
+          </span>
+        </div>
+        <div class="opt-card">
+          <b>Tasa DGT · ciclomotor</b>
+          <span class="p">{eur(TASA.ciclo)}</span>
+          <span>
+            Tasa 1.2, para ciclomotores de hasta 50 cc.
+            {/* Comprobado el 9 de noviembre de 2026 en sede.dgt.gob.es: tasa 1.2, 27,85 €. */}
+          </span>
+        </div>
+      </div>
+
+      <div class="alt" style="margin-top:28px">
+        <b>El impuesto, según la comunidad del comprador.</b> Se calcula sobre el valor de la moto,
+        con el tipo de su comunidad. Dos excepciones que conviene saber: en <b
+          >Illes Balears y en Navarra los ciclomotores están exentos del ITP</b
+        >, así que un ciclomotor allí paga solo los honorarios y la tasa. Y en Navarra también están
+        exentos los vehículos de 10 años o más. Los tipos de las 19 comunidades están en <a
+          href="/precio-traspaso-coche/">cuánto cuesta la transferencia</a
+        >.
+      </div>
+    </div>
+  </section>
+
+  <CtaBanda
+    titulo="Pide la transferencia de tu moto"
+    texto="Sin pagar nada ahora. Te escribimos en menos de 24 horas."
+    cta="#calculadora"
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Preguntas sobre la transferencia de moto</h2>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Tu moto, a tu nombre sin ir a Tráfico"
+    texto="89 € de honorarios para motos y ciclomotores. Calcula tu total en 20 segundos."
+    cta="#calculadora"
+  />
+</BaseLayout>

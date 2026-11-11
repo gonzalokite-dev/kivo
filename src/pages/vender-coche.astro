@@ -1,0 +1,259 @@
+---
+/**
+ * Si vendes.
+ * Palabra clave: vender coche a particular.
+ * Secundarias: qué hacer al vender un coche, dejar de ser titular.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import RespuestaDirecta from '../components/RespuestaDirecta.astro';
+import Compartir from '../components/Compartir.astro';
+import Riesgos from '../components/Riesgos.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icono from '../components/Icono.astro';
+import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
+
+const path = '/vender-coche/';
+const title = 'Vendes tu coche: deja de ser el titular sin ir a Tráfico | Kivo';
+const description =
+  'Has vendido tu coche a un particular: esto es lo que tienes que hacer para dejar de ser el titular y que no te lleguen multas de otro ni el IVTM.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Si vendes tu coche', href: path },
+];
+
+const preguntas: Pregunta[] = [
+  {
+    q: 'He vendido el coche y me siguen llegando multas, ¿qué hago?',
+    a: 'Mientras el coche siga a tu nombre en la DGT, las multas te llegan a ti. Lo que corta eso es la transferencia o, mientras llega, la notificación de venta. Si tienes el contrato firmado, puedes identificar al comprador ante el organismo que te sanciona.',
+    html:
+      'Mientras el coche siga a tu nombre en la DGT, las multas te llegan a ti. Lo que corta eso es la transferencia o, mientras llega, la <a href="/guias/notificacion-de-venta-dgt/">notificación de venta en la DGT</a>. Si tienes el contrato firmado, puedes identificar al comprador ante el organismo que te sanciona.',
+  },
+  {
+    q: '¿Tengo que hacer yo la transferencia si vendo?',
+    a: 'La ley pone la transferencia en manos del comprador: es quien paga el impuesto y quien tiene 30 días para comunicarla. Pero el riesgo mientras no se hace es tuyo, así que te interesa que se haga pronto.',
+  },
+  {
+    q: '¿Qué pasa si el comprador no transfiere el coche?',
+    a: 'El coche sigue siendo tuyo para Tráfico y para tu ayuntamiento: multas e impuesto de circulación a tu nombre. Puedes presentar la notificación de venta para que la responsabilidad pase al comprador desde esa fecha.',
+    html:
+      'El coche sigue siendo tuyo para Tráfico y para tu ayuntamiento: multas e impuesto de circulación a tu nombre. Puedes presentar la <a href="/guias/notificacion-de-venta-dgt/">notificación de venta</a> para que la responsabilidad pase al comprador desde esa fecha.',
+  },
+  {
+    q: '¿Pago yo algo de la transferencia como vendedor?',
+    a: 'El ITP y la tasa de la DGT los paga el comprador. Si lo tramitáis con Kivo, los 89 € de honorarios los paga quien lo encarga: a veces el comprador, a veces los partís. Lo acordáis vosotros.',
+    html:
+      'El ITP y la tasa de la DGT los paga el comprador. Si lo tramitáis con Kivo, los 89 € de honorarios los paga quien lo encarga: a veces el comprador, a veces los partís. Lo acordáis vosotros; el reparto legal está en la guía de <a href="/guias/quien-paga-traspaso-coche/">quién paga la transferencia</a>.',
+  },
+  {
+    q: '¿Tengo que dar de baja el seguro?',
+    a: 'Sí, pero no antes de entregar el coche. Avisa a tu aseguradora en cuanto la venta esté hecha y guarda el justificante. El seguro no sustituye a la transferencia.',
+  },
+  {
+    q: '¿Y si vendo el coche a un desguace o a una compraventa?',
+    a: 'Si va al desguace, lo que toca es la baja definitiva en un centro autorizado, no una transferencia. Si lo compra un profesional para revenderlo, suele hacer una transferencia a su nombre o acogerse al régimen de vehículos para reventa.',
+  },
+];
+
+const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
+---
+
+<BaseLayout {title} {description} {path} {jsonld}>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Vendes tu coche: deja de ser el titular</h1>
+      <p class="lede">
+        Has cobrado y has entregado las llaves, pero <b
+          >para Tráfico el coche sigue siendo tuyo hasta que se transfiere</b
+        >. Esto es lo que tienes que hacer.
+      </p>
+      <RespuestaDirecta
+        texto="Mientras no se haga el traspaso, el coche sigue a nombre de quien lo vende: las multas y el impuesto de circulación le siguen llegando a él. La notificación de venta (8,67 €) traslada esa responsabilidad al comprador, pero no sustituye al traspaso."
+      />
+      <ul class="checks">
+        <li><Icono name="check" size={16} sw={3} />Firmas desde el móvil</li>
+        <li><Icono name="check" size={16} sw={3} />Te avisamos cuando ya no sea tuyo</li>
+        <li><Icono name="check" size={16} sw={3} />Sin ir a Tráfico</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="riesgo" style="padding-top:48px">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">El riesgo</span>
+        <h2>Qué pasa si el coche sigue a tu nombre</h2>
+        <p>
+          No es un detalle administrativo: mientras el titular seas tú, respondes de ese coche ante
+          Tráfico y ante tu ayuntamiento.
+        </p>
+      </div>
+      <Riesgos soloTarjetas />
+      <div class="alt" style="margin-top:28px">
+        <b>El 1 de enero marca el impuesto de circulación.</b> El ayuntamiento cobra el IVTM a quien
+        figure como titular ese día. Si vendes en noviembre y la transferencia no se hace, en enero
+        te llega a ti el recibo del año entero. Los plazos exactos están en la guía del <a
+          href="/guias/plazo-traspaso-coche/">plazo de la transferencia</a
+        >.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Tu parte</span>
+        <h2>Qué tienes que hacer tú</h2>
+        <p>Poco: tres cosas y una firma. El impuesto y la tasa no van contigo.</p>
+      </div>
+
+      <div class="doc-mini">
+        <ul>
+          <li>
+            <Icono name="documento" />
+            <span class="who-tag">Paso 1</span>
+            <b>Tu DNI o NIE</b>
+            <span>Foto por las dos caras, con el documento entero y en vigor.</span>
+          </li>
+          <li>
+            <Icono name="tarjeta" />
+            <span class="who-tag">Paso 2</span>
+            <b>El permiso de circulación</b>
+            <span>El papel de la guantera, que hoy está a tu nombre. Entrégalo al comprador.</span>
+          </li>
+          <li>
+            <Icono name="sincargas" />
+            <span class="who-tag">Paso 3</span>
+            <b>La ficha técnica</b>
+            <span>Con la ITV en vigor. Si es de papel, la hoja del último sello.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="alt" style="margin-top:28px">
+        <b>Y la firma.</b> Firmas el contrato de compraventa y el mandato desde tu móvil, con un
+        enlace que te enviamos por email. No necesitas certificado digital ni coincidir con el
+        comprador en ningún sitio. Guarda tu copia del contrato: es tu prueba de la venta y de la
+        fecha.
+      </div>
+    </div>
+  </section>
+
+  <section id="pasale" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Para el comprador</span>
+        <h2>Envíale esto al comprador</h2>
+        <p>
+          La transferencia la tiene que pedir quien compra. Pásale el mensaje y lo dejamos resuelto.
+        </p>
+      </div>
+      <Compartir
+        nivel="h3"
+        antetitulo="Pásaselo"
+        titulo="Que lo pida él y los dos os quitáis el papeleo"
+      />
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap what">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Dos trámites distintos</span>
+        <h2>Notificación de venta o transferencia</h2>
+        <p class="big">
+          No son lo mismo y conviene no confundirlos. La <b>transferencia</b> cambia el titular: el
+          coche pasa a ser del comprador y tú dejas de aparecer. La <b>notificación de venta</b> no
+          cambia el titular: solo le dice a la DGT que has vendido, para que la responsabilidad pase
+          al comprador desde esa fecha. Cuesta 8,67 € y la hace el vendedor.
+          <b>Si la transferencia la tramitamos nosotros, no necesitas notificar la venta</b>: el
+          coche pasa directamente al comprador. Lo tienes todo en la guía de la <a
+            href="/guias/notificacion-de-venta-dgt/">notificación de venta en la DGT</a
+          >.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact">
+          <strong>Transferencia</strong><span
+            >Cambia el titular. La pide el comprador y paga el ITP.</span
+          >
+        </div>
+        <div class="fact">
+          <strong>Notificación</strong><span
+            >8,67 €. La hace el vendedor. No cambia el titular.</span
+          >
+        </div>
+        <div class="fact">
+          <strong>Con Kivo</strong><span>No hace falta notificar: transferimos directamente.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plazos" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Plazos</span>
+        <h2>Plazos</h2>
+        <p>Los dos plazos corren desde la fecha del contrato, no desde que te acuerdas.</p>
+      </div>
+
+      <div class="opts">
+        <div class="opt-card">
+          <b>30 días para la DGT</b>
+          <span class="p">30 días</span>
+          <span>
+            El comprador tiene que comunicar la transferencia a la DGT como máximo 30 días después de
+            firmar el contrato.
+          </span>
+        </div>
+        <div class="opt-card">
+          <b>30 días hábiles para el impuesto</b>
+          <span class="p">30 hábiles</span>
+          <span>
+            Es el plazo del modelo 620 del ITP. Fuera de plazo, Hacienda aplica recargos al
+            comprador.
+          </span>
+        </div>
+        <div class="opt-card mine">
+          <b>Lo que tarda después</b>
+          <span class="p">Depende</span>
+          <span>
+            Nosotros presentamos en cuanto tenemos las firmas. Lo que tarde Tráfico no lo
+            prometemos: te escribimos por email en cada paso.
+          </span>
+        </div>
+      </div>
+
+      <p class="src" style="margin-top:20px">
+        Los dos plazos, con lo que pasa si se pasan, en la guía del <a
+          href="/guias/plazo-traspaso-coche/">plazo de la transferencia de un coche</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <CtaBanda
+    titulo="Que el coche deje de estar a tu nombre"
+    texto="Calcula el total y te escribimos en menos de 24 horas."
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Preguntas de quien vende</h2>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Deja de ser el titular sin ir a Tráfico"
+    texto="Te enviamos un email en cuanto el coche ya no está a tu nombre."
+  />
+</BaseLayout>

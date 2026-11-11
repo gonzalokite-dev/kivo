@@ -1,0 +1,190 @@
+---
+/**
+ * Contador del plazo: el usuario pone la fecha de la compra y ve cuántos días
+ * le quedan de los 30 para comunicar la transferencia a la DGT.
+ *
+ * Es urgencia real, no inventada: el plazo es el que ya explica la web
+ * (Riesgos, guía del plazo). Al pulsar el botón, la fecha se escribe en el
+ * campo «¿Algo que debamos saber?» del formulario del hero, así el equipo la
+ * tiene sin preguntarla.
+ *
+ * Sin JavaScript se ve el texto y el botón, que lleva al formulario igual.
+ */
+interface Props {
+  /** A dónde lleva el botón. En la portada, al formulario del hero. */
+  cta?: string;
+}
+const { cta = '/#solicitud' } = Astro.props;
+---
+
+<div class="plazo" id="contador-plazo">
+  <div class="plazo-q">
+    <span class="eyebrow">Calcula tu plazo</span>
+    <h3>¿Cuándo firmasteis la compra?</h3>
+    <div class="field">
+      <label for="plazo-fecha">Fecha del contrato de compraventa</label>
+      <input id="plazo-fecha" type="date" />
+    </div>
+  </div>
+
+  <div class="plazo-r" aria-live="polite">
+    <p class="plazo-num" id="plazo-num">30 días</p>
+    <p class="plazo-txt" id="plazo-txt">
+      Es lo que tiene el comprador para comunicar la transferencia a la DGT. Pon la fecha y te
+      decimos cuántos te quedan.
+    </p>
+    <div class="plazo-bar" aria-hidden="true"><i id="plazo-fill"></i></div>
+    <a class="btn plazo-btn" href={cta} id="plazo-cta">Pedir mi traspaso hoy</a>
+  </div>
+</div>
+
+<style>
+  .plazo {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+    margin-top: 16px;
+    background: var(--asfalto);
+    color: var(--on-asfalto);
+    border-radius: var(--r-lg);
+    padding: 28px;
+  }
+  .plazo h3 {
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 10px 0 16px;
+  }
+  .plazo .eyebrow {
+    color: var(--amarillo);
+  }
+  .plazo .field label {
+    color: var(--on-asfalto-suave);
+  }
+  .plazo input {
+    color-scheme: light;
+    background: #fff;
+    color: #0e1630;
+  }
+  .plazo-r {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .plazo-num {
+    font: 800 44px/1 var(--f-d);
+    letter-spacing: -0.03em;
+    color: var(--amarillo);
+  }
+  .plazo-txt {
+    color: var(--on-asfalto-suave);
+  }
+  .plazo-txt :global(b) {
+    color: var(--on-asfalto);
+  }
+  .plazo-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+  }
+  .plazo-bar i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--amarillo);
+    border-radius: inherit;
+    transition: width 0.3s;
+  }
+  .plazo-bar.tarde i {
+    background: #ff8a7a;
+  }
+  .plazo-btn {
+    justify-self: start;
+    margin-top: 6px;
+    background: var(--amarillo);
+    color: var(--on-amarillo);
+  }
+  @media (max-width: 760px) {
+    .plazo {
+      grid-template-columns: 1fr;
+      padding: 22px;
+    }
+    .plazo-num {
+      font-size: 38px;
+    }
+    .plazo-btn {
+      justify-self: stretch;
+    }
+  }
+</style>
+
+<script>
+  const fecha = document.getElementById('plazo-fecha') as HTMLInputElement | null;
+  if (fecha) {
+    const num = document.getElementById('plazo-num')!;
+    const txt = document.getElementById('plazo-txt')!;
+    const fill = document.getElementById('plazo-fill')!;
+    const cta = document.getElementById('plazo-cta') as HTMLAnchorElement;
+    const DIA = 86_400_000;
+    const PLAZO = 30;
+
+    // Fechas en local y a medianoche, para que no bailen con la hora.
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const iso = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    fecha.max = iso(hoy);
+    const largo = (d: Date) =>
+      d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    let elegida: Date | null = null;
+
+    function pintar() {
+      if (!fecha!.value) return;
+      const [y, m, d] = fecha!.value.split('-').map(Number);
+      const compra = new Date(y, m - 1, d);
+      if (compra > hoy) {
+        num.textContent = '—';
+        txt.textContent = 'Esa fecha todavía no ha llegado. Pon la del contrato de compraventa.';
+        return;
+      }
+      elegida = compra;
+      const limite = new Date(compra.getTime() + PLAZO * DIA);
+      const quedan = Math.round((limite.getTime() - hoy.getTime()) / DIA);
+      const bar = fill.parentElement!;
+
+      if (quedan > 0) {
+        num.textContent = quedan === 1 ? 'Te queda 1 día' : `Te quedan ${quedan} días`;
+        txt.innerHTML = `Tienes <b>hasta el ${largo(limite)}</b> para comunicar la transferencia a la DGT. Nosotros la presentamos en cuanto tengamos las fotos y las firmas.`;
+        fill.style.width = `${(quedan / PLAZO) * 100}%`;
+        bar.classList.toggle('tarde', quedan <= 7);
+      } else if (quedan === 0) {
+        num.textContent = 'Hoy es el último día';
+        txt.innerHTML = 'Pídela ahora y la empezamos en cuanto te escribamos. <b>Si se pasa el plazo, se puede hacer igual</b>, pero mejor no esperar más.';
+        fill.style.width = '3%';
+        bar.classList.add('tarde');
+      } else {
+        const pasados = -quedan;
+        num.textContent = pasados === 1 ? 'Plazo pasado por 1 día' : `Plazo pasado por ${pasados} días`;
+        txt.innerHTML = 'Sin problema: <b>la transferencia se puede hacer igual</b>. Lo que cuesta esperar son los recargos de Hacienda sobre el impuesto y que las multas sigan llegando al vendedor. Cuanto antes, mejor.';
+        fill.style.width = '100%';
+        bar.classList.add('tarde');
+      }
+    }
+    fecha.addEventListener('change', pintar);
+    fecha.addEventListener('input', pintar);
+
+    // Deja la fecha escrita en el formulario del hero, si está en la página.
+    cta.addEventListener('click', () => {
+      const msg = document.getElementById('h-msg') as HTMLTextAreaElement | null;
+      if (msg && elegida && !msg.value.includes('Fecha de compra')) {
+        const linea = `Fecha de compra: ${largo(elegida)}.`;
+        msg.value = msg.value ? `${linea}\n${msg.value}` : linea;
+        // El comentario va plegado en el formulario: se abre para que se vea.
+        const mas = msg.closest('details');
+        if (mas) mas.open = true;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,43 @@
+---
+/**
+ * Cierre de página: bloque asfalto con el icono, el titular y una sola
+ * acción. Sobre asfalto, el botón principal es amarillo (brandbook, cap. 10).
+ */
+interface Props {
+  titulo?: string;
+  texto?: string;
+  cta?: string;
+  etiqueta?: string;
+}
+const {
+  titulo = 'Haz tu transferencia sin ir a Tráfico',
+  texto = '89 € de honorarios. Tu total, en 20 segundos. Recuerda: tienes 30 días desde la compra.',
+  cta = '/#calculadora',
+  etiqueta = 'Calcular mi precio',
+} = Astro.props;
+---
+
+<section class="final">
+  <div class="wrap">
+    <div class="final-box">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 256 256"
+        width="88"
+        height="88"
+        aria-hidden="true"
+      >
+        <rect x="0" y="0" width="256" height="256" rx="61.4" fill="#3D5AFE"></rect>
+        <path d="M56.3 102.4C76.8 46.1 179.2 46.1 199.7 92.2" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round"></path>
+        <path d="M174.1 87.0L202.2 97.3L212.5 69.1" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M79.4 143.4L97.3 115.2Q101.1 110.1 107.5 110.1L148.5 110.1Q154.9 110.1 158.7 115.2L176.6 143.4Z" fill="#FFFFFF"></path>
+        <rect x="41.0" y="138.2" width="174.1" height="41.0" rx="17.9" fill="#FFFFFF"></rect>
+        <circle cx="81.9" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"></circle>
+        <circle cx="174.1" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"></circle>
+        <path d="M93.4 138.2L104.4 120.8L124.2 120.8L124.2 138.2Z M131.8 138.2L131.8 120.8L151.6 120.8L162.6 138.2Z" fill="#3D5AFE"></path>
+      </svg>
+      <div><h2>{titulo}</h2><p>{texto}</p></div>
+      <a class="btn" href={cta}>{etiqueta}</a>
+    </div>
+  </div>
+</section>

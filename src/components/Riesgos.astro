@@ -1,0 +1,56 @@
+---
+/**
+ * Lo que pasa si la transferencia no se hace.
+ * Tono del brandbook: un aviso útil, sin meter miedo.
+ * No lleva .wrap: lo pone la página que lo usa.
+ */
+interface Props {
+  /** Sin el encabezado, para páginas que ya tienen su propio H2. */
+  soloTarjetas?: boolean;
+}
+const { soloTarjetas = false } = Astro.props;
+---
+
+<Fragment>
+  {
+    !soloTarjetas && (
+      <div class="sec-head">
+        <span class="eyebrow">No lo dejes</span>
+        <h2>Qué pasa si la transferencia no se hace</h2>
+        <p>
+          Hasta que la DGT registra al nuevo titular, para Tráfico y para Hacienda el coche sigue
+          siendo del vendedor.
+        </p>
+      </div>
+    )
+  }
+
+  <div class="risk">
+    <div>
+      <strong>30 días</strong>
+      <b>Es el plazo desde la compra</b>
+      <p>
+        Para comunicar la transferencia a la DGT y para pagar el impuesto. Fuera de plazo, Hacienda
+        aplica recargos. Los dos plazos, en la guía del <a href="/guias/plazo-traspaso-coche/"
+          >plazo de la transferencia</a
+        >.
+      </p>
+    </div>
+    <div>
+      <strong>Multas</strong>
+      <b>Le llegan al vendedor</b>
+      <p>
+        Las sanciones de tráfico se envían a quien figura como titular, aunque ya no conduzca ese
+        coche.
+      </p>
+    </div>
+    <div>
+      <strong>1 de enero</strong>
+      <b>Impuesto de circulación</b>
+      <p>
+        El ayuntamiento lo cobra a quien es titular ese día. Si el coche sigue a tu nombre, lo pagas
+        tú.
+      </p>
+    </div>
+  </div>
+</Fragment>

@@ -1,0 +1,15 @@
+---
+interface Props {
+  href: string;
+  titulo: string;
+  resumen: string;
+  lectura: number;
+}
+const { href, titulo, resumen, lectura } = Astro.props;
+---
+
+<a class="gcard" href={href}>
+  <b>{titulo}</b>
+  <p>{resumen}</p>
+  <span class="meta">{lectura} min de lectura</span>
+</a>

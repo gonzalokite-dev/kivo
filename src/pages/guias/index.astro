@@ -1,0 +1,88 @@
+---
+/**
+ * Índice del blog. Las 10 guías en tarjetas, agrupadas en los tres bloques
+ * del brandbook: hacer la transferencia, casos especiales e impuestos.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Migas from '../../components/Migas.astro';
+import TarjetaGuia from '../../components/TarjetaGuia.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { breadcrumbLd, type Miga } from '../../data/seo';
+
+const path = '/guias/';
+const title = 'Guías sobre la transferencia de coches | Kivo';
+const description =
+  'Diez guías para entender la transferencia de un coche: cómo se hace, quién la paga, qué plazos hay, los casos especiales y cómo se calcula el impuesto.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Guías', href: path },
+];
+
+const GRUPOS = [
+  {
+    nombre: 'Hacer el traspaso' as const,
+    intro: 'El trámite normal: los pasos, quién paga, los plazos y qué hacer sin certificado digital.',
+  },
+  {
+    nombre: 'Casos especiales' as const,
+    intro: 'Cuando el coche viene de una herencia, pasa entre familiares o arrastra una carga financiera.',
+  },
+  {
+    nombre: 'Impuestos y tasas' as const,
+    intro: 'De dónde salen las cifras: la tasa de la DGT, el valor fiscal de Hacienda y la notificación de venta.',
+  },
+];
+
+const todas = await getCollection('guias');
+const porGrupo = GRUPOS.map((g) => ({
+  ...g,
+  guias: todas
+    .filter((x) => x.data.group === g.nombre)
+    .sort((a, b) => a.data.order - b.data.order),
+}));
+
+const jsonld = [breadcrumbLd(migas)];
+---
+
+<BaseLayout {title} {description} {path} {jsonld}>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Guías sobre la transferencia de coches</h1>
+      <p class="lede">
+        Lo que nos preguntan por email, explicado entero y con las cifras de 2026. Si prefieres que
+        lo hagamos nosotros, <b>son 89 € de honorarios</b>.
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-top:48px">
+    <div class="wrap">
+      {
+        porGrupo.map((g) => (
+          <div class="gblock">
+            <h2>{g.nombre}</h2>
+            <p>{g.intro}</p>
+            <div class="gcards">
+              {g.guias.map((x) => (
+                <TarjetaGuia
+                  href={`/guias/${x.id}/`}
+                  titulo={x.data.title}
+                  resumen={x.data.summary}
+                  lectura={x.data.reading}
+                />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Deja de leer y pídela"
+    texto="Cambio de titular en la DGT, impuesto y papeleo por 89 € de honorarios."
+  />
+</BaseLayout>

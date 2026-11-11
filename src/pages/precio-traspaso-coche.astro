@@ -1,0 +1,326 @@
+---
+/**
+ * Precio.
+ * Palabra clave: cuánto cuesta el traspaso de un coche.
+ * Secundarias: cuánto cuesta la transferencia de un coche, coste traspaso coche, precio cambio de nombre coche.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import RespuestaDirecta from '../components/RespuestaDirecta.astro';
+import Calculadora from '../components/Calculadora.astro';
+import TablaItp from '../components/TablaItp.astro';
+import Comparativa from '../components/Comparativa.astro';
+import Garantia from '../components/Garantia.astro';
+import PrecioCard from '../components/PrecioCard.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icono from '../components/Icono.astro';
+import { breadcrumbLd, faqLd, serviceLd, type Miga } from '../data/seo';
+import { CCAA, FEE, TASA, eur, itpFor, total } from '../data/tarifas';
+
+const path = '/precio-traspaso-coche/';
+const title = '¿Cuánto cuesta el traspaso de un coche en 2026? | Kivo';
+const description =
+  'Honorarios de 89 €, tasa de la DGT de 55,70 € y el ITP de tu comunidad. Calcula el total exacto del traspaso de tu coche o moto en 20 segundos.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Cuánto cuesta', href: path },
+];
+
+/** Los tres ejemplos salen de la misma función que la calculadora. */
+const ccaa = (id: string) => CCAA.find((c) => c.id === id)!;
+const ejemplos = [
+  {
+    titulo: 'Coche de 6.000 €',
+    detalle: '8 años · Comunidad de Madrid',
+    c: ccaa('MAD'),
+    veh: 'coche' as const,
+    age: 8,
+    cc: 1400,
+    precio: 6000,
+    nota: 'El 4 % de Madrid sobre 6.000 €.',
+  },
+  {
+    titulo: 'Moto de 3.500 €',
+    detalle: '5 años · Cataluña',
+    c: ccaa('CAT'),
+    veh: 'moto' as const,
+    age: 5,
+    cc: 600,
+    precio: 3500,
+    nota: 'El 5 % de Cataluña. La tasa de la moto es la misma que la del coche.',
+  },
+  {
+    titulo: 'Coche de 2.500 €',
+    detalle: '14 años · Comunitat Valenciana',
+    c: ccaa('VAL'),
+    veh: 'coche' as const,
+    age: 14,
+    cc: 1400,
+    precio: 2500,
+    nota: 'Cuota fija: con 12 años o más y menos de 20.000 €, no se aplica el 6 %.',
+  },
+].map((e) => ({
+  ...e,
+  itp: itpFor(e.c, e.veh, e.age, e.cc, e.precio).itp,
+  total: total(e.c, e.veh, e.age, e.cc, e.precio),
+}));
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Quién paga la transferencia de un coche, el comprador o el vendedor?',
+    a: 'El ITP lo paga el comprador por ley: es el sujeto pasivo del impuesto. La tasa de la DGT también la paga quien pone el coche a su nombre. Entre vosotros podéis pactar otro reparto, pero ante Hacienda responde el comprador.',
+    html:
+      'El ITP lo paga el comprador por ley: es el sujeto pasivo del impuesto. La tasa de la DGT también la paga quien pone el coche a su nombre. Entre vosotros podéis pactar otro reparto, pero ante Hacienda responde el comprador. Lo desarrollamos en la guía de <a href="/guias/quien-paga-traspaso-coche/">quién paga la transferencia de un coche</a>.',
+  },
+  {
+    q: '¿Cuánto es la tasa de la DGT en 2026?',
+    a: 'La tasa 1.5 de transferencia cuesta 55,70 € para coches y motos. En ciclomotores es la tasa 1.2, de 27,85 €. La pagamos nosotros y te enviamos el justificante, sin recargo.',
+    html:
+      'La tasa 1.5 de transferencia cuesta 55,70 € para coches y motos. En ciclomotores es la tasa 1.2, de 27,85 €. La pagamos nosotros y te enviamos el justificante, sin recargo. Tienes el detalle en la guía de la <a href="/guias/tasa-dgt-transferencia/">tasa de la DGT de transferencia</a>.',
+  },
+  {
+    q: '¿Los 89 € son iguales para cualquier coche?',
+    a: 'Sí. Son los honorarios de Kivo, IVA incluido, y no cambian por el precio, la antigüedad ni la comunidad. Lo único que varía en tu total es el impuesto, porque depende de tu comunidad y del valor del coche.',
+  },
+  {
+    q: '¿Tengo que pagar algo al enviar la solicitud?',
+    a: 'No. El formulario no cobra nada. En menos de 24 horas te escribe una persona del equipo, te confirma el precio exacto con la matrícula y te explica cómo pagar los honorarios, la tasa y el impuesto.',
+  },
+  {
+    q: '¿El precio incluye el informe del vehículo?',
+    a: 'Sí. Antes de liquidar nada comprobamos en la DGT que no haya cargas, embargos ni precintos y que la ITV esté en vigor. Va incluido en los 89 €.',
+  },
+  {
+    q: '¿Y si el impuesto me sale a 0 €?',
+    a: 'Pasa en algunas comunidades con coches antiguos y con ciclomotores. Entonces pagas solo los 89 € de honorarios y la tasa de la DGT: 144,70 € en total para un coche o una moto.',
+  },
+];
+
+// El Service+Offer con el precio de 89 € va aquí también, no solo en la
+// portada: es la página que responde exactamente a "cuánto cuesta".
+const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
+---
+
+<BaseLayout {title} {description} {path} {jsonld} cta="#calculadora">
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>¿Cuánto cuesta el traspaso de un coche en 2026?</h1>
+      <p class="lede">
+        Tres conceptos y ni uno más: <b>89 € de honorarios</b>, la tasa de la DGT y el impuesto de tu
+        comunidad. Aquí los ves por separado y calculas tu total exacto.
+      </p>
+      <RespuestaDirecta
+        texto="El traspaso de un coche cuesta tres cosas: <b>89 € de honorarios</b> de Kivo, 55,70 € de tasa de la DGT y el ITP de tu comunidad (del 3 % al 6 % del valor del coche). Para un coche de 6.000 €, de 8 años, en la Comunidad de Madrid, el total es 384,70 €."
+      />
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">El desglose</span>
+        <h2>Lo que pagas: honorarios, tasa de la DGT e impuesto</h2>
+        <p>
+          El precio de una transferencia no es un número suelto: son tres conceptos con destinos
+          distintos. Nosotros solo cobramos el primero.
+        </p>
+      </div>
+
+      <div class="opts">
+        <div class="opt-card mine">
+          <b>Honorarios de Kivo</b>
+          <span class="p">{eur(FEE)}</span>
+          <span>
+            Lo único que cobramos. IVA incluido, igual para cualquier coche o moto. Incluye el
+            informe del vehículo, el contrato, el mandato, la liquidación del impuesto y la
+            presentación en la DGT.
+          </span>
+        </div>
+        <div class="opt-card">
+          <b>Tasa de la DGT</b>
+          <span class="p">{eur(TASA.coche)}</span>
+          <span>
+            Tasa 1.5, la que cobra Tráfico por el cambio de titular. En ciclomotores es la tasa 1.2,
+            de {eur(TASA.ciclo)}. Va íntegra a la DGT: la pagamos y te pasamos el justificante.
+          </span>
+        </div>
+        <div class="opt-card">
+          <b>Impuesto (ITP)</b>
+          <span class="p">3 – 6 %</span>
+          <span>
+            Lo paga el comprador en su comunidad, sobre el valor del coche. Es el concepto que hace
+            que dos transferencias cuesten distinto. Va íntegro a Hacienda.
+          </span>
+        </div>
+      </div>
+
+      <p class="src" style="margin-top:20px">
+        Ninguna de las dos últimas lleva margen nuestro. Si el impuesto te sale 0 €, pagas 0 € de
+        impuesto.
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap calc-layout">
+      <div>
+      <div class="sec-head">
+        <span class="eyebrow">Calculadora</span>
+        <h2>Calcula tu total</h2>
+        <p>
+          Elige el vehículo, la comunidad del comprador, el precio y la antigüedad. Aplicamos las
+          cuotas fijas y las exenciones de cada comunidad.
+        </p>
+      </div>
+        <ul class="calc-points">
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Tasa e impuesto al céntimo</b>Los pagamos por ti, sin margen, con el justificante de
+              cada pago.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Con las reglas de tu comunidad</b>Tipos, cuotas fijas y exenciones de las 19
+              comunidades.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Cifra exacta antes de pagar</b>Te la confirmamos con la matrícula antes de
+              liquidar el impuesto.</span
+            >
+          </li>
+        </ul>
+      </div>
+      <Calculadora titulo="Tu total, concepto a concepto" />
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap what">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">El aviso importante</span>
+        <h2>Por qué el impuesto puede salir más alto que tu precio</h2>
+        <p class="big">
+          Hacienda no se cree sin más el precio del contrato. Calcula el ITP sobre <b
+            >el mayor entre lo que has pagado y el valor de tu modelo en sus tablas oficiales</b
+          >, rebajado por años de uso. Si compras barato un coche que en tablas vale más, el impuesto
+          sale sobre el valor de tablas. Y si declaras menos, llega una complementaria meses después.
+          Te lo explicamos entero en la guía del <a href="/guias/valor-fiscal-coche-hacienda/"
+            >valor fiscal de un coche según Hacienda</a
+          >.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact">
+          <strong>El mayor</strong><span>Entre el precio del contrato y el valor de tablas.</span>
+        </div>
+        <div class="fact">
+          <strong>Por años</strong><span>El valor de tablas baja con la antigüedad del coche.</span>
+        </div>
+        <div class="fact">
+          <strong>Sin sorpresas</strong><span
+            >Lo calculamos con la matrícula antes de pagar nada.</span
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="itp" style="padding-top:0">
+    <div class="wrap itp-wrap">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Impuesto por comunidad</span>
+        <h2>ITP por comunidad autónoma</h2>
+        <p>
+          Lo paga el comprador en la comunidad donde vive, sobre el mayor entre el precio de compra y
+          el valor de tablas de Hacienda. Pulsa «Calcular» y la calculadora se pone con tu comunidad.
+        </p>
+        <p class="src" style="margin:0">
+          Tipos generales para turismos en 2026. Te confirmamos la cifra exacta con la matrícula
+          antes de pagar.
+        </p>
+      </div>
+      <TablaItp />
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Ejemplos</span>
+        <h2>Tres ejemplos de total</h2>
+        <p>Calculados con la misma lógica que la calculadora de arriba.</p>
+      </div>
+
+      <div class="cases">
+        {
+          ejemplos.map((e) => (
+            <div class="case">
+              <div class="case-top">
+                <b>{e.titulo}</b>
+                <span>{e.detalle}</span>
+              </div>
+              <dl>
+                <div class="row"><dt>Honorarios Kivo</dt><dd>{eur(FEE)}</dd></div>
+                <div class="row"><dt>Tasa DGT</dt><dd>{eur(TASA[e.veh])}</dd></div>
+                <div class="row"><dt>Impuesto (ITP)</dt><dd>{eur(e.itp)}</dd></div>
+                <div class="tot">
+                  <dt>Total</dt>
+                  <dd>{eur(e.total)}</dd>
+                </div>
+              </dl>
+              <p class="src" style="margin:0">{e.nota}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Compara</span>
+        <h2>Kivo, gestoría de barrio o hacerlo tú</h2>
+        <p>Hacerlo tú sale más barato si los dos tenéis certificado digital y tiempo.</p>
+      </div>
+      <Comparativa soloTabla />
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Qué incluye</span><h2>Qué pagas con los 89 € y qué pasa si no se puede</h2></div>
+      <PrecioCard />
+      <Garantia />
+    </div>
+  </section>
+
+  <CtaBanda
+    titulo="Tu total exacto, con tu comunidad"
+    texto="Sin pagar nada ahora. Te escribimos en menos de 24 horas."
+    cta="#calculadora"
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Preguntas frecuentes sobre el precio</h2>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Calcula tu transferencia y pídela"
+    texto="89 € de honorarios. La tasa y el impuesto, al céntimo y sin margen."
+    cta="#calculadora"
+  />
+</BaseLayout>

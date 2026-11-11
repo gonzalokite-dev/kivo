@@ -1,0 +1,94 @@
+---
+/**
+ * Documentación.
+ * Palabra clave: documentos traspaso coche.
+ * Secundarias: documentos transferencia coche, papeles para cambiar el nombre de un coche.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import RespuestaDirecta from '../components/RespuestaDirecta.astro';
+import DocsCompleta from '../components/DocsCompleta.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
+
+const path = '/documentacion-traspaso-coche/';
+const title = 'Documentos para el traspaso de un coche (2026) | Kivo';
+const description =
+  'Los papeles para cambiar el nombre de un coche: DNI de los dos, permiso de circulación y ficha técnica. Con ejemplos ilustrados y cómo hacer las fotos.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Documentos', href: path },
+];
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Qué papeles hacen falta para cambiar el nombre de un coche?',
+    a: 'Tres documentos: el DNI o NIE de comprador y vendedor por las dos caras, el permiso de circulación y la ficha técnica con la ITV en vigor. El contrato de compraventa y el mandato los redactamos nosotros y los firmáis desde el móvil.',
+  },
+  {
+    q: '¿Hace falta el contrato de compraventa firmado en papel?',
+    a: 'No. Nosotros lo redactamos con vuestros datos y lo firmáis los dos online, desde el móvil, con firma electrónica. Tiene la misma validez que la firma en papel.',
+  },
+  {
+    q: '¿Valen fotos hechas con el móvil?',
+    a: 'Sí, son las que pedimos. Documento entero con las cuatro esquinas a la vista, sobre una mesa lisa, con luz de día y sin flash. Si haces zoom y no se lee, repite la foto.',
+  },
+  {
+    q: '¿Qué pasa si el vendedor no encuentra el permiso de circulación?',
+    a: 'Avísanos antes de pagar nada. Sin permiso de circulación no se puede presentar la transferencia: hay que pedir un duplicado en la DGT y te explicamos cómo.',
+  },
+  {
+    q: 'Soy extranjero, ¿qué documento envío?',
+    a: 'Vale la tarjeta de residencia (TIE) o el pasaporte junto al certificado de NIE. Por las dos caras, igual que el DNI.',
+  },
+  {
+    q: '¿Para qué usáis mis documentos?',
+    a: 'Solo para tramitar tu transferencia: redactar el contrato, liquidar el impuesto y presentar el cambio de titular en la DGT. No se usan para nada más.',
+  },
+];
+
+const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
+---
+
+<BaseLayout {title} {description} {path} {jsonld}>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Documentos para el traspaso de un coche</h1>
+      <p class="lede">
+        Son <b>tres fotos y una firma</b>. Aquí tienes qué envía cada uno, ejemplos de cada documento
+        y cómo hacer las fotos para que valgan a la primera.
+      </p>
+      <RespuestaDirecta
+        texto="Para el traspaso de un coche hacen falta tres documentos: el DNI o NIE de comprador y vendedor, el permiso de circulación y la ficha técnica con la ITV en vigor. El contrato de compraventa lo redacta Kivo y se firma desde el móvil."
+      />
+    </div>
+  </section>
+
+  <section id="documentacion" style="padding-top:48px">
+    <DocsCompleta />
+  </section>
+
+  <CtaBanda
+    titulo="Ya tienes los papeles, pide el traspaso"
+    texto="Calcula tu total y te escribimos en menos de 24 horas."
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Preguntas sobre la documentación</h2>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Envíanos las fotos y lo hacemos nosotros"
+    texto="89 € de honorarios. Firmáis desde el móvil, sin certificado digital."
+  />
+</BaseLayout>

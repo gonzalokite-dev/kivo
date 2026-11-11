@@ -1,0 +1,54 @@
+---
+/**
+ * Plantilla de página legal. Estructura y encabezados listos, sin redactar:
+ * el texto lo tiene que escribir quien asuma la responsabilidad legal.
+ * Todas van con noindex y fuera del sitemap mientras sean borrador.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import { breadcrumbLd, type Miga } from '../data/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  h1: string;
+  etiqueta: string;
+}
+const { title, description, path, h1, etiqueta } = Astro.props;
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: etiqueta, href: path },
+];
+---
+
+<BaseLayout {title} {description} {path} noindex jsonld={[breadcrumbLd(migas)]}>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>{h1}</h1>
+    </div>
+  </section>
+
+  <section style="padding-top:40px">
+    <div class="wrap">
+      <!-- VALIDAR: esta página es una plantilla. Los encabezados están puestos,
+           el contenido lo tiene que redactar un abogado o el responsable legal
+           antes de publicar. Hasta entonces se queda en noindex y fuera del
+           sitemap. -->
+      <div class="draft">
+        <b>Borrador sin redactar</b>
+        <p>
+          Esta página tiene la estructura montada pero no el contenido. No la publiques como
+          definitiva: la tiene que revisar y completar el responsable legal con los datos reales de
+          la sociedad.
+        </p>
+      </div>
+
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

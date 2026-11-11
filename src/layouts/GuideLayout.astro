@@ -1,0 +1,140 @@
+---
+/**
+ * Plantilla de guía. El orden es siempre el mismo:
+ * migas → H1 y fecha → respuesta corta → índice → cuerpo → preguntas →
+ * fuentes oficiales → guías relacionadas → llamada a la acción final.
+ *
+ * La caja de llamada a la acción de mitad del texto va dentro del MDX, en el
+ * punto donde corta mejor la lectura.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import Preguntas from '../components/Preguntas.astro';
+import TarjetaGuia from '../components/TarjetaGuia.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { breadcrumbLd, faqLd, articleLd, type Miga } from '../data/seo';
+import { FUENTES } from '../data/nav';
+
+interface Props {
+  guia: CollectionEntry<'guias'>;
+  /** Encabezados que devuelve `render()`, para el índice de contenidos. */
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { guia, headings } = Astro.props;
+const d = guia.data;
+const path = `/guias/${guia.id}/`;
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Guías', href: '/guias/' },
+  { label: d.title, href: path },
+];
+
+const indice = headings.filter((h) => h.depth === 2);
+
+const fuentes = d.sources.map((k) => FUENTES[k]);
+
+const todas = await getCollection('guias');
+const relacionadas = d.related
+  .map((id) => todas.find((g) => g.id === id))
+  .filter((g): g is CollectionEntry<'guias'> => Boolean(g));
+
+const mesAno = d.updated.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+
+const jsonld = [
+  breadcrumbLd(migas),
+  faqLd(d.faqs),
+  articleLd({
+    path,
+    title: d.title,
+    description: d.description,
+    published: d.published,
+    modified: d.updated,
+  }),
+];
+---
+
+<BaseLayout title={d.seoTitle} description={d.description} {path} {jsonld}>
+  <div class="wrap guide">
+    <article class="guide-main">
+      <Migas {migas} />
+
+      <header style="display:grid;gap:14px">
+        <h1 style="font-size:clamp(30px,4.4vw,46px);line-height:1.06;letter-spacing:-.03em">
+          {d.title}
+        </h1>
+        <p class="updated">
+          <span>Actualizado: <time datetime={d.updated.toISOString().slice(0, 10)}>{mesAno}</time></span>
+          <span>·</span>
+          <span>{d.reading} min de lectura</span>
+        </p>
+      </header>
+
+      <div class="short">
+        <b>Respuesta corta</b>
+        <p>{d.short}</p>
+      </div>
+
+      <div class="prose guide-body">
+        <slot />
+      </div>
+
+      <section class="gfaq">
+        <h2 id="preguntas-frecuentes">Preguntas frecuentes</h2>
+        <Preguntas preguntas={d.faqs} abrirPrimera={false} />
+      </section>
+
+      <section class="sources">
+        <h2>Fuentes oficiales</h2>
+        <ul>
+          {
+            fuentes.map((f) => (
+              <li>
+                <a href={f.url} target="_blank" rel="noopener">
+                  {f.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="nota">
+          Enlazamos solo a la fuente original: DGT, BOE, Agencia Tributaria, RACE y el Consejo
+          General de Gestores Administrativos. Las cifras son de 2026; si cambian, actualizamos la
+          guía y la fecha de arriba.
+        </p>
+      </section>
+
+      <section class="related">
+        <h2>Guías relacionadas</h2>
+        <div class="gcards">
+          {
+            relacionadas.map((g) => (
+              <TarjetaGuia
+                href={`/guias/${g.id}/`}
+                titulo={g.data.title}
+                resumen={g.data.summary}
+                lectura={g.data.reading}
+              />
+            ))
+          }
+        </div>
+      </section>
+    </article>
+
+    <aside class="toc" aria-labelledby="toc-t">
+      <b id="toc-t">En esta guía</b>
+      <ol>
+        {indice.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        <li><a href="#preguntas-frecuentes">Preguntas frecuentes</a></li>
+      </ol>
+    </aside>
+  </div>
+
+  <FinalCta
+    titulo="¿Te lo hacemos nosotros?"
+    texto="Cambio de titular en la DGT, impuesto y papeleo por 89 € de honorarios. Te escribimos en menos de 24 horas."
+  />
+</BaseLayout>

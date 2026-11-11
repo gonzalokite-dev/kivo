@@ -1,0 +1,19 @@
+---
+/**
+ * Respuesta directa: 2-4 líneas con el dato clave de la página, arriba del
+ * todo. Para el fragmento destacado de Google y para que un asistente de IA
+ * pueda citarla sin tener que leer la página entera (GEO).
+ *
+ * Mismo bloque que ya usan las guías (`.short`), aquí para las 5 páginas
+ * comerciales.
+ */
+interface Props {
+  texto: string;
+}
+const { texto } = Astro.props;
+---
+
+<div class="short">
+  <b>Respuesta directa</b>
+  <p set:html={texto} />
+</div>

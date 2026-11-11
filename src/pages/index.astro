@@ -1,0 +1,286 @@
+---
+/**
+ * Portada.
+ * Palabra clave: traspaso coche.
+ * Secundarias: transferencia coche, traspaso de coche online,
+ * cambio de nombre coche, gestoría de traspasos de coche.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Calculadora from '../components/Calculadora.astro';
+import FormularioHero from '../components/FormularioHero.astro';
+import Traspaso from '../components/Traspaso.astro';
+import BarraConfianza from '../components/BarraConfianza.astro';
+import Problemas from '../components/Problemas.astro';
+import QueEs from '../components/QueEs.astro';
+import Pasos from '../components/Pasos.astro';
+import Riesgos from '../components/Riesgos.astro';
+import PrecioCard from '../components/PrecioCard.astro';
+import Garantia from '../components/Garantia.astro';
+import Comparativa from '../components/Comparativa.astro';
+import Compartir from '../components/Compartir.astro';
+import Confianza from '../components/Confianza.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import Icono from '../components/Icono.astro';
+import ContadorPlazo from '../components/ContadorPlazo.astro';
+import { organizationLd, serviceLd, faqLd } from '../data/seo';
+
+const path = '/';
+
+const title = 'Traspaso de coche online, sin ir a Tráfico | Kivo · 89 €';
+const description =
+  'Hacemos el traspaso de tu coche online: cambio de titular en la DGT, impuesto y papeleo por 89 €. Calcula tu total y te escribimos en menos de 24 h.';
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Quién paga el traspaso del coche?',
+    a: 'Normalmente el comprador: la tasa de la DGT (55,70 € en 2026 para coches y motos) y el ITP de su comunidad. Podéis pactar otra cosa entre vosotros.',
+    html:
+      'Normalmente el comprador: la tasa de la DGT (55,70 € en 2026 para coches y motos) y el ITP de su comunidad. Podéis pactar otra cosa entre vosotros. Lo detallamos en la guía de <a href="/guias/quien-paga-traspaso-coche/">quién paga la transferencia de un coche</a>.',
+  },
+  {
+    q: '¿Cómo se hace el traspaso de un coche?',
+    a: 'Con Kivo: calculas tu precio, envías la solicitud y te escribimos en menos de 24 horas. Después enviáis tres fotos y firmáis desde el móvil; nosotros pagamos el impuesto y presentamos el cambio de titular en la DGT.',
+    html:
+      'Con Kivo: calculas tu precio, envías la solicitud y te escribimos en menos de 24 horas. Después enviáis tres fotos y firmáis desde el móvil; nosotros pagamos el impuesto y presentamos el cambio de titular en la DGT. Si prefieres hacerlo tú, tienes los cinco pasos en la guía de <a href="/guias/como-hacer-traspaso-coche/">cómo hacer la transferencia de un coche</a>.',
+  },
+  {
+    q: '¿Cuánto tiempo tengo para hacer el traspaso?',
+    a: 'El comprador tiene 30 días desde la firma del contrato para comunicar la transferencia a la DGT, y 30 días hábiles para presentar el modelo 620 del impuesto. Fuera de plazo, Hacienda aplica recargos.',
+    html:
+      'El comprador tiene 30 días desde la firma del contrato para comunicar la transferencia a la DGT, y 30 días hábiles para presentar el modelo 620 del impuesto. Fuera de plazo, Hacienda aplica recargos. Tienes los dos plazos explicados en la guía del <a href="/guias/plazo-traspaso-coche/">plazo de la transferencia</a>.',
+  },
+  {
+    q: '¿Necesitamos certificado digital?',
+    a: 'No. Firmáis el contrato y el mandato desde el móvil y nosotros presentamos la transferencia como gestores.',
+    html:
+      'No. Firmáis el contrato y el mandato desde el móvil y nosotros presentamos la transferencia como gestores. Si quieres ver todas las vías, mira la guía de la <a href="/guias/traspaso-coche-sin-certificado-digital/">transferencia de coche sin certificado digital</a>.',
+  },
+  {
+    q: '¿Por qué el ITP puede salir más alto que mi precio?',
+    a: 'Hacienda calcula el impuesto sobre el mayor entre el precio del contrato y el valor de tu modelo en sus tablas oficiales, rebajado según la antigüedad. La calculadora estima y te confirmamos la cifra exacta con la matrícula antes de pagar el impuesto.',
+  },
+  {
+    q: '¿Qué documentos hacen falta?',
+    a: 'Fotos del DNI o NIE de comprador y vendedor por las dos caras, del permiso de circulación y de la ficha técnica con la ITV en vigor.',
+    html:
+      'Fotos del DNI o NIE de comprador y vendedor por las dos caras, del permiso de circulación y de la ficha técnica con la ITV en vigor. Lo tienes todo, con ejemplos, en <a href="/documentacion-traspaso-coche/">los documentos para la transferencia</a>.',
+  },
+  {
+    q: '¿Y si el coche tiene una carga o un embargo?',
+    a: 'Lo vemos en el informe de la DGT antes de liquidar nada. Si no se puede tramitar, te devolvemos los honorarios.',
+  },
+  {
+    q: '¿Podemos hacerlo si vivimos en ciudades distintas?',
+    a: 'Sí. Cada uno envía sus fotos y firma desde su móvil. No hace falta veros ni coincidir en ningún sitio.',
+  },
+  {
+    q: '¿Tengo que pagar al pedirla?',
+    a: 'No. Envías el formulario sin pagar nada. En menos de 24 horas te escribe alguien del equipo, te confirma el precio exacto con la matrícula y te explica cómo pagar los 89 € de honorarios, la tasa y el impuesto. De cada pago te enviamos el justificante.',
+  },
+  {
+    q: '¿Y si compro el coche a un concesionario o a una empresa?',
+    a: 'Si el vendedor es un profesional, la venta lleva IVA en la factura y no se paga ITP. Normalmente la transferencia la hace el propio vendedor; si no, escríbenos.',
+  },
+  {
+    q: '¿Necesito pasar la ITV?',
+    a: 'No hay que ir a la ITV para la transferencia, pero el permiso de circulación nuevo solo es válido con la ITV en vigor.',
+  },
+  {
+    q: '¿Hacéis motos y ciclomotores?',
+    a: 'Sí, con los mismos documentos. En ciclomotores la tasa de la DGT es de 27,85 €.',
+    html:
+      'Sí, con los mismos documentos. En ciclomotores la tasa de la DGT es de 27,85 €. Tienes los detalles en <a href="/traspaso-moto/">transferencia de moto</a>.',
+  },
+  {
+    q: 'Soy el vendedor, ¿tengo que hacer algo más?',
+    a: 'Enviar tu DNI, el permiso de circulación y firmar. Cuando el coche ya no esté a tu nombre, te lo confirmamos por email.',
+    html:
+      'Enviar tu DNI, el permiso de circulación y firmar. Cuando el coche ya no esté a tu nombre, te lo confirmamos por email. Más cosas que mirar si <a href="/vender-coche/">vendes tu coche</a>.',
+  },
+  {
+    q: '¿Cuánto tarda el traspaso?',
+    a: 'La presentamos en cuanto tenemos los documentos firmados. Lo que tarde después depende de Tráfico y de Hacienda; te escribimos por email en cada paso.',
+  },
+];
+
+const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {path}
+  {jsonld}
+  sticky={{ cta: '#solicitud', texto: 'Pedir mi traspaso' }}
+>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">Cambio de titular · 100 % online · toda España</span>
+        <h1>Traspaso de coche online, <span class="hl">sin ir a Tráfico.</span></h1>
+        <p class="lede">
+          ¿Has comprado o vendido un coche? <b
+            >Cambiamos el titular en la DGT y pagamos el impuesto por ti.</b
+          > Vosotros solo firmáis desde el móvil.
+        </p>
+
+        <!-- Solo en móvil: el formulario queda debajo de la tarjeta del
+             traspaso, a casi una pantalla. Estos botones llevan directo. -->
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#solicitud">Pedir mi traspaso</a>
+          <a class="btn btn-ghost" href="#calculadora">Ver mi precio</a>
+        </div>
+
+        <Traspaso />
+
+        <ul class="checks">
+          <li><Icono name="check" size={16} sw={3} />89 € de honorarios</li>
+          <li><Icono name="check" size={16} sw={3} />Coches y motos</li>
+          <li><Icono name="check" size={16} sw={3} />Gestor colegiado</li>
+        </ul>
+      </div>
+
+      <FormularioHero />
+    </div>
+  </section>
+
+  <BarraConfianza />
+
+  <section id="problema"><Problemas /></section>
+
+  <section id="que-es">
+    <QueEs
+      respuesta="Kivo hace el traspaso de tu coche online: cambiamos el titular en la DGT, liquidamos el impuesto y presentamos el cambio por ti. Cuesta <b>89 € de honorarios</b>, fijos para cualquier coche o moto, más la tasa de la DGT (55,70 €) y el ITP de tu comunidad. Envías el formulario y te escribimos en menos de 24 horas, sin pagar nada hasta entonces."
+    />
+  </section>
+
+  <section id="como" style="background:var(--surface)"><div class="wrap"><Pasos /></div></section>
+
+  <!-- La calculadora, en medio de la página: para quien prefiere ver el
+       precio antes de dejar sus datos. El formulario rápido ya está arriba,
+       en el hero. -->
+  <section id="precio-rapido">
+    <div class="wrap calc-layout">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Calculadora</span>
+          <h2>¿Prefieres ver el precio antes?</h2>
+          <p>En 20 segundos y sin dejar tus datos.</p>
+        </div>
+        <ul class="calc-points">
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Tasa e impuesto al céntimo</b>Los pagamos por ti, sin margen, y te mandamos el
+              justificante de cada uno.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Con las reglas de tu comunidad</b>Tipos, cuotas fijas por cilindrada y
+              exenciones de las 19 comunidades.</span
+            >
+          </li>
+          <li>
+            <Icono name="check" size={20} sw={3} /><span
+              ><b>Cifra exacta antes de pagar</b>Te la confirmamos con la matrícula antes de
+              liquidar el impuesto.</span
+            >
+          </li>
+        </ul>
+      </div>
+      <Calculadora />
+    </div>
+  </section>
+
+  <!-- Resumen de documentación: el detalle entero está en su propia página. -->
+  <section id="documentacion">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Documentación</span>
+        <h2>Solo necesitamos 3 fotos</h2>
+        <p>
+          Nada de ir a buscar papeles raros. El contrato, el impuesto y la tasa de Tráfico los
+          preparamos nosotros.
+        </p>
+      </div>
+
+      <div class="doc-mini">
+        <ul>
+          <li>
+            <Icono name="documento" />
+            <span class="who-tag">Comprador y vendedor</span>
+            <b>DNI o NIE de los dos</b>
+            <span>Por las dos caras, en vigor. También vale la TIE o el pasaporte con NIE.</span>
+          </li>
+          <li>
+            <Icono name="tarjeta" />
+            <span class="who-tag">Vendedor</span>
+            <b>Permiso de circulación</b>
+            <span>El documento entero. Dice a nombre de quién está hoy el coche.</span>
+          </li>
+          <li>
+            <Icono name="sincargas" />
+            <span class="who-tag">Vendedor</span>
+            <b>Ficha técnica con la ITV en vigor</b>
+            <span>Si es de papel, la hoja del último sello de la ITV.</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="alt centro">
+        <b>Y la firma.</b> Comprador y vendedor firman el contrato y el mandato desde el móvil, con
+        un enlace que enviamos por email. Tienes los ejemplos ilustrados, cómo hacer las fotos y los
+        casos especiales en <a href="/documentacion-traspaso-coche/"
+          >los documentos para la transferencia de un coche</a
+        >.
+      </p>
+    </div>
+  </section>
+
+  <section id="plazo" style="padding-bottom:40px">
+    <div class="wrap">
+      <Riesgos />
+      <ContadorPlazo cta="#solicitud" />
+    </div>
+  </section>
+
+  <section id="precio">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Precio</span><h2>Un precio cerrado para tu transferencia</h2></div>
+      <PrecioCard />
+      <Garantia />
+      <p class="src" style="margin-top:16px">
+        ¿Quieres el desglose completo, con el impuesto de las 19 comunidades y tres ejemplos de total?
+        Está en <a href="/precio-traspaso-coche/">cuánto cuesta la transferencia de un coche</a>.
+      </p>
+    </div>
+  </section>
+
+  <section style="padding-top:0"><div class="wrap"><Comparativa /></div></section>
+
+  <section id="vendes" style="padding-top:0">
+    <div class="wrap"><Compartir /></div>
+  </section>
+
+  <section id="seguridad" style="padding-top:0"><Confianza /></section>
+
+  <CtaBanda
+    titulo="¿Listo? Pide tu transferencia"
+    texto="Déjanos tus datos y te escribimos en menos de 24 horas. Sin pagar nada ahora."
+    etiqueta="Pedir mi transferencia"
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Lo que más nos preguntan sobre la transferencia</h2>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta />
+</BaseLayout>

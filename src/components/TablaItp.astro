@@ -1,0 +1,52 @@
+---
+/**
+ * Tabla del ITP por comunidad autónoma.
+ * Se renderiza en el build desde `src/data/tarifas.ts`: los tipos están en el
+ * HTML estático. Los botones «Calcular» ponen la comunidad en la calculadora.
+ */
+import { ccaaOrdenadas, nombreTabla, pct } from '../data/tarifas';
+
+interface Props {
+  /** Si no hay calculadora en la página, se oculta la columna de acción. */
+  conBotones?: boolean;
+}
+const { conBotones = true } = Astro.props;
+const comunidades = ccaaOrdenadas();
+---
+
+<div class="tbl itp">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Comunidad</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Coches antiguos y casos especiales</th>
+        {
+          conBotones && (
+            <th scope="col"><span class="visually-hidden">Acción</span></th>
+          )
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        comunidades.map((c) => (
+          <tr>
+            <th scope="row">{nombreTabla(c)}</th>
+            <td class="rate">{pct(c.r)}</td>
+            <td class="nt">{c.nota}</td>
+            {
+              conBotones && (
+                <td>
+                  <button class="cbtn" type="button" data-ccaa={c.id}>
+                    Calcular
+                  </button>
+                </td>
+              )
+            }
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

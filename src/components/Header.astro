@@ -1,0 +1,69 @@
+---
+import Logo from './Logo.astro';
+import { MENU } from '../data/nav';
+
+interface Props {
+  /** Ruta de la página actual, para marcar el enlace del menú. */
+  actual?: string;
+  /** A dónde lleva el botón principal. */
+  cta?: string;
+}
+const { actual = '', cta = '/#calculadora' } = Astro.props;
+---
+
+<div class="notice">
+  Tienes <b>30 días desde la compra</b> para hacer el traspaso. Pídela hoy y te escribimos en
+  menos de 24 horas. <a href={cta}>Calcular mi precio</a>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Kivo, inicio">
+      <Logo />
+      <small>Traspaso de vehículos online</small>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      {
+        MENU.map((m) => (
+          <a href={m.href} aria-current={m.href === actual ? 'page' : undefined}>
+            {m.label}
+          </a>
+        ))
+      }
+    </nav>
+    <a class="btn btn-primary" href={cta}>Calcular mi precio</a>
+    <!-- Menú de móvil: <details> nativo, funciona sin JavaScript. El script
+         de abajo solo lo cierra al elegir un enlace o tocar fuera. -->
+    <details class="menu-movil">
+      <summary aria-label="Abrir el menú">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg>
+      </summary>
+      <nav aria-label="Principal (móvil)">
+        {
+          MENU.map((m) => (
+            <a href={m.href} aria-current={m.href === actual ? "page" : undefined}>
+              {m.label}
+            </a>
+          ))
+        }
+        <a class="btn btn-primary btn-block" href="/#solicitud">Pedir mi traspaso</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>(".menu-movil");
+  if (menu) {
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => (menu.open = false)));
+    document.addEventListener("click", (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.open) {
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      }
+    });
+  }
+</script>

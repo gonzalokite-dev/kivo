@@ -1,0 +1,32 @@
+---
+/**
+ * Preguntas frecuentes en <details>. El marcado FAQPage lo pone la página,
+ * con `faqLd()`, para que haya un solo bloque de datos estructurados.
+ * Las respuestas aceptan HTML (enlaces internos a las guías).
+ */
+export interface Pregunta {
+  q: string;
+  /** Respuesta en texto plano, la que va al JSON-LD. */
+  a: string;
+  /** Respuesta con enlaces, si hace falta. Si falta, se usa `a`. */
+  html?: string;
+}
+
+interface Props {
+  preguntas: Pregunta[];
+  /** La primera abierta, como en la landing. */
+  abrirPrimera?: boolean;
+}
+const { preguntas, abrirPrimera = true } = Astro.props;
+---
+
+<div>
+  {
+    preguntas.map((p, i) => (
+      <details open={abrirPrimera && i === 0}>
+        <summary>{p.q}</summary>
+        <p set:html={p.html ?? p.a} />
+      </details>
+    ))
+  }
+</div>

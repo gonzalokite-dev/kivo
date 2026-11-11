@@ -1,0 +1,98 @@
+---
+/**
+ * Bloque del vendedor: el aviso de que el coche sigue siendo suyo y el
+ * mensaje listo para pasarle al comprador por WhatsApp.
+ * Fondo azul suave, como manda el brandbook para las piezas de vendedor.
+ */
+import Icono from './Icono.astro';
+import { SITE_URL } from '../data/seo';
+
+interface Props {
+  /** `h2` en la portada; `h3` cuando ya hay un H2 encima. */
+  nivel?: 'h2' | 'h3';
+  titulo?: string;
+  antetitulo?: string;
+}
+
+const {
+  nivel = 'h2',
+  titulo = 'Hasta que esté a nombre del comprador, el coche sigue siendo tuyo para Tráfico.',
+  antetitulo = '¿Vendes tu coche?',
+} = Astro.props;
+
+const Titulo = nivel;
+const mensaje = `Hola, para la transferencia del coche usamos Kivo: lo hacen todo online por 89 €. Calcula el total aquí: ${SITE_URL}`;
+---
+
+<div class="seller">
+  <div>
+    <span class="eyebrow">{antetitulo}</span>
+    <Titulo>{titulo}</Titulo>
+    <p>
+      Las multas y el impuesto de circulación te siguen llegando a ti. Pásale Kivo al comprador y lo
+      dejamos resuelto.
+    </p>
+    <ul>
+      <li><Icono name="check" size={18} sw={2.6} />Firmas desde tu móvil, donde estés</li>
+      <li>
+        <Icono name="check" size={18} sw={2.6} />Te enviamos un email cuando el coche ya no está a tu
+        nombre
+      </li>
+    </ul>
+  </div>
+
+  <div class="share">
+    <b style="font-family:var(--f-d)">Envíale esto al comprador</b>
+    <code id="shareText">{mensaje}</code>
+    <!-- wa.me sin número abre WhatsApp para elegir el chat: no hace falta
+         el teléfono de Kivo. En móvil, si hay menú de compartir del sistema,
+         se usa ese (vale para WhatsApp, Telegram, SMS…). -->
+    <a
+      class="btn"
+      id="waShare"
+      href={`https://wa.me/?text=${encodeURIComponent(mensaje)}`}
+      target="_blank"
+      rel="noopener">Enviárselo por WhatsApp</a
+    >
+    <button class="link-btn" type="button" id="copyShare">Copiar el mensaje</button>
+    <span class="hint" id="copyMsg" aria-live="polite"></span>
+  </div>
+</div>
+
+<script>
+  const boton = document.getElementById('copyShare');
+  const aviso = document.getElementById('copyMsg');
+  const texto = document.getElementById('shareText');
+
+  const wa = document.getElementById('waShare') as HTMLAnchorElement | null;
+  if (wa && texto && typeof navigator.share === 'function' && matchMedia('(pointer:coarse)').matches) {
+    wa.textContent = 'Enviárselo al comprador';
+    wa.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigator.share({ text: texto.textContent ?? '' }).catch(() => {});
+    });
+  }
+
+  if (boton && aviso && texto) {
+    // Si el portapapeles no está disponible (http, permisos), se selecciona
+    // el texto para que el usuario pueda copiarlo a mano.
+    const seleccionar = () => {
+      const r = document.createRange();
+      r.selectNodeContents(texto);
+      const s = getSelection();
+      s?.removeAllRanges();
+      s?.addRange(r);
+      aviso.textContent = 'Selecciona y copia el mensaje.';
+    };
+    boton.addEventListener('click', () => {
+      const ok = () => {
+        aviso.textContent = 'Mensaje copiado. Pégalo en WhatsApp.';
+      };
+      try {
+        navigator.clipboard.writeText(texto.textContent ?? '').then(ok, seleccionar);
+      } catch {
+        seleccionar();
+      }
+    });
+  }
+</script>

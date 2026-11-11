@@ -1,0 +1,195 @@
+---
+/**
+ * Formulario de solicitud del hero: directo, sin calculadora por delante.
+ * Para quien ya sabe que quiere pedirlo. La calculadora de precio vive en su
+ * propia sección, más abajo en la página (ver <Calculadora /> en index.astro).
+ *
+ * Mismos campos y misma validación que pide el prompt: rol, matrícula,
+ * nombre, móvil, email, comentario opcional y casilla de privacidad.
+ */
+import Icono from './Icono.astro';
+
+interface Props {
+  titulo?: string;
+}
+const { titulo = 'Pide tu traspaso' } = Astro.props;
+---
+
+<div class="calc" id="solicitud" aria-live="polite">
+  <form id="h-formView" class="lead" novalidate>
+    <div class="calc-head">
+      <h2>{titulo}</h2>
+      <span class="badge">Sin pago ahora</span>
+    </div>
+
+    <div class="field">
+      <span class="flbl" id="h-rolLbl">Tú eres</span>
+      <div class="seg seg2" role="radiogroup" aria-labelledby="h-rolLbl">
+        <input type="radio" name="h-rol" id="h-rol-c" value="comprador" checked />
+        <label for="h-rol-c">Quien compra</label>
+        <input type="radio" name="h-rol" id="h-rol-v" value="vendedor" />
+        <label for="h-rol-v">Quien vende</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="h-matricula">Matrícula del vehículo</label>
+      <input
+        id="h-matricula"
+        name="matricula"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        enterkeyhint="next"
+        maxlength="10"
+        placeholder="1234 MBC"
+        style="text-transform:uppercase;letter-spacing:2px;font-weight:700"
+      />
+    </div>
+
+    <div class="field">
+      <label for="h-nombre">Tu nombre</label>
+      <input id="h-nombre" name="nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Nombre y apellidos" />
+    </div>
+
+    <div class="fields fields-pareja">
+    <div class="field">
+      <label for="h-tel">Móvil</label>
+      <input id="h-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="600 000 000" />
+    </div>
+
+    <div class="field">
+      <label for="h-email">Email</label>
+      <input id="h-email" name="email" type="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="tu@email.com" />
+    </div>
+    </div>
+    <span class="hint">Te escribimos por email con cada paso; el móvil, solo por si hace falta llamarte.</span>
+
+    <!-- El comentario es opcional: plegado para que el formulario no se alargue. -->
+    <details class="mas" id="h-mas">
+      <summary>Añadir un comentario <span class="opt">(opcional)</span></summary>
+    <div class="field">
+      <label for="h-msg" class="visually-hidden">¿Algo que debamos saber?</label>
+      <textarea
+        id="h-msg"
+        name="mensaje"
+        rows="2"
+        placeholder="Por ejemplo: compré el coche el 3 de noviembre"></textarea>
+    </div>
+    </details>
+
+    <label class="consent">
+      <input type="checkbox" id="h-rgpd" name="privacidad" />
+      <span
+        >Acepto que Kivo use estos datos para contactarme sobre mi traspaso, según la <a
+          href="/privacidad/">política de privacidad</a
+        >.</span
+      >
+    </label>
+
+    <p class="err" id="h-leadErr" hidden></p>
+
+    <button class="btn btn-primary btn-block" type="submit" id="h-send">Enviar solicitud</button>
+    <div class="trust">
+      <span>89 € cerrados, sin sorpresas</span>
+      <span><Icono name="candado" size={13} sw={2.2} />Sin pagar nada ahora</span>
+      <span>Te respondemos en menos de 24 h</span>
+      <span>Gestor colegiado</span>
+    </div>
+  </form>
+
+  <div id="h-doneView" class="fin" hidden>
+    <span class="chip-dgt"><Icono name="check" size={14} sw={3.2} />Solicitud recibida</span>
+    <span class="plate" style="font-size:18px"><i></i><span id="h-donePlate">1234 MBC</span></span>
+    <h2 style="font-size:24px">Gracias, <span id="h-doneName"></span></h2>
+    <p style="color:var(--tinta-suave)">
+      Alguien del equipo de Kivo te escribirá en <b>menos de 24 horas</b> para empezar tu traspaso.
+      Mientras, puedes ir preparando las fotos de los documentos.
+    </p>
+    <a class="link-btn" href="/documentacion-traspaso-coche/" style="text-decoration:underline">
+      Ver qué documentos hacen falta
+    </a>
+    <button class="link-btn" type="button" id="h-restart">Enviar otra solicitud</button>
+  </div>
+</div>
+
+<script>
+  import { validarLead, marcarError, limpiarAlEscribir, formatearMatricula } from '../scripts/lead';
+  const raiz = document.getElementById('solicitud');
+  if (raiz) {
+    const $ = (id: string) => document.getElementById(id)!;
+    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT;
+
+    const vistas = { form: $('h-formView'), done: $('h-doneView') };
+    function show(v: keyof typeof vistas) {
+      Object.entries(vistas).forEach(([k, el]) => ((el as HTMLElement).hidden = k !== v));
+    }
+
+    $('h-restart').addEventListener('click', () => {
+      ($('h-formView') as HTMLFormElement).reset();
+      show('form');
+    });
+
+    limpiarAlEscribir($('h-formView'), $('h-leadErr'));
+    formatearMatricula($('h-matricula') as HTMLInputElement);
+
+    $('h-formView').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const val = (id: string) => ($(id) as HTMLInputElement).value;
+      const { datos: lead, err, campo } = validarLead('h-');
+      const { matricula: m, nombre: n, telefono: t, email: em } = lead;
+      const rol = (document.querySelector('input[name="h-rol"]:checked') as HTMLInputElement).value;
+
+      const box = $('h-leadErr');
+      box.hidden = !err;
+      box.textContent = err;
+      marcarError($('h-formView'), campo, box);
+      if (err) return;
+
+      const boton = $('h-send') as HTMLButtonElement;
+      boton.disabled = true;
+      boton.textContent = 'Enviando…';
+
+      const datos = {
+        rol,
+        matricula: m,
+        nombre: n,
+        telefono: t,
+        email: em,
+        mensaje: val('h-msg').trim(),
+        pagina: location.pathname,
+        origen: 'hero',
+      };
+
+      if (ENDPOINT) {
+        try {
+          const res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(datos),
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+        } catch (e) {
+          boton.disabled = false;
+          boton.textContent = 'Enviar solicitud';
+          box.hidden = false;
+          box.textContent = 'No hemos podido enviar la solicitud. Inténtalo otra vez en un momento.';
+          console.error('[Kivo] Fallo al enviar el formulario del hero:', e);
+          return;
+        }
+      } else {
+        console.warn(
+          '[Kivo] PUBLIC_FORM_ENDPOINT no está definida: la solicitud NO se ha enviado. ' +
+            'Copia .env.example a .env y pon el endpoint de Formspree. Datos del formulario:',
+          datos
+        );
+      }
+
+      $('h-donePlate').textContent = m.replace(/^(\d{4})\s?([A-Z]{3})$/, '$1 $2');
+      $('h-doneName').textContent = n.split(' ')[0];
+      show('done');
+      boton.disabled = false;
+      boton.textContent = 'Enviar solicitud';
+    });
+  }
+</script>

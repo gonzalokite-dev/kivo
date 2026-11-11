@@ -1,0 +1,380 @@
+---
+/**
+ * Calculadora de precio + formulario de solicitud.
+ *
+ * Tres vistas en la misma tarjeta: calculadora → formulario → pantalla de
+ * éxito. No hay pago online: el formulario es una solicitud y contesta una
+ * persona del equipo en menos de 24 horas.
+ *
+ * Las opciones del selector de comunidad se renderizan en el build, así que
+ * los tipos del ITP están en el HTML estático, no solo en el JavaScript.
+ */
+import { CCAA, FEE, TASA, eur, ccaaSelector, CCAA_POR_DEFECTO, type Vehiculo } from '../data/tarifas';
+import Icono from './Icono.astro';
+
+interface Props {
+  /** Vehículo preseleccionado. */
+  veh?: Vehiculo;
+  /** Título de la tarjeta. */
+  titulo?: string;
+}
+
+const { veh = 'coche', titulo = '¿Cuánto cuesta tu transferencia?' } = Astro.props;
+const comunidades = ccaaSelector();
+const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
+---
+
+<div class="calc" id="calculadora" data-veh={veh} aria-live="polite">
+  <div id="calcView">
+    <div class="calc-head">
+      <h2>{titulo}</h2>
+      <span class="badge">Precio cerrado</span>
+    </div>
+
+    <div class="seg" role="radiogroup" aria-label="Tipo de vehículo">
+      <input type="radio" name="veh" id="veh-coche" value="coche" checked={veh === 'coche'} />
+      <label for="veh-coche">Coche</label>
+      <input type="radio" name="veh" id="veh-moto" value="moto" checked={veh === 'moto'} />
+      <label for="veh-moto">Moto</label>
+      <input type="radio" name="veh" id="veh-ciclo" value="ciclo" checked={veh === 'ciclo'} />
+      <label for="veh-ciclo">Ciclomotor</label>
+    </div>
+
+    <div class="fields">
+      <div class="field full">
+        <label for="ccaa">¿Dónde vive el comprador?</label>
+        <select id="ccaa">
+          {
+            comunidades.map((c) => (
+              <option value={c.id} selected={c.id === CCAA_POR_DEFECTO}>
+                {c.n}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="precio-compra">Precio de compra</label>
+        <div class="money">
+          <input id="precio-compra" type="text" inputmode="numeric" value="6.000" autocomplete="off" />
+          <span>€</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="edad">Antigüedad</label>
+        <select id="edad">
+          <option value="1">Menos de 2 años</option>
+          <option value="3">2 a 4 años</option>
+          <option value="6">5 a 7 años</option>
+          <option value="8" selected>8 o 9 años</option>
+          <option value="10">10 u 11 años</option>
+          <option value="12">12 a 14 años</option>
+          <option value="15">15 años o más</option>
+        </select>
+      </div>
+
+      <div class="field full" id="ccField" hidden>
+        <label for="cc">Cilindrada</label>
+        <select id="cc">
+          <option value="1000">Hasta 1.000 cc</option>
+          <option value="1150">1.001 a 1.199 cc</option>
+          <option value="1400" selected>1.200 a 1.499 cc</option>
+          <option value="1550">1.500 a 1.599 cc</option>
+          <option value="1800">1.600 a 1.999 cc</option>
+          <option value="2200">2.000 cc o más</option>
+        </select>
+        <span class="hint">Tu comunidad aplica una cuota fija a vehículos de esta antigüedad.</span>
+      </div>
+    </div>
+
+    <dl class="receipt">
+      <div class="row ours"><dt>Honorarios Kivo</dt><dd>{eur(FEE)}</dd></div>
+      <div class="row"><dt id="tasaLbl">Tasa DGT</dt><dd id="tasa">{eur(TASA[veh])}</dd></div>
+      <div class="row">
+        <dt>Impuesto de la compraventa (ITP)</dt>
+        <dd id="itp">{eur((6000 * porDefecto.r) / 100)}</dd>
+      </div>
+      <div class="total">
+        <dt>Total de tu transferencia</dt>
+        <dd id="total">{eur(FEE + TASA[veh] + (6000 * porDefecto.r) / 100)}</dd>
+      </div>
+    </dl>
+
+    <p class="note" id="itpNote">
+      Estimación al 4 % de la Comunidad de Madrid. <b
+        >Hacienda usa el mayor entre tu precio y el valor de tablas del modelo</b
+      >; te confirmamos la cifra exacta con la matrícula antes de pagar el impuesto.
+    </p>
+
+    <button class="btn btn-primary btn-block" id="go" type="button">
+      Pedir mi transferencia <Icono name="flecha" size={18} sw={2.5} class="arrow" />
+    </button>
+
+    <div class="trust">
+      <span>89 € cerrados, sin sorpresas</span>
+      <span><Icono name="candado" size={13} sw={2.2} />Sin pagar nada ahora</span>
+      <span>Te respondemos en menos de 24 h</span>
+      <span>Gestor colegiado</span>
+    </div>
+  </div>
+
+  <form id="leadView" class="lead" hidden novalidate>
+    <div class="calc-head">
+      <h2>Te escribimos en menos de 24 h</h2>
+      <span class="badge">Sin pago ahora</span>
+    </div>
+
+    <div class="sum"><span>Total estimado</span><strong id="sumTotal">—</strong></div>
+
+    <div class="field">
+      <span class="flbl" id="rolLbl">Tú eres</span>
+      <div class="seg seg2" role="radiogroup" aria-labelledby="rolLbl">
+        <input type="radio" name="rol" id="rol-c" value="comprador" checked />
+        <label for="rol-c">Quien compra</label>
+        <input type="radio" name="rol" id="rol-v" value="vendedor" />
+        <label for="rol-v">Quien vende</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="matricula">Matrícula del vehículo</label>
+      <input
+        id="matricula"
+        name="matricula"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        enterkeyhint="next"
+        maxlength="10"
+        placeholder="1234 MBC"
+        style="text-transform:uppercase;letter-spacing:2px;font-weight:700"
+      />
+    </div>
+
+    <div class="field">
+      <label for="nombre">Tu nombre</label>
+      <input id="nombre" name="nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Nombre y apellidos" />
+    </div>
+
+    <div class="field">
+      <label for="tel">Móvil</label>
+      <input id="tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="600 000 000" />
+      <span class="hint">Solo por si necesitamos llamarte.</span>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="tu@email.com" />
+      <span class="hint">Aquí te escribimos con cada paso de la transferencia.</span>
+    </div>
+
+    <div class="field">
+      <label for="msg">¿Algo que debamos saber? <span class="opt">(opcional)</span></label>
+      <textarea
+        id="msg"
+        name="mensaje"
+        rows="2"
+        placeholder="Por ejemplo: compré el coche el 3 de noviembre"></textarea>
+    </div>
+
+    <label class="consent">
+      <input type="checkbox" id="rgpd" name="privacidad" />
+      <span
+        >Acepto que Kivo use estos datos para contactarme sobre mi transferencia, según la <a
+          href="/privacidad/">política de privacidad</a
+        >.</span
+      >
+    </label>
+
+    <p class="err" id="leadErr" hidden></p>
+
+    <button class="btn btn-primary btn-block" type="submit" id="send">Enviar solicitud</button>
+    <p class="hint" style="text-align:center">
+      No pagas nada ahora. Te explicamos el precio exacto y cómo seguir en el primer email.
+    </p>
+    <button class="link-btn" type="button" id="back">Volver a la calculadora</button>
+  </form>
+
+  <div id="doneView" class="fin" hidden>
+    <span class="chip-dgt"><Icono name="check" size={14} sw={3.2} />Solicitud recibida</span>
+    <span class="plate" style="font-size:18px"><i></i><span id="donePlate">1234 MBC</span></span>
+    <h2 style="font-size:24px">Gracias, <span id="doneName"></span></h2>
+    <p style="color:var(--tinta-suave)">
+      Alguien del equipo de Kivo te escribirá en <b>menos de 24 horas</b> para empezar tu
+      transferencia. Mientras, puedes ir preparando las fotos de los documentos.
+    </p>
+    <a class="link-btn" href="/documentacion-traspaso-coche/" style="text-decoration:underline">
+      Ver qué documentos hacen falta
+    </a>
+    <button class="link-btn" type="button" id="restart">Calcular otro vehículo</button>
+  </div>
+</div>
+
+<script>
+  import { CCAA, FEE, TASA, itpFor, eur, type Vehiculo } from '../data/tarifas';
+  import { validarLead, marcarError, limpiarAlEscribir, formatearMatricula } from '../scripts/lead';
+
+  const raiz = document.getElementById('calculadora');
+  if (raiz) {
+    const $ = (id: string) => document.getElementById(id)!;
+    const sel = $('ccaa') as HTMLSelectElement;
+    const parse = (s: string) => {
+      const n = parseInt(String(s).replace(/[^\d]/g, ''), 10);
+      return isNaN(n) ? 0 : n;
+    };
+    const vehActual = () =>
+      (document.querySelector('input[name="veh"]:checked') as HTMLInputElement).value as Vehiculo;
+
+    /** El texto bajo el recibo: explica de dónde sale el impuesto. */
+    function nota(c: (typeof CCAA)[number], veh: Vehiculo, age: number, fixed: boolean) {
+      if (veh === 'ciclo' && c.ciclo0) return `En ${c.n} los ciclomotores no pagan ITP.`;
+      if (veh !== 'ciclo' && c.exentoOld && age >= c.exentoOld) {
+        const salvo = c.id === 'CAT' ? ' (salvo históricos o de alta gama)' : '';
+        return `En ${c.n} los vehículos de ${c.exentoOld} años o más no pagan ITP${salvo}.`;
+      }
+      if (fixed && c.old) {
+        return `${c.n} aplica una cuota fija a coches de ${c.old.min} años o más según cilindrada.`;
+      }
+      const tipo = String(c.r).replace('.', ',');
+      return `Estimación al ${tipo} % de ${c.n}. <b>Hacienda usa el mayor entre tu precio y el valor de tablas del modelo</b>; te confirmamos la cifra exacta con la matrícula antes de pagar el impuesto.`;
+    }
+
+    let ultimo = { total: 0, itp: 0, ccaa: '', veh: 'coche' as Vehiculo };
+
+    function calc() {
+      const veh = vehActual();
+      const c = CCAA.find((x) => x.id === sel.value)!;
+      const age = +($('edad') as HTMLSelectElement).value;
+      const cc = +($('cc') as HTMLSelectElement).value;
+      const price = parse(($('precio-compra') as HTMLInputElement).value);
+
+      // La cilindrada solo se pregunta cuando decide la cuota fija.
+      const pideCc = veh === 'coche' && !!c.old && age >= c.old.min && (!c.old.max || price < c.old.max);
+      ($('ccField') as HTMLElement).hidden = !pideCc;
+
+      const r = itpFor(c, veh, age, cc, price);
+      const tasa = TASA[veh];
+
+      $('tasaLbl').textContent = veh === 'ciclo' ? 'Tasa DGT (ciclomotor)' : 'Tasa DGT';
+      $('tasa').textContent = eur(tasa);
+      $('itp').textContent = price || r.fixed ? eur(r.itp) : '—';
+      $('itpNote').innerHTML =
+        price || r.fixed ? nota(c, veh, age, r.fixed) : 'Escribe el precio de compra para estimar el impuesto.';
+
+      const total = FEE + tasa + r.itp;
+      ultimo = { total, itp: r.itp, ccaa: c.n, veh };
+      $('total').textContent = eur(total);
+
+      const st = document.getElementById('stickyTotal');
+      const sl = document.getElementById('stickyLbl');
+      if (st) st.textContent = eur(total).replace(',00', '');
+      if (sl) sl.textContent = 'total estimado con impuestos';
+    }
+
+    ($('precio-compra') as HTMLInputElement).addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      const n = parse(el.value);
+      el.value = n ? n.toLocaleString('es-ES') : '';
+      calc();
+    });
+    ['ccaa', 'edad', 'cc'].forEach((id) => $(id).addEventListener('change', calc));
+    document
+      .querySelectorAll('input[name="veh"]')
+      .forEach((r) => r.addEventListener('change', calc));
+    calc();
+
+    // --- las tres vistas ---------------------------------------------------
+    const vistas = { calc: $('calcView'), lead: $('leadView'), done: $('doneView') };
+    function show(v: keyof typeof vistas) {
+      Object.entries(vistas).forEach(([k, el]) => ((el as HTMLElement).hidden = k !== v));
+      raiz!.scrollIntoView({ block: 'start' });
+    }
+    $('go').addEventListener('click', () => {
+      $('sumTotal').textContent = eur(ultimo.total);
+      show('lead');
+      setTimeout(() => ($('matricula') as HTMLInputElement).focus(), 50);
+    });
+    $('back').addEventListener('click', () => show('calc'));
+    $('restart').addEventListener('click', () => show('calc'));
+
+    // --- envío -------------------------------------------------------------
+    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT;
+
+    limpiarAlEscribir($('leadView'), $('leadErr'));
+    formatearMatricula($('matricula') as HTMLInputElement);
+
+    $('leadView').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const val = (id: string) => ($(id) as HTMLInputElement).value;
+      const { datos: lead, err, campo } = validarLead('');
+      const { matricula: m, nombre: n, telefono: t, email: em } = lead;
+      const rol = (document.querySelector('input[name="rol"]:checked') as HTMLInputElement).value;
+
+      const box = $('leadErr');
+      box.hidden = !err;
+      box.textContent = err;
+      marcarError($('leadView'), campo, box);
+      if (err) return;
+
+      const boton = $('send') as HTMLButtonElement;
+      boton.disabled = true;
+      boton.textContent = 'Enviando…';
+
+      const datos = {
+        rol,
+        matricula: m,
+        nombre: n,
+        telefono: t,
+        email: em,
+        mensaje: val('msg').trim(),
+        vehiculo: ultimo.veh,
+        comunidad: ultimo.ccaa,
+        itp_estimado: eur(ultimo.itp),
+        total_estimado: eur(ultimo.total),
+        pagina: location.pathname,
+      };
+
+      if (ENDPOINT) {
+        try {
+          const res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(datos),
+          });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+        } catch (e) {
+          boton.disabled = false;
+          boton.textContent = 'Enviar solicitud';
+          box.hidden = false;
+          box.textContent =
+            'No hemos podido enviar la solicitud. Inténtalo otra vez en un momento.';
+          console.error('[Kivo] Fallo al enviar el formulario:', e);
+          return;
+        }
+      } else {
+        console.warn(
+          '[Kivo] PUBLIC_FORM_ENDPOINT no está definida: la solicitud NO se ha enviado. ' +
+            'Copia .env.example a .env y pon el endpoint de Formspree. Datos del formulario:',
+          datos
+        );
+      }
+
+      $('donePlate').textContent = m.replace(/^(\d{4})\s?([A-Z]{3})$/, '$1 $2');
+      $('doneName').textContent = n.split(' ')[0];
+      show('done');
+      boton.disabled = false;
+      boton.textContent = 'Enviar solicitud';
+    });
+
+    // Los botones «Calcular» de la tabla del ITP ponen la comunidad aquí.
+    document.querySelectorAll<HTMLButtonElement>('[data-ccaa]').forEach((b) =>
+      b.addEventListener('click', () => {
+        sel.value = b.dataset.ccaa!;
+        calc();
+        show('calc');
+      })
+    );
+  }
+</script>

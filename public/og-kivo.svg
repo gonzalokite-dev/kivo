@@ -1,0 +1,50 @@
+<!-- Fuente de la imagen para compartir. El PNG real que se usa en Open Graph
+     es public/og-kivo.png, generado desde este SVG con
+     `node scripts/convertir-og.mjs`. Si editas este archivo, vuelve a
+     ejecutar el script para regenerar el PNG. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Kivo · Transferencia de coche online, sin ir a Tráfico. 89 € de honorarios.">
+  <rect width="1200" height="630" fill="#0E1630"/>
+
+  <!-- la carretera, con la marca central discontinua -->
+  <rect x="0" y="560" width="1200" height="10" fill="#1C2445"/>
+  <g fill="#FFD84D">
+    <rect x="60" y="563" width="52" height="4" rx="2"/>
+    <rect x="152" y="563" width="52" height="4" rx="2"/>
+    <rect x="244" y="563" width="52" height="4" rx="2"/>
+    <rect x="336" y="563" width="52" height="4" rx="2"/>
+    <rect x="428" y="563" width="52" height="4" rx="2"/>
+    <rect x="520" y="563" width="52" height="4" rx="2"/>
+    <rect x="612" y="563" width="52" height="4" rx="2"/>
+    <rect x="704" y="563" width="52" height="4" rx="2"/>
+    <rect x="796" y="563" width="52" height="4" rx="2"/>
+    <rect x="888" y="563" width="52" height="4" rx="2"/>
+    <rect x="980" y="563" width="52" height="4" rx="2"/>
+    <rect x="1072" y="563" width="52" height="4" rx="2"/>
+  </g>
+
+  <!-- icono -->
+  <g transform="translate(72 64) scale(0.42)">
+    <rect width="256" height="256" rx="61.4" fill="#3D5AFE"/>
+    <path d="M56.3 102.4C76.8 46.1 179.2 46.1 199.7 92.2" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round"/>
+    <path d="M174.1 87.0L202.2 97.3L212.5 69.1" fill="none" stroke="#FFD84D" stroke-width="17.9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M79.4 143.4L97.3 115.2Q101.1 110.1 107.5 110.1L148.5 110.1Q154.9 110.1 158.7 115.2L176.6 143.4Z" fill="#FFFFFF"/>
+    <rect x="41.0" y="138.2" width="174.1" height="41.0" rx="17.9" fill="#FFFFFF"/>
+    <circle cx="81.9" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"/>
+    <circle cx="174.1" cy="181.8" r="21.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="10.2"/>
+    <path d="M93.4 138.2L104.4 120.8L124.2 120.8L124.2 138.2Z M131.8 138.2L131.8 120.8L151.6 120.8L162.6 138.2Z" fill="#3D5AFE"/>
+  </g>
+
+  <g font-family="'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif">
+    <text x="72" y="300" font-size="76" font-weight="800" fill="#EEF1FA" letter-spacing="-2.4">Transferencia de coche</text>
+    <text x="72" y="386" font-size="76" font-weight="800" fill="#EEF1FA" letter-spacing="-2.4">online, <tspan fill="#FFD84D">sin ir a Tráfico.</tspan></text>
+    <text x="72" y="468" font-size="34" font-weight="600" fill="#A3ABC2">Cambio de titular en la DGT, impuesto y papeleo.</text>
+    <text x="72" y="512" font-size="34" font-weight="800" fill="#EEF1FA">89 € de honorarios · toda España</text>
+  </g>
+
+  <!-- matrícula de ejemplo -->
+  <g transform="translate(910 420)">
+    <rect x="0" y="0" width="218" height="68" rx="9" fill="#FFFFFF" stroke="#0E1630" stroke-width="4"/>
+    <rect x="4" y="4" width="26" height="60" rx="5" fill="#1B3FA6"/>
+    <text x="124" y="48" font-size="38" font-weight="700" fill="#0E1630" text-anchor="middle" letter-spacing="5" font-family="'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif">1234 MBC</text>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+---
+/**
+ * Logo de Kivo. Tal cual sale del design system «Kivo · Carril».
+ * No redibujar ni recomponer (brandbook, cap. 2 · Versiones).
+ * La palabra «kivo» usa `currentColor`, así que el inverso se consigue
+ * cambiando el color del contenedor.
+ */
+interface Props {
+  /** Alto en píxeles. Mínimo 100 px de ancho ≈ 34 px de alto. */
+  class?: string;
+}
+const { class: cls = 'logo-svg' } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 350 124"
+  width="350"
+  height="124"
+  role="img"
+  class={cls}
+  aria-label="Kivo"
+>
+  <rect x="0" y="10" width="104" height="104" rx="25.0" fill="#3D5AFE"></rect>
+  <path d="M22.9 51.6C31.2 28.7 72.8 28.7 81.1 47.4" fill="none" stroke="#FFD84D" stroke-width="7.3" stroke-linecap="round"></path>
+  <path d="M70.7 45.4L82.2 49.5L86.3 38.1" fill="none" stroke="#FFD84D" stroke-width="7.3" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M32.2 68.2L39.5 56.8Q41.1 54.7 43.7 54.7L60.3 54.7Q62.9 54.7 64.5 56.8L71.8 68.2Z" fill="#FFFFFF"></path>
+  <rect x="16.6" y="66.2" width="70.7" height="16.6" rx="7.3" fill="#FFFFFF"></rect>
+  <circle cx="33.3" cy="83.8" r="8.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="4.2"></circle>
+  <circle cx="70.7" cy="83.8" r="8.8" fill="#FFFFFF" stroke="#3D5AFE" stroke-width="4.2"></circle>
+  <path d="M38.0 66.2L42.4 59.1L50.4 59.1L50.4 66.2Z M53.6 66.2L53.6 59.1L61.6 59.1L66.0 66.2Z" fill="#3D5AFE"></path>
+  <path fill="currentColor" d="M137.94 92.0V10.24H154.14V54.30L174.12 33.03H194.1L172.71 56.79L193.99 92.0H175.63L160.62 66.83L154.14 73.96V92.0ZM198.22 92.0V33.03H214.42V92.0ZM198.22 27.73V11.54H214.42V27.73ZM241.77 92.0 218.55 33.03H236.05L248.79 68.34L261.53 33.03H279.03L255.81 92.0ZM312.43 93.29Q303.68 93.29 296.50 89.30Q289.32 85.30 285.05 78.33Q280.78 71.37 280.78 62.51Q280.78 53.55 285.05 46.64Q289.32 39.72 296.50 35.73Q303.68 31.73 312.43 31.73Q321.18 31.73 328.30 35.73Q335.43 39.72 339.70 46.64Q343.96 53.55 343.96 62.51Q343.96 71.37 339.70 78.33Q335.43 85.30 328.30 89.30Q321.18 93.29 312.43 93.29ZM312.43 78.71Q316.86 78.71 320.15 76.66Q323.44 74.61 325.33 70.94Q327.22 67.26 327.22 62.51Q327.22 57.76 325.33 54.14Q323.44 50.52 320.15 48.42Q316.86 46.31 312.43 46.31Q308.00 46.31 304.65 48.42Q301.30 50.52 299.41 54.14Q297.52 57.76 297.52 62.51Q297.52 67.26 299.41 70.94Q301.30 74.61 304.65 76.66Q308.00 78.71 312.43 78.71Z"></path>
+</svg>

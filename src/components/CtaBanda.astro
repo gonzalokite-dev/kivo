@@ -1,0 +1,27 @@
+---
+import Icono from './Icono.astro';
+
+interface Props {
+  titulo: string;
+  texto: string;
+  cta?: string;
+  etiqueta?: string;
+}
+const {
+  titulo,
+  texto,
+  cta = '/#calculadora',
+  etiqueta = 'Calcular mi precio',
+} = Astro.props;
+---
+
+<section class="cta-sec">
+  <div class="wrap">
+    <div class="cta-band">
+      <div><b>{titulo}</b><span>{texto}</span></div>
+      <a class="btn btn-primary" href={cta}>
+        {etiqueta} <Icono name="flecha" size={18} sw={2.5} class="arrow" />
+      </a>
+    </div>
+  </div>
+</section>
