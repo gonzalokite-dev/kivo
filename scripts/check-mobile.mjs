@@ -41,9 +41,20 @@ const TIPOS = {
 const errores = [];
 
 // --- servidor estático -----------------------------------------------------
+/** Solicitudes que han llegado a la función simulada /api/solicitud. */
+const recibidas = [];
+
 function servidor() {
   return new Promise((res) => {
     const s = createServer(async (req, rep) => {
+      // Simula la función de Vercel api/solicitud.js: guarda lo que llega.
+      if (req.method === 'POST' && req.url.startsWith('/api/solicitud')) {
+        let cuerpo = '';
+        for await (const trozo of req) cuerpo += trozo;
+        try { recibidas.push(JSON.parse(cuerpo)); } catch { recibidas.push({ invalido: cuerpo }); }
+        rep.writeHead(200, { 'Content-Type': 'application/json' });
+        return rep.end('{"ok":true}');
+      }
       let ruta = decodeURIComponent(req.url.split('?')[0]);
       let f = join(DIST, ruta);
       try {
@@ -333,28 +344,26 @@ try {
   }
 
   // Caso válido: tiene que llegar a la pantalla de éxito.
+  const antes = recibidas.length;
   const bueno = await cdp.eval(`(async () => {
-    const avisos = [];
-    const orig = console.warn; console.warn = (...a) => { avisos.push(a.join(' ')); orig(...a); };
     const v = (id, val) => document.getElementById(id).value = val;
     v('matricula','1234 MBC'); v('nombre','Javi Pérez'); v('tel','600123456'); v('email','javi@ejemplo.es');
     document.getElementById('rgpd').checked = true;
     document.getElementById('leadView').dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}));
     await new Promise(r => setTimeout(r, 300));
-    console.warn = orig;
     return {
       exito: !document.getElementById('doneView').hidden,
       matricula: document.getElementById('donePlate').textContent,
       nombre: document.getElementById('doneName').textContent,
-      avisoSinEndpoint: avisos.some(a => a.includes('PUBLIC_FORM_ENDPOINT')),
     };
   })()`);
+  const envio = recibidas[antes];
+  const envioOk = envio && envio.matricula === '1234 MBC' && envio.email === 'javi@ejemplo.es' && envio.origen === 'calculadora' && envio.web === '';
   console.log(
-    `    ${bueno.exito ? 'ok ' : 'NO '} datos válidos      → pantalla de éxito (${bueno.matricula}, ${bueno.nombre}); aviso por consola sin endpoint: ${bueno.avisoSinEndpoint}`
+    `    ${bueno.exito && envioOk ? 'ok ' : 'NO '} datos válidos      → pantalla de éxito (${bueno.matricula}, ${bueno.nombre}); llega a /api/solicitud: ${envioOk ? 'sí' : JSON.stringify(envio)}`
   );
   if (!bueno.exito) errores.push('El formulario válido no llega a la pantalla de éxito');
-  if (!bueno.avisoSinEndpoint)
-    errores.push('Sin PUBLIC_FORM_ENDPOINT debería avisar por consola y no lo hace');
+  if (!envioOk) errores.push('La solicitud no llega bien a /api/solicitud: ' + JSON.stringify(envio));
 
   // --- 5) lo añadido para móvil y conversión -----------------------------
   console.log('\n  Móvil y conversión');

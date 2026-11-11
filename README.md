@@ -41,14 +41,33 @@ node scripts/check-lighthouse.mjs /vender-coche/        # rutas concretas
 | Dónde | Qué |
 | --- | --- |
 | `site.config.mjs` | Dominio (`gestoriakivo.com`) para canónicas, Open Graph, sitemap y robots. |
-| `.env` | `PUBLIC_FORM_ENDPOINT`, el endpoint del formulario (Formspree o similar). Copia `.env.example`. |
+| `api/solicitud.js` | Función de Vercel que recibe los formularios: email al equipo y acuse automático al cliente. Hoy con FormSubmit; con `RESEND_API_KEY`, con Resend. |
+| `LEAD_DESTINATARIOS` en `site.config.mjs` | A quién llegan las solicitudes. Opcionales en Vercel: `RESEND_API_KEY`, `LEAD_DESTINATARIOS`, `LEAD_REMITENTE`, `LEAD_RESPONDER_A` (ver `.env.example`). |
 | `src/data/tarifas.ts` | Honorarios, tasas de la DGT y el ITP de las 19 comunidades. |
 | `src/data/nav.ts` | Menú, pie y las fuentes oficiales a las que enlazamos. |
 | `src/data/seo.ts` | Generadores de JSON-LD y la imagen para compartir. |
 
-**Sin `PUBLIC_FORM_ENDPOINT` el formulario no envía nada**: valida, muestra la
-pantalla de éxito y deja un aviso en la consola con los datos que habría
-enviado. Así se puede probar el flujo completo sin endpoint.
+### Envío de los formularios
+
+Los dos formularios (el del hero y el de la calculadora) envían a
+`/api/solicitud`, una función de Vercel (`api/solicitud.js`) que:
+
+1. manda un email al equipo (`LEAD_DESTINATARIOS`) con todos los datos; al
+   responder, la respuesta va al cliente;
+2. manda al cliente un acuse automático («el equipo de Kivo está gestionando
+   tu petición»), en inglés si la solicitud viene de `/en/`.
+
+**Hoy envía con FormSubmit** (sin cuenta). La primera vez, FormSubmit manda un
+email «Activate form» al primer destinatario; hasta que se pulsa, no reenvía
+nada. Con una clave de Resend en Vercel (`RESEND_API_KEY`) pasa a usar Resend,
+con los emails con diseño y remitente @gestoriakivo.com.
+
+Si falla el email al equipo, el cliente ve un error y puede reintentar. Si solo
+falla el acuse, la solicitud ya ha llegado y el cliente ve el éxito. Un campo
+trampa invisible descarta los envíos de bots.
+
+**En local (`astro dev`) la función no existe**: sin `PUBLIC_FORM_ENDPOINT` el
+formulario simula el envío y deja los datos en la consola.
 
 ### Bloques que aparecen solos al rellenar un dato
 

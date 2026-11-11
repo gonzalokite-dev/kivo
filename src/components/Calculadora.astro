@@ -188,6 +188,9 @@ const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
       >
     </label>
 
+    {/* Trampa para bots: invisible para las personas. */}
+    <input class="trampa" type="text" id="c-web" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
     <p class="err" id="leadErr" hidden></p>
 
     <button class="btn btn-primary btn-block" type="submit" id="send">Enviar solicitud</button>
@@ -300,7 +303,10 @@ const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
     $('restart').addEventListener('click', () => show('calc'));
 
     // --- envío -------------------------------------------------------------
-    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT;
+    // En producción, la función de Vercel /api/solicitud (api/solicitud.js),
+    // que envía el email al equipo y el acuse al cliente. En «astro dev» no
+    // existe: sin PUBLIC_FORM_ENDPOINT se simula el envío y se avisa por consola.
+    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT || (import.meta.env.DEV ? '' : '/api/solicitud');
 
     limpiarAlEscribir($('leadView'), $('leadErr'));
     formatearMatricula($('matricula') as HTMLInputElement);
@@ -334,6 +340,8 @@ const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
         itp_estimado: eur(ultimo.itp),
         total_estimado: eur(ultimo.total),
         pagina: location.pathname,
+        origen: 'calculadora',
+        web: val('c-web'),
       };
 
       if (ENDPOINT) {

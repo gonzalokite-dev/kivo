@@ -731,3 +731,7 @@ footer .wrap{display:block}
 .cta-nota{flex-basis:100%;font-size:13px;color:var(--tinta-suave);text-align:center}
 .cta-band .cta-acc{display:grid;gap:10px;justify-items:center}
 .cta-band .cta-nota{color:var(--on-amarillo);opacity:.75}
+
+/* Campo trampa de los formularios: fuera de la vista, pero no display:none
+   (algunos bots se saltan los campos ocultos con display:none). */
+.trampa{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}

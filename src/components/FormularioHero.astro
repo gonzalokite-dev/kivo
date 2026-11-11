@@ -186,6 +186,9 @@ const titulo = Astro.props.titulo ?? T.titulo;
       <span>{T.rgpd1}<a href="/privacidad/">{T.rgpd2}</a>.</span>
     </label>
 
+    {/* Trampa para bots: invisible para las personas. Si llega rellena, la función no envía nada. */}
+    <input class="trampa" type="text" id="h-web" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
     <p class="err" id="h-leadErr" hidden></p>
 
     <button class="btn btn-primary btn-block" type="submit" id="h-send">{T.enviar}</button>
@@ -219,7 +222,10 @@ const titulo = Astro.props.titulo ?? T.titulo;
   const raiz = document.getElementById('solicitud');
   if (raiz) {
     const $ = (id: string) => document.getElementById(id)!;
-    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT;
+    // En producción, la función de Vercel /api/solicitud (api/solicitud.js),
+    // que envía el email al equipo y el acuse al cliente. En «astro dev» no
+    // existe: sin PUBLIC_FORM_ENDPOINT se simula el envío y se avisa por consola.
+    const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT || (import.meta.env.DEV ? '' : '/api/solicitud');
     const lang = raiz.dataset.lang === 'en' ? 'en' : 'es';
     const txt = {
       enviar: raiz.dataset.enviar!,
@@ -317,6 +323,7 @@ const titulo = Astro.props.titulo ?? T.titulo;
         idioma: lang,
         pagina: location.pathname,
         origen: 'hero',
+        web: val('h-web'),
       };
 
       if (ENDPOINT) {

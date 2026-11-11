@@ -31,6 +31,14 @@ export const TELEFONO = null;
 export const EMAIL = null;
 export const WHATSAPP = '34663482301'; // +34 663 48 23 01
 
+// A quién llegan las solicitudes de los formularios (api/solicitud.js). El
+// primero recibe además las respuestas de los clientes al email automático.
+// Si se define LEAD_DESTINATARIOS en Vercel, manda la de Vercel.
+export const LEAD_DESTINATARIOS = [
+  'gbenavides@benavidesasociados.com',
+  'vbenavides@benavidesasociados.com',
+];
+
 // Mensaje que aparece ya escrito al abrir WhatsApp desde la web. El usuario
 // lo puede cambiar antes de enviarlo. Uno por idioma (/en/ usa el inglés).
 export const WHATSAPP_MENSAJE = {
