@@ -18,6 +18,7 @@ export const MENU: Enlace[] = [
 /** Las 5 comerciales, para el pie y para los enlaces internos. */
 export const COMERCIALES: Enlace[] = [
   { href: '/', label: 'Traspaso de coche' },
+  { href: '/gestoria-traspaso-coche/', label: 'Gestoría de traspasos' },
   { href: '/precio-traspaso-coche/', label: 'Cuánto cuesta' },
   { href: '/documentacion-traspaso-coche/', label: 'Documentos' },
   { href: '/traspaso-moto/', label: 'Traspaso de moto' },

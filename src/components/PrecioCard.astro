@@ -6,6 +6,12 @@
  */
 import Icono from './Icono.astro';
 
+interface Props {
+  /** A dónde lleva «Ver mi total»: la calculadora de la página o la de /precio-traspaso-coche/. */
+  cta?: string;
+}
+const { cta = '#calculadora' } = Astro.props;
+
 const incluye = [
   ['Sin colas ni cita en Tráfico', 'presentamos la transferencia online, como gestores.'],
   ['Informe del vehículo', 'comprobamos cargas, embargos e ITV antes de pagar nada.'],
@@ -26,7 +32,7 @@ const incluye = [
       Igual para cualquier coche o moto. La tasa DGT y el ITP los pagamos por ti y te los enseñamos
       al céntimo, sin margen.
     </p>
-    <a class="btn" href="#calculadora">Ver mi total</a>
+    <a class="btn" href={cta}>Ver mi total</a>
     <span class="price-nota">Sin pagar nada ahora · Respuesta en menos de 24 h</span>
   </div>
   <div class="incluye">

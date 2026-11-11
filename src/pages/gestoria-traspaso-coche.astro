@@ -1,0 +1,334 @@
+---
+/**
+ * Gestoría para el traspaso de un coche.
+ * Palabra clave: gestoría traspaso coche.
+ * Secundarias: gestoría transferencia coche, gestoría online traspaso coche,
+ * cuánto cobra una gestoría por un traspaso, gestor administrativo traspaso.
+ *
+ * Intención distinta de la portada: aquí busca quien ya ha decidido que se
+ * lo haga una gestoría y compara (qué hace, cuánto cobra, online o
+ * presencial, si es seguro). La portada se queda con «traspaso coche
+ * (online)» y enlaza aquí con el ancla «gestoría de traspasos de coche».
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import RespuestaDirecta from '../components/RespuestaDirecta.astro';
+import FormularioHero from '../components/FormularioHero.astro';
+import PrecioCard from '../components/PrecioCard.astro';
+import Garantia from '../components/Garantia.astro';
+import Confianza from '../components/Confianza.astro';
+import Pasos from '../components/Pasos.astro';
+import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
+import FaqLado from '../components/FaqLado.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icono from '../components/Icono.astro';
+import { FEE, TASA, CCAA, eur } from '../data/tarifas';
+import { ANIO } from '../../site.config.mjs';
+import { breadcrumbLd, faqLd, serviceLd, type Miga } from '../data/seo';
+
+const path = '/gestoria-traspaso-coche/';
+const title = 'Gestoría de traspaso de coche online: 89 € + tasas | Kivo';
+const description =
+  'Gestoría online para el traspaso de tu coche: cambio de titular en la DGT, ITP y papeleo por 89 €. Gestor colegiado, sin cita y sin ir a ninguna oficina.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Gestoría de traspasos', href: path },
+];
+
+const tareas = [
+  ['Revisa el coche antes de nada', 'pide el informe de la DGT para ver cargas, embargos o la ITV caducada.'],
+  ['Prepara el contrato de compraventa', 'con los datos de comprador, vendedor y vehículo.'],
+  ['Recoge el mandato', 'la autorización firmada para presentar el trámite en vuestro nombre.'],
+  ['Calcula y paga el impuesto (ITP)', 'el modelo 620 o el de tu comunidad, sobre el valor de tablas de Hacienda.'],
+  ['Paga la tasa de la DGT', `${eur(TASA.coche)} en ${ANIO} para coches y motos.`],
+  ['Presenta el cambio de titular', 'en la DGT, con todos los documentos.'],
+  ['Te entrega el permiso nuevo', 'a nombre del comprador, y avisa al vendedor de que ya no es el titular.'],
+];
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Qué hace una gestoría en el traspaso de un coche?',
+    a: 'Revisa el informe del vehículo, redacta el contrato, recoge el mandato de comprador y vendedor, calcula y paga el impuesto de transmisiones (ITP), paga la tasa de la DGT y presenta el cambio de titular. Al final entrega el permiso de circulación a nombre del comprador.',
+  },
+  {
+    q: '¿Cuánto cobra una gestoría por un traspaso de coche?',
+    a: 'Cada gestoría fija sus honorarios y algunas cobran aparte el informe del vehículo o los envíos. A eso se suman siempre la tasa de la DGT y el ITP, que son iguales vayas donde vayas. En Kivo los honorarios son 89 €, IVA incluido, para cualquier coche o moto.',
+    html:
+      'Cada gestoría fija sus honorarios y algunas cobran aparte el informe del vehículo o los envíos. A eso se suman siempre la tasa de la DGT y el ITP, que son iguales vayas donde vayas. En Kivo los honorarios son 89 €, IVA incluido, para cualquier coche o moto; tienes el desglose en <a href="/precio-traspaso-coche/">cuánto cuesta el traspaso de un coche</a>.',
+  },
+  {
+    q: '¿Tengo que ir a la gestoría en persona?',
+    a: 'Con una gestoría online, no. Enviáis las fotos de los documentos y firmáis el contrato y el mandato desde el móvil. Comprador y vendedor no tienen que coincidir ni desplazarse.',
+  },
+  {
+    q: '¿Puede hacerlo una gestoría de otra provincia?',
+    a: 'Sí. El cambio de titular es un trámite de la DGT válido en toda España, y el impuesto se paga en la comunidad del comprador. La gestoría puede estar en cualquier sitio.',
+  },
+  {
+    q: '¿Es seguro dar mis datos a una gestoría online?',
+    a: 'Sí, si la transferencia la presenta un gestor administrativo colegiado con vuestro mandato firmado, como en cualquier gestoría. Los documentos se usan solo para el traspaso y recibes el justificante de cada pago.',
+  },
+  {
+    q: '¿Me sale más barato hacerlo sin gestoría?',
+    a: 'Te ahorras los honorarios, pero necesitáis certificado digital o Cl@ve para hacerlo online, o pedir cita en Tráfico, y calcular vosotros el ITP con las tablas de Hacienda. La tasa y el impuesto son los mismos.',
+    html:
+      'Te ahorras los honorarios, pero necesitáis certificado digital o Cl@ve para hacerlo online, o pedir cita en Tráfico, y calcular vosotros el ITP con las tablas de Hacienda. La tasa y el impuesto son los mismos. Lo comparamos en la guía del <a href="/guias/traspaso-coche-sin-certificado-digital/">traspaso sin certificado digital</a>.',
+  },
+];
+
+const tipos = CCAA.map((c) => c.r);
+const itpMin = String(Math.min(...tipos)).replace('.', ',');
+const itpMax = String(Math.max(...tipos)).replace('.', ',');
+
+const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {path}
+  {jsonld}
+  cta="#solicitud"
+  sticky={{ cta: '#solicitud', texto: 'Pedir mi traspaso' }}
+>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Gestoría para el traspaso de tu coche, 100 % online</h1>
+      <p class="lede">
+        Hacemos lo mismo que una gestoría de barrio, <b>sin que tengas que ir a la oficina</b>:
+        revisamos el coche, preparamos el contrato, pagamos el impuesto y presentamos el cambio de
+        titular en la DGT. Por <b>89 € de honorarios</b>.
+      </p>
+      <RespuestaDirecta
+        texto={`Kivo es una gestoría online de traspasos de coches y motos. Un gestor administrativo colegiado presenta el cambio de titular en la DGT con vuestro mandato, y nosotros liquidamos el ITP y pagamos la tasa (${eur(TASA.coche)}). Los honorarios son <b>${FEE} €, IVA incluido</b>, y firmáis todo desde el móvil.`}
+      />
+      <ul class="checks">
+        <li><Icono name="check" size={16} sw={3} />Gestor administrativo colegiado</li>
+        <li><Icono name="check" size={16} sw={3} />Sin cita ni oficina</li>
+        <li><Icono name="check" size={16} sw={3} />Toda España</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="que-hace">
+    <div class="wrap calc-layout">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Qué hace la gestoría</span>
+          <h2>Todo lo que hacemos por ti en el traspaso</h2>
+          <p>Lo mismo que harías tú en Tráfico y en Hacienda, sin que tengas que hacerlo.</p>
+        </div>
+        <ol class="tareas">
+          {
+            tareas.map(([t, d], i) => (
+              <li>
+                <span class="tarea-n">{i + 1}</span>
+                <span>
+                  <b>{t}:</b> {d}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="alt" style="margin-top:24px">
+          <b>Tú solo envías tres fotos y firmas.</b> Qué documentos son y cómo hacer las fotos está en{' '}
+          <a href="/documentacion-traspaso-coche/">los documentos para el traspaso de un coche</a>.
+        </p>
+      </div>
+      <FormularioHero />
+    </div>
+  </section>
+
+  <section id="cuanto-cobra" style="background:var(--surface)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Precio</span>
+        <h2>¿Cuánto cobra una gestoría por un traspaso?</h2>
+        <p>
+          Hay dos partes: los honorarios de la gestoría, que cada una fija a su manera, y la tasa de
+          la DGT y el impuesto, que son iguales vayas donde vayas.
+        </p>
+      </div>
+      <div class="cobra">
+        <div>
+          <b>Honorarios de la gestoría</b>
+          <p>
+            Cada gestoría pone su precio y algunas cobran aparte el informe del vehículo, el contrato
+            o el envío del permiso. <b>Pregunta siempre qué incluye.</b> En Kivo son {FEE} €, IVA
+            incluido, con todo eso dentro.
+          </p>
+        </div>
+        <div>
+          <b>Tasa de la DGT</b>
+          <p>
+            {eur(TASA.coche)} en {ANIO} para coches y motos ({eur(TASA.ciclo)} en ciclomotores). La
+            paga el comprador y es igual en toda España. Nosotros la pagamos sin recargo.
+          </p>
+        </div>
+        <div>
+          <b>Impuesto (ITP)</b>
+          <p>
+            Del {itpMin} % al {itpMax} % según la comunidad del comprador, sobre el valor de tablas de Hacienda. Lo
+            calculas en <a href="/precio-traspaso-coche/">cuánto cuesta el traspaso de un coche</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="precio">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Nuestros honorarios</span>
+        <h2>89 € cerrados, con todo incluido</h2>
+      </div>
+      <PrecioCard cta="/precio-traspaso-coche/#calculadora" />
+      <Garantia />
+    </div>
+  </section>
+
+  <section id="online-o-presencial" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Online o presencial</span>
+        <h2>Gestoría online o gestoría de barrio</h2>
+        <p>El trámite y el resultado son los mismos. Cambia cómo lo vives tú.</p>
+      </div>
+      <div class="vs">
+        <div>
+          <b>Gestoría presencial</b>
+          <ul>
+            <li>Vas a la oficina, a veces dos veces: para dejar papeles y para firmar.</li>
+            <li>Comprador y vendedor tienen que pasar o mandar a alguien.</li>
+            <li>En horario de oficina.</li>
+            <li>Para saber cómo va, llamas.</li>
+          </ul>
+        </div>
+        <div class="vs-kivo">
+          <b>Kivo, gestoría online</b>
+          <ul>
+            <li>Envías tres fotos desde el móvil y firmáis con un enlace.</li>
+            <li>Cada uno desde donde esté, aunque viváis en ciudades distintas.</li>
+            <li>Cuando te venga bien, también por la noche o en fin de semana.</li>
+            <li>Te escribimos por email en cada paso, con la matrícula en el asunto.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="seguridad" style="padding-top:0"><Confianza /></section>
+
+  <section id="como" style="background:var(--surface)">
+    <div class="wrap"><Pasos /></div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>Preguntas sobre la gestoría del traspaso</h2>
+        <FaqLado cta="#solicitud" />
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Tu gestoría de traspasos, sin ir a la oficina"
+    texto="89 € de honorarios. La tasa y el impuesto, al céntimo y sin margen."
+    cta="#solicitud"
+    etiqueta="Pedir mi traspaso"
+  />
+</BaseLayout>
+
+<style>
+  .tareas {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .tareas li {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 12px;
+    align-items: start;
+    color: var(--tinta-suave);
+  }
+  .tareas b {
+    color: var(--tinta);
+  }
+  .tarea-n {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--azul-suave);
+    color: var(--azul-texto);
+    font: 800 14px/1 var(--f-d);
+  }
+  .cobra {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .cobra > div {
+    background: var(--bg);
+    border-radius: var(--r-lg);
+    padding: 26px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .cobra > div > b {
+    font: 800 19px/1.25 var(--f-d);
+  }
+  .cobra p {
+    color: var(--tinta-suave);
+  }
+  .cobra p b {
+    color: var(--tinta);
+  }
+  .vs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 960px;
+    margin-inline: auto;
+  }
+  .vs > div {
+    border-radius: var(--r-lg);
+    padding: 28px;
+    background: var(--surface);
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .vs > div > b {
+    font: 800 20px/1.2 var(--f-d);
+  }
+  .vs ul {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
+    color: var(--tinta-suave);
+  }
+  .vs .vs-kivo {
+    background: var(--azul-suave);
+  }
+  .vs .vs-kivo ul {
+    color: var(--tinta);
+  }
+  @media (max-width: 860px) {
+    .cobra,
+    .vs {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

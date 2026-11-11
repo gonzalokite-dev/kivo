@@ -41,6 +41,7 @@ export const GET: APIRoute = async () => {
     `- [Documentos para la transferencia de un coche](${abs('/documentacion-traspaso-coche/')}): qué documentos envían el comprador y el vendedor, con ejemplos ilustrados.`,
     `- [Transferencia de moto online](${abs('/traspaso-moto/')}): precio y documentos para motos y ciclomotores.`,
     `- [Vender coche a particular](${abs('/vender-coche/')}): qué tiene que hacer quien vende para dejar de ser el titular.`,
+    `- [Gestoría de traspaso de coche online](${abs('/gestoria-traspaso-coche/')}): qué hace una gestoría en el traspaso, cuánto cobra y la diferencia entre gestoría online y presencial.`,
     '',
     `- [Car ownership transfer in Spain](${abs('/en/')}): la misma oferta en inglés, para residentes extranjeros con NIE.`,
     `- [Fuentes y datos](${abs('/fuentes-y-datos/')}): de dónde sale cada cifra de la web, con enlace a la fuente oficial.`,

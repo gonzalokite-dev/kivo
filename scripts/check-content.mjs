@@ -42,6 +42,7 @@ const COMERCIALES = [
   '/documentacion-traspaso-coche/',
   '/traspaso-moto/',
   '/vender-coche/',
+  '/gestoria-traspaso-coche/',
 ];
 
 const errores = [];
