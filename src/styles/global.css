@@ -718,3 +718,16 @@ footer .wrap{display:block}
 .hero-val span{color:#e0a800;letter-spacing:2px;font-size:16px}
 .hero-alt{font-size:15px;color:var(--tinta-suave)}
 .hero-alt a{font-weight:700}
+
+/* Formulario del hero en dos pasos, con barra de progreso. */
+.pasos-form{display:grid;gap:6px;margin-top:-4px}
+.pasos-form span{font:700 12px/1 var(--f-d);letter-spacing:.06em;text-transform:uppercase;color:var(--azul-texto)}
+.pasos-bar{height:6px;border-radius:999px;background:var(--surface);overflow:hidden}
+.pasos-bar i{display:block;height:100%;width:50%;background:var(--azul);border-radius:inherit;transition:width .3s}
+.paso-form{display:grid;gap:12px}
+.paso-volver{font-size:13px;margin-bottom:-2px}
+
+/* Frase de tranquilidad bajo los botones (el «o habla con nosotros» de Taxfix). */
+.cta-nota{flex-basis:100%;font-size:13px;color:var(--tinta-suave);text-align:center}
+.cta-band .cta-acc{display:grid;gap:10px;justify-items:center}
+.cta-band .cta-nota{color:var(--on-amarillo);opacity:.75}

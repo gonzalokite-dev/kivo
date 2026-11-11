@@ -1,18 +1,94 @@
 ---
-/** La tarjeta de 89 EUR y lo que incluye. El encabezado lo pone la página. */
+/**
+ * La tarjeta de 89 EUR y lo que incluye, en lista de beneficios con la frase
+ * clave en negrita (patrón de las tarjetas de plan de Taxfix). El encabezado
+ * lo pone la página. Solo cosas que el servicio ya hace según el resto de la web.
+ */
+import Icono from './Icono.astro';
+
+const incluye = [
+  ['Sin colas ni cita en Tráfico', 'presentamos la transferencia online, como gestores.'],
+  ['Informe del vehículo', 'comprobamos cargas, embargos e ITV antes de pagar nada.'],
+  ['Contrato de compraventa', 'lo redactamos con vuestros datos y lo firmáis desde el móvil.'],
+  ['Mandato al gestor', 'para que podamos presentarlo en vuestro nombre, sin certificado digital.'],
+  ['Impuesto (ITP) calculado y pagado', 'con el valor de tablas de Hacienda, para evitar complementarias.'],
+  ['Tasa de la DGT pagada', 'al céntimo y sin recargo, con su justificante.'],
+  ['Cambio de titular en la DGT', 'y te mandamos el permiso de circulación a tu nombre.'],
+  ['Un email en cada paso', 'con la matrícula en el asunto: sabes cómo va sin llamar a nadie.'],
+];
 ---
 
-      <div class="price">
-        <div class="price-card">
-          <span class="eyebrow">Honorarios, IVA incluido</span>
-          <span class="num">89<small>€</small></span>
-          <p>Igual para cualquier coche o moto. La tasa DGT y el ITP los pagamos por ti y te los enseñamos al céntimo, sin margen.</p>
-          <a class="btn" href="#calculadora">Ver mi total</a>
-        </div>
-        <div class="inc"><ul>
-          <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><b>Informe del vehículo</b><span>Comprobamos cargas, embargos e ITV antes de nada.</span></li>
-          <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg><b>Contrato de compraventa</b><span>Lo redactamos con vuestros datos y lo firmáis online.</span></li>
-          <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><b>Impuesto (ITP) liquidado</b><span>Sobre el valor de tablas de Hacienda, para evitar complementarias.</span></li>
-          <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 17h14l-1.5-6h-11z"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/><path d="M7 11l1.5-4h7L17 11"/></svg><b>Cambio de titular en la DGT</b><span>Presentamos la transferencia y te mandamos el permiso a tu nombre.</span></li>
-        </ul></div>
-      </div>
+<div class="price">
+  <div class="price-card">
+    <span class="eyebrow">Honorarios, IVA incluido</span>
+    <span class="num">89<small>€</small></span>
+    <p>
+      Igual para cualquier coche o moto. La tasa DGT y el ITP los pagamos por ti y te los enseñamos
+      al céntimo, sin margen.
+    </p>
+    <a class="btn" href="#calculadora">Ver mi total</a>
+    <span class="price-nota">Sin pagar nada ahora · Respuesta en menos de 24 h</span>
+  </div>
+  <div class="incluye">
+    <b>Todo esto va incluido</b>
+    <ul>
+      {
+        incluye.map(([t, d]) => (
+          <li>
+            <Icono name="check" size={18} sw={3} />
+            <span>
+              <b>{t}:</b> {d}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .incluye {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 30px 32px;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+  }
+  .incluye > b {
+    font: 800 20px/1.2 var(--f-d);
+    letter-spacing: -0.01em;
+  }
+  .incluye ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .incluye li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    align-items: start;
+    color: var(--tinta-suave);
+    font-size: 15.5px;
+  }
+  .incluye li :global(svg) {
+    color: var(--ok);
+    margin-top: 3px;
+  }
+  .incluye li b {
+    color: var(--tinta);
+    font-weight: 700;
+  }
+  .price-nota {
+    font-size: 13px;
+    color: var(--on-asfalto-suave);
+  }
+  @media (max-width: 520px) {
+    .incluye {
+      padding: 24px 20px;
+    }
+  }
+</style>

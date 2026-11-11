@@ -28,6 +28,7 @@ import ParaTi from '../components/ParaTi.astro';
 import Opiniones from '../components/Opiniones.astro';
 import TuGestor from '../components/TuGestor.astro';
 import Compromisos from '../components/Compromisos.astro';
+import PorQueKivo from '../components/PorQueKivo.astro';
 import { VALORACION, WHATSAPP, TELEFONO } from '../../site.config.mjs';
 import { waLink } from '../data/whatsapp';
 import { organizationLd, serviceLd, faqLd } from '../data/seo';
@@ -158,6 +159,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
         <div class="hero-cta">
           <a class="btn btn-primary" href="#solicitud">Pedir mi traspaso</a>
           <a class="btn btn-ghost" href="#calculadora">Ver mi precio</a>
+          <span class="cta-nota">Sin pagar nada ahora · Te escribimos en menos de 24 h</span>
         </div>
 
         <Traspaso />
@@ -182,6 +184,20 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
   </section>
 
   <BarraConfianza />
+
+  <!-- El precio justo después del hero: quien llega quiere saber cuánto
+       cuesta antes que nada (como los planes de Taxfix tras su hero). -->
+  <section id="precio">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Precio</span><h2>Un precio cerrado para tu transferencia</h2></div>
+      <PrecioCard />
+      <Garantia />
+      <p class="src" style="margin-top:16px">
+        ¿Quieres el desglose completo, con el impuesto de las 19 comunidades y tres ejemplos de total?
+        Está en <a href="/precio-traspaso-coche/">cuánto cuesta la transferencia de un coche</a>.
+      </p>
+    </div>
+  </section>
 
   <section id="para-ti"><ParaTi /></section>
 
@@ -283,19 +299,10 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
     </div>
   </section>
 
-  <section id="precio">
-    <div class="wrap">
-      <div class="sec-head"><span class="eyebrow">Precio</span><h2>Un precio cerrado para tu transferencia</h2></div>
-      <PrecioCard />
-      <Garantia />
-      <p class="src" style="margin-top:16px">
-        ¿Quieres el desglose completo, con el impuesto de las 19 comunidades y tres ejemplos de total?
-        Está en <a href="/precio-traspaso-coche/">cuánto cuesta la transferencia de un coche</a>.
-      </p>
-    </div>
-  </section>
 
-  <section style="padding-top:0"><div class="wrap"><Comparativa /></div></section>
+  <section id="compara"><div class="wrap"><Comparativa /></div></section>
+
+  <section id="por-que" style="padding-top:0"><PorQueKivo /></section>
 
   <section id="vendes" style="padding-top:0">
     <div class="wrap"><Compartir /></div>

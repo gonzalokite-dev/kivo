@@ -1,0 +1,89 @@
+---
+/**
+ * «¿Por qué Kivo y no otra gestoría online?»: tres razones en tarjetas de
+ * color (patrón de Taxfix). Solo afirmaciones que el resto de la web ya
+ * sostiene: especialización, precio a la vista y el despacho que hay detrás.
+ */
+import Icono from './Icono.astro';
+
+const razones = [
+  {
+    icono: 'coche',
+    t: 'Solo hacemos traspasos',
+    p: 'No somos una gestoría que hace de todo: nos dedicamos solo a la transferencia de coches y motos, con las reglas del impuesto de las 19 comunidades.',
+  },
+  {
+    icono: 'tarjeta',
+    t: 'El precio, antes de pedir nada',
+    p: '89 € de honorarios y la tasa y el impuesto al céntimo en la calculadora. Sin «desde», sin presupuesto a medida y sin margen en lo que pagamos por ti.',
+  },
+  {
+    icono: 'escudo',
+    t: 'Un despacho de verdad detrás',
+    p: 'Kivo es una marca de Benavides Asociados, despacho profesional de Pollença, y la transferencia la presenta un gestor administrativo colegiado.',
+  },
+];
+---
+
+<div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Por qué Kivo</span>
+    <h2>¿Por qué nosotros y no otra gestoría online?</h2>
+  </div>
+  <ul class="razones">
+    {
+      razones.map((r) => (
+        <li>
+          <span class="razon-ico">
+            <Icono name={r.icono} size={26} sw={2} />
+          </span>
+          <b>{r.t}</b>
+          <p>{r.p}</p>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .razones {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .razones li {
+    background: var(--azul-suave);
+    border-radius: 28px;
+    padding: 36px 28px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    justify-items: center;
+    text-align: center;
+  }
+  .razon-ico {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--azul);
+    color: var(--on-azul);
+    margin-bottom: 6px;
+  }
+  .razones b {
+    font: 800 21px/1.25 var(--f-d);
+    letter-spacing: -0.015em;
+  }
+  .razones p {
+    color: var(--tinta-suave);
+  }
+  @media (max-width: 860px) {
+    .razones {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

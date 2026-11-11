@@ -429,6 +429,34 @@ try {
     if (!ok) errores.push(`Móvil y conversión: falla «${nombre}» (${det})`);
   }
 
+  // --- 5b) el formulario del hero en dos pasos ------------------------------
+  console.log('\n  Formulario en dos pasos');
+  await cdp.goto(`http://127.0.0.1:${PUERTO}/`);
+  const pasos = await cdp.eval(`(async () => {
+    const $ = (id) => document.getElementById(id);
+    const r = { alEmpezar: !$('h-paso1').hidden && $('h-paso2').hidden };
+    $('h-matricula').value = 'XX';
+    $('h-seguir').click();
+    r.errorMatricula = !$('h-err1').hidden && $('h-paso2').hidden;
+    $('h-matricula').value = '1234 MBC';
+    $('h-seguir').click();
+    r.pasa = $('h-paso1').hidden && !$('h-paso2').hidden && document.activeElement.id === 'h-nombre';
+    r.barra = $('h-pasoBar').style.width;
+    $('h-volver').click();
+    r.vuelve = !$('h-paso1').hidden;
+    return r;
+  })()`);
+  const pruebasPasos = [
+    ['empieza en el paso 1', pasos.alEmpezar, ''],
+    ['no avanza con la matrícula mal', pasos.errorMatricula, ''],
+    ['avanza al paso 2 y enfoca el nombre', pasos.pasa, `barra ${pasos.barra}`],
+    ['vuelve al paso 1', pasos.vuelve, ''],
+  ];
+  for (const [nombre, ok, det] of pruebasPasos) {
+    console.log(`    ${ok ? 'ok ' : 'NO '} ${nombre.padEnd(44)} ${det}`);
+    if (!ok) errores.push(`Dos pasos: falla «${nombre}»`);
+  }
+
   // --- 6) la versión en inglés ---------------------------------------------
   console.log('\n  Versión en inglés');
   await cdp.goto(`http://127.0.0.1:${PUERTO}/en/`);
