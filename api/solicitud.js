@@ -2,29 +2,28 @@
  * POST /api/solicitud — función de Vercel que recibe los formularios de
  * solicitud (hero y calculadora) y envía dos emails.
  *
- * Cómo envía:
- *   - Sin RESEND_API_KEY (ahora): con FormSubmit, sin cuenta. Los
- *     destinatarios salen de LEAD_DESTINATARIOS en site.config.mjs.
- *   - Con RESEND_API_KEY en Vercel: con Resend, con los emails con diseño
- *     de abajo y remitente @gestoriakivo.com.
+ * Envía con el buzón de correo de Arsys del dominio (SMTP). Los
+ * destinatarios salen de LEAD_DESTINATARIOS en site.config.mjs.
  *
  * Los dos emails:
  *
- *   1. Al equipo (LEAD_DESTINATARIOS), con todos los datos del lead.
- *      «Responder» contesta directamente al cliente.
+ *   1. Al equipo (LEAD_DESTINATARIOS), con todos los datos del lead en
+ *      bloques. «Responder» contesta directamente al cliente.
  *   2. Al cliente, un acuse automático: el equipo de Kivo está gestionando
  *      su petición. En inglés si la solicitud viene de /en/.
  *
- * Variables de entorno, todas opcionales (Vercel → Settings → Environment
- * Variables):
- *   RESEND_API_KEY      clave de Resend; sin ella se usa FormSubmit
+ * Variables de entorno (Vercel → Settings → Environment Variables):
+ *   SMTP_USUARIO        el buzón de Arsys, p. ej. hola@gestoriakivo.com (obligatoria)
+ *   SMTP_CLAVE          su contraseña (obligatoria)
+ *   SMTP_HOST           por defecto smtp.serviciodecorreo.es (Arsys)
+ *   SMTP_PUERTO         por defecto 465 (SSL); 587 para STARTTLS
  *   LEAD_DESTINATARIOS  emails separados por comas; si está, manda sobre
  *                       LEAD_DESTINATARIOS de site.config.mjs
- *   LEAD_REMITENTE      solo con Resend: «Kivo <hola@gestoriakivo.com>»,
- *                       con el dominio verificado en Resend
  *   LEAD_RESPONDER_A    a dónde van las respuestas del cliente al acuse
  *                       (por defecto, el primer destinatario)
+ *   RESEND_API_KEY      alternativa a Arsys: solo se usa si no hay SMTP
  */
+import nodemailer from 'nodemailer';
 import {
   SITE_URL,
   WHATSAPP,
@@ -48,50 +47,169 @@ const campo = (v, max = 200) => String(v ?? '').trim().slice(0, max);
 
 const whatsappTexto = WHATSAPP ? `+${WHATSAPP.slice(0, 2)} ${WHATSAPP.slice(2, 5)} ${WHATSAPP.slice(5, 7)} ${WHATSAPP.slice(7, 9)} ${WHATSAPP.slice(9)}` : null;
 
-async function enviar(clave, email) {
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${clave}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(email),
-  });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
-  return res.json();
+/** Solo para las pruebas automáticas: sustituye el envío real. */
+let envioDePrueba = null;
+export const __probarCon = (fn) => {
+  envioDePrueba = fn;
+};
+
+/**
+ * Prepara el envío según lo que haya en Vercel:
+ *   - SMTP_USUARIO + SMTP_CLAVE: el buzón de Arsys (la opción elegida). El
+ *     remitente es ese mismo buzón: Arsys solo deja enviar como el usuario
+ *     con el que se entra, y el SPF del dominio ya le autoriza.
+ *   - RESEND_API_KEY: Resend, por si algún día se cambia.
+ * Cada email es { from, to, replyTo, subject, html, text }.
+ * Devuelve null si no hay nada configurado.
+ */
+function preparaEnvio() {
+  if (envioDePrueba) return { remitente: 'Kivo <prueba@gestoriakivo.com>', enviar: envioDePrueba };
+
+  const usuario = process.env.SMTP_USUARIO;
+  const clave = process.env.SMTP_CLAVE;
+  if (usuario && clave) {
+    const puerto = Number(process.env.SMTP_PUERTO || 465);
+    const transporte = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.serviciodecorreo.es',
+      port: puerto,
+      secure: puerto === 465,
+      auth: { user: usuario, pass: clave },
+    });
+    return {
+      remitente: process.env.LEAD_REMITENTE || `Kivo <${usuario}>`,
+      enviar: (m) => transporte.sendMail(m),
+    };
+  }
+
+  const claveResend = process.env.RESEND_API_KEY;
+  if (claveResend) {
+    return {
+      remitente: process.env.LEAD_REMITENTE || 'Kivo <hola@gestoriakivo.com>',
+      enviar: async (m) => {
+        const res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${claveResend}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...m, reply_to: m.replyTo, replyTo: undefined }),
+        });
+        if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
+      },
+    };
+  }
+  return null;
 }
 
-/** Email al equipo con todos los datos. */
-function emailEquipo(d) {
-  const filas = [
-    ['Rol', d.rol === 'vendedor' ? 'Vende' : 'Compra'],
-    ['Matrícula', d.matricula],
-    ['Nombre', d.nombre],
-    ['Móvil', d.telefono],
-    ['Email', d.email],
-    ['Comentario', d.mensaje || '—'],
-    ['Vehículo', d.vehiculo],
-    ['Comunidad', d.comunidad],
-    ['ITP estimado', d.itp_estimado],
-    ['Total estimado', d.total_estimado],
-    ['Idioma', d.idioma === 'en' ? 'Inglés' : 'Español'],
-    ['Formulario', d.origen === 'hero' ? 'Formulario principal' : 'Calculadora'],
-    ['Página', d.pagina ? SITE_URL + d.pagina : ''],
-  ].filter(([, v]) => v);
+/** «600123456» → «600 123 456»; «+34600123456» → «+34 600 123 456». Los
+ *  extranjeros se dejan como vienen. */
+function movilLegible(t) {
+  const m = t.replace(/\s/g, '').match(/^(\+34)?(\d{3})(\d{3})(\d{3})$/);
+  return m ? `${m[1] ? m[1] + ' ' : ''}${m[2]} ${m[3]} ${m[4]}` : t;
+}
 
-  const html = `
-  <div style="font-family:Arial,sans-serif;color:#0e1630;max-width:560px">
-    <h2 style="margin:0 0 4px">Nueva solicitud de traspaso</h2>
-    <p style="margin:0 0 16px;color:#5a6480">${esc(d.matricula)} · ${esc(d.nombre)}</p>
-    <table style="border-collapse:collapse;width:100%;font-size:14px">
-      ${filas
+const VEHICULOS = { coche: 'Coche', moto: 'Moto', ciclo: 'Ciclomotor' };
+
+/**
+ * La ficha del lead, en bloques y en orden de uso: quién es y cómo
+ * contactarle, qué vehículo y cuánto le hemos estimado, y de dónde viene.
+ * La usan el email al equipo y su versión en texto plano.
+ */
+function fichaLead(d) {
+  const quien = d.rol === 'vendedor' ? 'vende' : 'compra';
+  const recibida = new Date().toLocaleString('es-ES', {
+    timeZone: 'Europe/Madrid',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const secciones = [
+    {
+      titulo: 'Cliente',
+      filas: [
+        ['Nombre', d.nombre],
+        ['Es quien', d.rol === 'vendedor' ? 'Vende el vehículo' : 'Compra el vehículo'],
+        ['Móvil', movilLegible(d.telefono)],
+        ['Email', d.email],
+        ['Comentario', d.mensaje || 'Sin comentario'],
+      ],
+    },
+    {
+      titulo: 'Vehículo',
+      filas: [
+        ['Matrícula', d.matricula],
+        ['Tipo', VEHICULOS[d.vehiculo] ?? ''],
+        ['Comunidad del comprador', d.comunidad],
+        ['ITP estimado', d.itp_estimado],
+        ['Total estimado', d.total_estimado ? `${d.total_estimado} (89 € + tasa + ITP)` : ''],
+      ],
+    },
+    {
+      titulo: 'Solicitud',
+      filas: [
+        ['Recibida', recibida],
+        ['Desde', `${d.origen === 'hero' ? 'Formulario principal' : 'Calculadora'} · ${d.pagina ? SITE_URL.replace('https://', '') + d.pagina : 'web'}`],
+        ['Idioma', d.idioma === 'en' ? 'Inglés (responder en inglés)' : 'Español'],
+      ],
+    },
+  ].map((s) => ({ ...s, filas: s.filas.filter(([, v]) => v) }));
+
+  const resumen = [
+    `${d.nombre} (${quien})`,
+    d.matricula,
+    d.comunidad,
+    d.total_estimado ? `total estimado ${d.total_estimado}` : '',
+  ]
+    .filter(Boolean)
+    .join(' · ');
+
+  return {
+    asunto: `Nueva solicitud de traspaso · ${d.matricula} · ${d.nombre} (${quien})`,
+    resumen,
+    secciones,
+    siguiente:
+      'Escribir al cliente en menos de 24 h para confirmar el precio exacto con la matrícula y pedirle las fotos de los documentos.',
+  };
+}
+
+/** Email al equipo con todos los datos (envío con Resend). */
+function emailEquipo(d) {
+  const f = fichaLead(d);
+  const celda = 'padding:8px 12px;border-bottom:1px solid #e3e7f2;font-size:14px;vertical-align:top';
+  const bloques = f.secciones
+    .map(
+      (s) => `
+      <tr><td colspan="2" style="padding:18px 12px 6px;font-size:12px;font-weight:bold;letter-spacing:.08em;text-transform:uppercase;color:#2a44d8">${esc(s.titulo)}</td></tr>
+      ${s.filas
         .map(
           ([k, v]) =>
-            `<tr><td style="padding:8px 10px;border-bottom:1px solid #e3e7f2;color:#5a6480;width:35%">${esc(k)}</td><td style="padding:8px 10px;border-bottom:1px solid #e3e7f2"><b>${esc(v)}</b></td></tr>`
+            `<tr><td style="${celda};color:#5a6480;width:38%">${esc(k)}</td><td style="${celda}"><b>${esc(v)}</b></td></tr>`
         )
-        .join('')}
-    </table>
-    <p style="margin-top:16px;font-size:13px;color:#5a6480">Si respondes a este email, la respuesta le llega directamente al cliente. Se ha comprometido una respuesta en menos de 24 horas.</p>
+        .join('')}`
+    )
+    .join('');
+
+  const html = `
+  <div style="font-family:Arial,sans-serif;color:#0e1630;max-width:600px">
+    <div style="background:#3d5afe;color:#fff;padding:16px 20px;border-radius:12px 12px 0 0">
+      <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85">Nueva solicitud de traspaso</div>
+      <div style="font-size:20px;font-weight:bold;margin-top:4px">${esc(d.matricula)} · ${esc(d.nombre)}</div>
+    </div>
+    <div style="border:1px solid #e3e7f2;border-top:0;border-radius:0 0 12px 12px;padding:6px 8px 14px">
+      <table style="border-collapse:collapse;width:100%">${bloques}</table>
+      <div style="margin:16px 12px 0;padding:12px 14px;background:#fff7d6;border-radius:10px;font-size:14px">
+        <b>Siguiente paso:</b> ${esc(f.siguiente)}
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:12px;color:#8a93ab">Si respondes a este email, la respuesta le llega directamente al cliente.</p>
   </div>`;
-  const text = filas.map(([k, v]) => `${k}: ${v}`).join('\n');
-  return { html, text };
+
+  const text = [
+    f.resumen,
+    ...f.secciones.flatMap((s) => ['', s.titulo.toUpperCase(), ...s.filas.map(([k, v]) => `${k}: ${v}`)]),
+    '',
+    `SIGUIENTE PASO: ${f.siguiente}`,
+  ].join('\n');
+  return { asunto: f.asunto, html, text };
 }
 
 /** Acuse automático para el cliente. */
@@ -147,52 +265,6 @@ function emailCliente(d) {
   return { asunto: T.asunto, html, text };
 }
 
-/**
- * Envío por FormSubmit (formsubmit.co), sin cuenta: reenvía la solicitud al
- * primer destinatario con copia al resto, y manda la respuesta automática al
- * email del cliente (campo «email» + `_autoresponse`).
- *
- * La primera vez, FormSubmit manda un email de «Activate form» al primer
- * destinatario: hasta que no se pulsa, no reenvía nada.
- */
-async function enviarFormSubmit(d, destinatarios, responderA) {
-  const [principal, ...copias] = destinatarios;
-  const acuse = emailCliente(d);
-  const datos = {
-    _subject: `Nueva solicitud · ${d.matricula} · ${d.nombre}`,
-    _template: 'table',
-    _captcha: 'false',
-    ...(copias.length ? { _cc: copias.join(',') } : {}),
-    _autoresponse: acuse.text,
-    Rol: d.rol === 'vendedor' ? 'Vende' : 'Compra',
-    Matrícula: d.matricula,
-    Nombre: d.nombre,
-    Móvil: d.telefono,
-    email: d.email,
-    Comentario: d.mensaje || '—',
-    ...(d.comunidad ? { Vehículo: d.vehiculo, Comunidad: d.comunidad, 'ITP estimado': d.itp_estimado, 'Total estimado': d.total_estimado } : {}),
-    Idioma: d.idioma === 'en' ? 'Inglés' : 'Español',
-    Formulario: d.origen === 'hero' ? 'Formulario principal' : 'Calculadora',
-    Página: d.pagina ? SITE_URL + d.pagina : '',
-    'Responder al cliente': `Responde a este email o escribe a ${d.email}. Las respuestas del cliente al acuse van a ${responderA}.`,
-  };
-  const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(principal)}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      // FormSubmit asocia el formulario a la web desde la que se envía.
-      Origin: SITE_URL,
-      Referer: SITE_URL + '/',
-    },
-    body: JSON.stringify(datos),
-  });
-  const cuerpo = await res.json().catch(() => ({}));
-  if (!res.ok || String(cuerpo.success) !== 'true') {
-    throw new Error(`FormSubmit ${res.status}: ${cuerpo.message ?? 'sin respuesta'}`);
-  }
-}
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -233,12 +305,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ ok: false, error: 'Faltan datos de la solicitud' });
   }
 
-  const clave = process.env.RESEND_API_KEY;
   const destinatarios = (process.env.LEAD_DESTINATARIOS ?? LEAD_DESTINATARIOS.join(','))
     .split(',')
     .map((s) => s.trim())
     .filter((s) => RE_EMAIL.test(s));
-  const remitente = process.env.LEAD_REMITENTE || 'Kivo <hola@gestoriakivo.com>';
   const responderA = process.env.LEAD_RESPONDER_A || destinatarios[0];
 
   if (destinatarios.length === 0) {
@@ -246,26 +316,20 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: 'Envío no configurado' });
   }
 
-  // Sin cuenta de Resend todavía: FormSubmit hace los dos envíos (al equipo y
-  // el acuse al cliente) en una sola llamada.
-  if (!clave) {
-    try {
-      await enviarFormSubmit(d, destinatarios, responderA);
-      return res.status(200).json({ ok: true });
-    } catch (e) {
-      console.error('[solicitud] FormSubmit no ha aceptado la solicitud:', e);
-      return res.status(502).json({ ok: false, error: 'No se ha podido enviar' });
-    }
+  const envio = preparaEnvio();
+  if (!envio) {
+    console.error('[solicitud] Falta SMTP_USUARIO y SMTP_CLAVE (buzón de Arsys) en Vercel.');
+    return res.status(500).json({ ok: false, error: 'Envío no configurado' });
   }
 
   // 1) Al equipo. Si esto falla, la solicitud no ha llegado: error al cliente.
   try {
     const eq = emailEquipo(d);
-    await enviar(clave, {
-      from: remitente,
+    await envio.enviar({
+      from: envio.remitente,
       to: destinatarios,
-      reply_to: d.email,
-      subject: `Nueva solicitud · ${d.matricula} · ${d.nombre}`,
+      replyTo: d.email,
+      subject: eq.asunto,
       html: eq.html,
       text: eq.text,
     });
@@ -278,10 +342,10 @@ export default async function handler(req, res) {
   //    se registra el error pero el cliente ve el éxito igualmente.
   try {
     const cl = emailCliente(d);
-    await enviar(clave, {
-      from: remitente,
+    await envio.enviar({
+      from: envio.remitente,
       to: [d.email],
-      reply_to: responderA,
+      replyTo: responderA,
       subject: cl.asunto,
       html: cl.html,
       text: cl.text,

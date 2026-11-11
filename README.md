@@ -41,8 +41,8 @@ node scripts/check-lighthouse.mjs /vender-coche/        # rutas concretas
 | Dónde | Qué |
 | --- | --- |
 | `site.config.mjs` | Dominio (`gestoriakivo.com`) para canónicas, Open Graph, sitemap y robots. |
-| `api/solicitud.js` | Función de Vercel que recibe los formularios: email al equipo y acuse automático al cliente. Hoy con FormSubmit; con `RESEND_API_KEY`, con Resend. |
-| `LEAD_DESTINATARIOS` en `site.config.mjs` | A quién llegan las solicitudes. Opcionales en Vercel: `RESEND_API_KEY`, `LEAD_DESTINATARIOS`, `LEAD_REMITENTE`, `LEAD_RESPONDER_A` (ver `.env.example`). |
+| `api/solicitud.js` | Función de Vercel que recibe los formularios: email al equipo y acuse automático al cliente. Envía con el buzón de correo de Arsys (SMTP). |
+| `LEAD_DESTINATARIOS` en `site.config.mjs` | A quién llegan las solicitudes. En Vercel: `SMTP_USUARIO` y `SMTP_CLAVE` (el buzón de Arsys) y opcionales (ver `.env.example`). |
 | `src/data/tarifas.ts` | Honorarios, tasas de la DGT y el ITP de las 19 comunidades. |
 | `src/data/nav.ts` | Menú, pie y las fuentes oficiales a las que enlazamos. |
 | `src/data/seo.ts` | Generadores de JSON-LD y la imagen para compartir. |
@@ -57,10 +57,9 @@ Los dos formularios (el del hero y el de la calculadora) envían a
 2. manda al cliente un acuse automático («el equipo de Kivo está gestionando
    tu petición»), en inglés si la solicitud viene de `/en/`.
 
-**Hoy envía con FormSubmit** (sin cuenta). La primera vez, FormSubmit manda un
-email «Activate form» al primer destinatario; hasta que se pulsa, no reenvía
-nada. Con una clave de Resend en Vercel (`RESEND_API_KEY`) pasa a usar Resend,
-con los emails con diseño y remitente @gestoriakivo.com.
+**Envía con el buzón de Arsys del dominio** (SMTP `smtp.serviciodecorreo.es`,
+puerto 465). El buzón y su contraseña van en Vercel (`SMTP_USUARIO`,
+`SMTP_CLAVE`); sin ellos, el formulario da error en vez de perder la solicitud.
 
 Si falla el email al equipo, el cliente ve un error y puede reintentar. Si solo
 falla el acuse, la solicitud ya ha llegado y el cliente ve el éxito. Un campo
