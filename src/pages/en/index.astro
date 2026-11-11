@@ -17,12 +17,12 @@ import FinalCta from '../../components/FinalCta.astro';
 import Icono from '../../components/Icono.astro';
 import Preguntas, { type Pregunta } from '../../components/Preguntas.astro';
 import { FEE, TASA, CCAA } from '../../data/tarifas';
-import { organizationLd, faqLd } from '../../data/seo';
+import { organizationLd, serviceLd, faqLd } from '../../data/seo';
 
 const path = '/en/';
 const title = 'Car ownership transfer in Spain, online | Kivo · €89';
 const description =
-  'We transfer car and motorbike ownership in Spain online: DGT registration change, transfer tax and paperwork for a €89 fee. No appointment, no digital certificate.';
+  'We transfer car and motorbike ownership in Spain online: DGT registration, transfer tax and paperwork for a €89 fee. No appointment or digital certificate.';
 
 const eurEn = (v: number) =>
   new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(v);
@@ -66,7 +66,7 @@ const preguntas: Pregunta[] = [
   },
 ];
 
-const jsonld = [organizationLd(), faqLd(preguntas)];
+const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
 ---
 
 <BaseLayout

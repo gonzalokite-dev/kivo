@@ -4,6 +4,7 @@
  * Palabra clave: documentos traspaso coche.
  * Secundarias: documentos transferencia coche, papeles para cambiar el nombre de un coche.
  */
+import { ANIO } from '../../site.config.mjs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Migas from '../components/Migas.astro';
 import RespuestaDirecta from '../components/RespuestaDirecta.astro';
@@ -15,7 +16,7 @@ import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
 import FaqLado from '../components/FaqLado.astro';
 
 const path = '/documentacion-traspaso-coche/';
-const title = 'Documentos para el traspaso de un coche (2026) | Kivo';
+const title = `Documentos para el traspaso de un coche (${ANIO}) | Kivo`;
 const description =
   'Los papeles para cambiar el nombre de un coche: DNI de los dos, permiso de circulación y ficha técnica. Con ejemplos ilustrados y cómo hacer las fotos.';
 

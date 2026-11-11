@@ -14,6 +14,11 @@ export const SOCIAL = {
 };
 export const SITE_NAME = 'Kivo';
 
+// Año de las tarifas y de los títulos SEO («… en 2026»). Cámbialo en enero,
+// cuando estén actualizadas la tasa de la DGT, el ITP y la orden de precios
+// medios: se propaga a los <title> de las páginas y de las guías ({año}).
+export const ANIO = '2026';
+
 // VALIDAR: datos de contacto reales. Mientras sean null, no se muestran ni
 // se incluyen en el JSON-LD de Organization: no inventamos un teléfono, un
 // email ni un número de WhatsApp. En cuanto existan, poner aquí:

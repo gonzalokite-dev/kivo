@@ -7,6 +7,7 @@
  * La caja de llamada a la acción de mitad del texto va dentro del MDX, en el
  * punto donde corta mejor la lectura.
  */
+import { ANIO } from '../../site.config.mjs';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
@@ -57,7 +58,7 @@ const jsonld = [
 ];
 ---
 
-<BaseLayout title={d.seoTitle} description={d.description} {path} {jsonld}>
+<BaseLayout title={d.seoTitle.replaceAll('{año}', ANIO)} description={d.description} {path} {jsonld}>
   <div class="wrap guide">
     <article class="guide-main">
       <Migas {migas} />

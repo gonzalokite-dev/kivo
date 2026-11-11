@@ -108,7 +108,9 @@ for (const { file, url } of todas) {
 
   if (!/property="og:title"/.test(html)) err(nombre, 'sin Open Graph');
   if (!/name="twitter:card"/.test(html)) err(nombre, 'sin Twitter Card');
-  if (!/<html lang="es"/.test(html)) err(nombre, 'sin lang="es"');
+  // /en/ es la versión en inglés; el resto, en español.
+  const idioma = url.startsWith('/en/') ? 'en' : 'es';
+  if (!new RegExp(`<html lang="${idioma}"`).test(html)) err(nombre, `sin lang="${idioma}"`);
 
   if (title) {
     const n = title.length;
@@ -124,7 +126,8 @@ for (const { file, url } of todas) {
   }
 
   // BreadcrumbList en todas menos la portada (y menos el 404).
-  const esPortada = url === '/';
+  // /en/ es la portada en inglés: como la portada, sin migas de pan.
+  const esPortada = url === '/' || url === '/en/';
   const es404 = url === '/404.html';
   const esPrecio = url === '/precio-traspaso-coche/';
   // El @type de Organization puede ir solo o en array (["Organization","ProfessionalService"]).
@@ -198,7 +201,9 @@ for (const { file, url } of guias) {
 
   // Estructura obligatoria de la plantilla.
   if (!/<div class="short">/.test(html)) err(url, 'sin caja de respuesta corta');
-  const detalles = (html.match(/<details/g) || []).length;
+  // Solo las preguntas: <details><summary>. El menú de móvil también es un
+  // <details>, pero lleva clase y no cuenta.
+  const detalles = (html.match(/<details><summary/g) || []).length;
   if (detalles < 4) err(url, `${detalles} preguntas frecuentes, mínimo 4`);
   if (detalles > 5) err(url, `${detalles} preguntas frecuentes, máximo 5`);
   if (!/"@type":"Article"/.test(html)) err(url, 'sin JSON-LD de Article');

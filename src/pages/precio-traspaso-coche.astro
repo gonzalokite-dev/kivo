@@ -4,6 +4,7 @@
  * Palabra clave: cuánto cuesta el traspaso de un coche.
  * Secundarias: cuánto cuesta la transferencia de un coche, coste traspaso coche, precio cambio de nombre coche.
  */
+import { ANIO } from '../../site.config.mjs';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Migas from '../components/Migas.astro';
 import RespuestaDirecta from '../components/RespuestaDirecta.astro';
@@ -21,7 +22,7 @@ import { CCAA, FEE, TASA, eur, itpFor, total } from '../data/tarifas';
 import FaqLado from '../components/FaqLado.astro';
 
 const path = '/precio-traspaso-coche/';
-const title = '¿Cuánto cuesta el traspaso de un coche en 2026? | Kivo';
+const title = `¿Cuánto cuesta el traspaso de un coche en ${ANIO}? | Kivo`;
 const description =
   'Honorarios de 89 €, tasa de la DGT de 55,70 € y el ITP de tu comunidad. Calcula el total exacto del traspaso de tu coche o moto en 20 segundos.';
 
