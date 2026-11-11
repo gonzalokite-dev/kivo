@@ -36,7 +36,7 @@ export const DOMICILIO_TEXTO = `${DOMICILIO.calle}, ${DOMICILIO.cp} ${DOMICILIO.
 
 // VALIDAR: datos de inscripción en el Registro Mercantil (tomo, folio, hoja
 // e inscripción). La LSSI (art. 10) obliga a ponerlos en el Aviso legal.
-// Mientras sea null, el Aviso legal muestra un hueco marcado para rellenar.
+// Mientras sea null, el Aviso legal no muestra la línea de datos registrales.
 export const REGISTRO_MERCANTIL = null;
 
 // Páginas legales en borrador: fuera del sitemap y con noindex.

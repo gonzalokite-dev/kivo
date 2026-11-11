@@ -37,15 +37,10 @@ const dominio = SITE_URL.replace(/^https?:\/\//, '');
     <li><b>Domicilio social:</b> {DOMICILIO_TEXTO}</li>
     {EMAIL && <li><b>Email:</b> <a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>}
     {TELEFONO && <li><b>Teléfono:</b> {TELEFONO}</li>}
-    <li>
-      <b>Datos registrales:</b>{' '}
-      {
-        REGISTRO_MERCANTIL ?? (
-          // VALIDAR: tomo, folio, hoja e inscripción en el Registro Mercantil.
-          <mark>[pendiente: inscripción en el Registro Mercantil, tomo, folio y hoja]</mark>
-        )
-      }
-    </li>
+    {/* VALIDAR: tomo, folio, hoja e inscripción en el Registro Mercantil
+        (LSSI, art. 10). La línea aparece en cuanto se rellena
+        REGISTRO_MERCANTIL en site.config.mjs. */}
+    {REGISTRO_MERCANTIL && <li><b>Datos registrales:</b> {REGISTRO_MERCANTIL}</li>}
   </ul>
   <p>En este texto, «Kivo», «nosotros» o «la empresa» se refieren a {RAZON_SOCIAL}.</p>
 
