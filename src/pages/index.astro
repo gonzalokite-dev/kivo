@@ -24,7 +24,13 @@ import FinalCta from '../components/FinalCta.astro';
 import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
 import Icono from '../components/Icono.astro';
 import ContadorPlazo from '../components/ContadorPlazo.astro';
+import ParaTi from '../components/ParaTi.astro';
+import Opiniones from '../components/Opiniones.astro';
+import TuGestor from '../components/TuGestor.astro';
+import Compromisos from '../components/Compromisos.astro';
+import { VALORACION, WHATSAPP, TELEFONO } from '../../site.config.mjs';
 import { organizationLd, serviceLd, faqLd } from '../data/seo';
+import FaqLado from '../components/FaqLado.astro';
 
 const path = '/';
 
@@ -105,6 +111,15 @@ const preguntas: Pregunta[] = [
   },
 ];
 
+// Línea de valoración bajo el titular (como la de Taxfix): solo con datos reales.
+const val = VALORACION as { nota: number; total?: number; fuente?: string; url?: string } | null;
+// Segundo canal junto al formulario: «o escríbenos por WhatsApp».
+const contacto = WHATSAPP
+  ? { href: `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, quiero hacer el traspaso de mi coche con Kivo.')}`, label: 'escríbenos por WhatsApp' }
+  : TELEFONO
+    ? { href: `tel:${TELEFONO}`, label: `llámanos al ${TELEFONO}` }
+    : null;
+
 const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
 ---
 
@@ -114,6 +129,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
   {path}
   {jsonld}
   sticky={{ cta: '#solicitud', texto: 'Pedir mi traspaso' }}
+  alternates={{ es: '/', en: '/en/' }}
 >
   <section class="hero">
     <div class="wrap">
@@ -125,6 +141,16 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
             >Cambiamos el titular en la DGT y pagamos el impuesto por ti.</b
           > Vosotros solo firmáis desde el móvil.
         </p>
+
+        {
+          val && (
+            <p class="hero-val">
+              <span aria-hidden="true">★★★★★</span> {String(val.nota).replace('.', ',')}/5
+              {val.total ? ` · ${val.total} opiniones` : ''}
+              {val.fuente ? ` en ${val.fuente}` : ''}
+            </p>
+          )
+        }
 
         <!-- Solo en móvil: el formulario queda debajo de la tarjeta del
              traspaso, a casi una pantalla. Estos botones llevan directo. -->
@@ -140,6 +166,14 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
           <li><Icono name="check" size={16} sw={3} />Coches y motos</li>
           <li><Icono name="check" size={16} sw={3} />Gestor colegiado</li>
         </ul>
+
+        {
+          contacto && (
+            <p class="hero-alt">
+              ¿Prefieres hablar antes? <a href={contacto.href} target={contacto.href.startsWith('http') ? '_blank' : undefined} rel="noopener">{contacto.label}</a>.
+            </p>
+          )
+        }
       </div>
 
       <FormularioHero />
@@ -147,6 +181,8 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
   </section>
 
   <BarraConfianza />
+
+  <section id="para-ti"><ParaTi /></section>
 
   <section id="problema"><Problemas /></section>
 
@@ -266,6 +302,10 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
 
   <section id="seguridad" style="padding-top:0"><Confianza /></section>
 
+  <TuGestor />
+
+  <Opiniones />
+
   <CtaBanda
     titulo="¿Listo? Pide tu transferencia"
     texto="Déjanos tus datos y te escribimos en menos de 24 horas. Sin pagar nada ahora."
@@ -277,10 +317,13 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
       <div class="sec-head" style="margin:0">
         <span class="eyebrow">Preguntas</span>
         <h2>Lo que más nos preguntan sobre la transferencia</h2>
+        <FaqLado cta="#solicitud" />
       </div>
       <Preguntas {preguntas} />
     </div>
   </section>
+
+  <section style="padding-top:0"><Compromisos /></section>
 
   <FinalCta />
 </BaseLayout>

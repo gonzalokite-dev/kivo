@@ -7,46 +7,78 @@ interface Props {
   actual?: string;
   /** A dónde lleva el botón principal. */
   cta?: string;
+  /** Cabecera en inglés para /en/. */
+  lang?: 'es' | 'en';
 }
-const { actual = '', cta = '/#calculadora' } = Astro.props;
+const { actual = '', cta = '/#calculadora', lang = 'es' } = Astro.props;
+const en = lang === 'en';
+
+/** Menú en inglés: secciones de la página /en/ y el enlace a la versión en español. */
+const MENU_EN = [
+  { href: '/en/#how', label: 'How it works' },
+  { href: '/en/#price', label: 'Price' },
+  { href: '/en/#documents', label: 'Documents' },
+  { href: '/en/#faq', label: 'FAQ' },
+];
+const menu = en ? MENU_EN : MENU;
+const T = en
+  ? { cta: 'Get started', ctaHref: '/en/#request', sub: 'Car transfers in Spain', home: '/en/', inicio: 'Kivo, home', abrir: 'Open menu', nav: 'Main', movil: 'Main (mobile)', pedir: 'Request your transfer', idioma: { href: '/', label: 'Español', hl: 'es' } }
+  : { cta: 'Calcular mi precio', ctaHref: cta, sub: 'Traspaso de vehículos online', home: '/', inicio: 'Kivo, inicio', abrir: 'Abrir el menú', nav: 'Principal', movil: 'Principal (móvil)', pedir: 'Pedir mi traspaso', idioma: { href: '/en/', label: 'English', hl: 'en' } };
 ---
 
 <div class="notice">
-  Tienes <b>30 días desde la compra</b> para hacer el traspaso. Pídela hoy y te escribimos en
-  menos de 24 horas. <a href={cta}>Calcular mi precio</a>
+  {
+    en ? (
+      <>
+        The buyer has <b>30 days from the purchase</b> to transfer the car. Request it today and we
+        reply within 24 hours. <a href="/en/#request">Get started</a>
+      </>
+    ) : (
+      <>
+        Tienes <b>30 días desde la compra</b> para hacer el traspaso. Pídela hoy y te escribimos en
+        menos de 24 horas. <a href={cta}>Calcular mi precio</a>
+      </>
+    )
+  }
 </div>
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="/" aria-label="Kivo, inicio">
+    <a class="brand" href={T.home} aria-label={T.inicio}>
       <Logo />
-      <small>Traspaso de vehículos online</small>
+      <small>{T.sub}</small>
     </a>
-    <nav class="nav" aria-label="Principal">
+    <nav class="nav" aria-label={T.nav}>
       {
-        MENU.map((m) => (
+        menu.map((m) => (
           <a href={m.href} aria-current={m.href === actual ? 'page' : undefined}>
             {m.label}
           </a>
         ))
       }
+      {en && (
+        <a href={T.idioma.href} hreflang={T.idioma.hl} lang={T.idioma.hl}>
+          {T.idioma.label}
+        </a>
+      )}
     </nav>
-    <a class="btn btn-primary" href={cta}>Calcular mi precio</a>
+    <a class="btn btn-primary" href={T.ctaHref}>{T.cta}</a>
     <!-- Menú de móvil: <details> nativo, funciona sin JavaScript. El script
          de abajo solo lo cierra al elegir un enlace o tocar fuera. -->
     <details class="menu-movil">
-      <summary aria-label="Abrir el menú">
+      <summary aria-label={T.abrir}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg>
       </summary>
-      <nav aria-label="Principal (móvil)">
+      <nav aria-label={T.movil}>
         {
-          MENU.map((m) => (
+          menu.map((m) => (
             <a href={m.href} aria-current={m.href === actual ? "page" : undefined}>
               {m.label}
             </a>
           ))
         }
-        <a class="btn btn-primary btn-block" href="/#solicitud">Pedir mi traspaso</a>
+        <a href={T.idioma.href} hreflang={T.idioma.hl} lang={T.idioma.hl}>{T.idioma.label}</a>
+        <a class="btn btn-primary btn-block" href={en ? '/en/#request' : '/#solicitud'}>{T.pedir}</a>
       </nav>
     </details>
   </div>

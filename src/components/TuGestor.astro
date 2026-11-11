@@ -1,0 +1,101 @@
+---
+/**
+ * «Quién lleva tu traspaso»: cara, nombre y colegiación de la persona que
+ * revisa los expedientes (el «Laura es tu asesora» de Taxfix). Solo se pinta
+ * con GESTOR relleno en site.config.mjs; sin datos no pinta nada.
+ */
+import { GESTOR } from '../../site.config.mjs';
+
+const g = GESTOR as {
+  nombre: string;
+  cargo?: string;
+  colegiado?: string;
+  foto?: string;
+  texto?: string;
+} | null;
+const iniciales = g ? g.nombre.split(' ').map((p) => p[0]).slice(0, 2).join('') : '';
+---
+
+{
+  g && (
+    <section id="gestor" style="padding-top:0">
+    <div class="wrap">
+      <div class="gestor">
+        {g.foto ? (
+          <img src={g.foto} alt={`${g.nombre}, ${g.cargo ?? 'de Kivo'}`} width="160" height="160" loading="lazy" />
+        ) : (
+          <span class="gestor-ini" aria-hidden="true">
+            {iniciales}
+          </span>
+        )}
+        <div>
+          <span class="eyebrow">Quién lleva tu traspaso</span>
+          <h2>{g.nombre}</h2>
+          {g.cargo && <p class="gestor-cargo">{g.cargo}</p>}
+          {g.colegiado && <p class="gestor-col">{g.colegiado}</p>}
+          <p class="gestor-txt">
+            {g.texto ??
+              'Reviso cada expediente antes de presentarlo en la DGT. Si algo no cuadra, te escribo antes de pagar nada en tu nombre.'}
+          </p>
+        </div>
+      </div>
+    </div>
+    </section>
+  )
+}
+
+<style>
+  .gestor {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 36px;
+    align-items: center;
+    max-width: 880px;
+    margin-inline: auto;
+    background: var(--surface);
+    border-radius: 28px;
+    padding: 36px;
+  }
+  .gestor img,
+  .gestor-ini {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid var(--bg);
+  }
+  .gestor-ini {
+    display: grid;
+    place-items: center;
+    background: var(--azul);
+    color: var(--on-azul);
+    font: 800 48px/1 var(--f-d);
+  }
+  .gestor h2 {
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: -0.02em;
+    margin-top: 8px;
+  }
+  .gestor-cargo {
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .gestor-col {
+    color: var(--tinta-suave);
+    font-size: 14px;
+  }
+  .gestor-txt {
+    margin-top: 14px;
+    color: var(--tinta-suave);
+    font-size: 17px;
+  }
+  @media (max-width: 640px) {
+    .gestor {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      padding: 28px 22px;
+      gap: 18px;
+    }
+  }
+</style>

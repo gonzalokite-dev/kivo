@@ -12,6 +12,7 @@ import Preguntas, { type Pregunta } from '../components/Preguntas.astro';
 import CtaBanda from '../components/CtaBanda.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
+import FaqLado from '../components/FaqLado.astro';
 
 const path = '/documentacion-traspaso-coche/';
 const title = 'Documentos para el traspaso de un coche (2026) | Kivo';
@@ -82,6 +83,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
       <div class="sec-head" style="margin:0">
         <span class="eyebrow">Preguntas</span>
         <h2>Preguntas sobre la documentación</h2>
+        <FaqLado />
       </div>
       <Preguntas {preguntas} />
     </div>

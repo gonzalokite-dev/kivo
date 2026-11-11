@@ -2,11 +2,18 @@
 /** La tarjeta del traspaso: vendedor -> coche -> comprador.
  * Motivo 1 del brandbook (la flecha del traspaso): una sola por pantalla,
  * siempre de izquierda a derecha. */
+interface Props {
+  lang?: 'es' | 'en';
+}
+const en = Astro.props.lang === 'en';
+const T = en
+  ? { aria: 'Example of a car transfer between two people', vende: 'sells', compra: 'buys', chip: 'Transferred at the DGT', sub: 'No appointment · no digital certificate' }
+  : { aria: 'Ejemplo de transferencia de un coche entre dos personas', vende: 'vende', compra: 'compra', chip: 'Transferido en la DGT', sub: 'Sin cita · sin certificado digital' };
 ---
 
-        <div class="transfer" aria-label="Ejemplo de transferencia de un coche entre dos personas">
+        <div class="transfer" aria-label={T.aria}>
           <div class="tf-row">
-            <div class="person"><span class="avatar v">L</span><b>Laura</b><span>vende</span></div>
+            <div class="person"><span class="avatar v">L</span><b>Laura</b><span>{T.vende}</span></div>
             <div class="carmove">
               <svg class="tf-svg" width="150" height="72" viewBox="0 0 150 72" aria-hidden="true">
                 <path d="M10 34C30 6 120 6 140 30" fill="none" stroke="#ffd84d" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 11"/>
@@ -21,10 +28,10 @@
               </svg>
               <span class="plate"><i></i>1234 MBC</span>
             </div>
-            <div class="person"><span class="avatar c">J</span><b>Javi</b><span>compra</span></div>
+            <div class="person"><span class="avatar c">J</span><b>Javi</b><span>{T.compra}</span></div>
           </div>
           <div class="tf-status">
-            <span class="chip-dgt"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Transferido en la DGT</span>
-            <span>Sin cita · sin certificado digital</span>
+            <span class="chip-dgt"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>{T.chip}</span>
+            <span>{T.sub}</span>
           </div>
         </div>

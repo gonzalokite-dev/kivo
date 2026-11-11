@@ -6,34 +6,116 @@
  *
  * Mismos campos y misma validación que pide el prompt: rol, matrícula,
  * nombre, móvil, email, comentario opcional y casilla de privacidad.
+ *
+ * Bilingüe: `lang="en"` para /en/. Los textos de la página van en `T`; los
+ * que cambia el script (botón, errores) viajan en data-* y en scripts/lead.ts.
  */
 import Icono from './Icono.astro';
+import Sellos from './Sellos.astro';
 
 interface Props {
   titulo?: string;
+  lang?: 'es' | 'en';
 }
-const { titulo = 'Pide tu traspaso' } = Astro.props;
+const { lang = 'es' } = Astro.props;
+
+const TEXTOS = {
+  es: {
+    titulo: 'Pide tu traspaso',
+    badge: 'Sin pago ahora',
+    rol: 'Tú eres',
+    compra: 'Quien compra',
+    vende: 'Quien vende',
+    matricula: 'Matrícula del vehículo',
+    nombre: 'Tu nombre',
+    nombrePh: 'Nombre y apellidos',
+    tel: 'Móvil',
+    telPh: '600 000 000',
+    emailPh: 'tu@email.com',
+    ayuda: 'Te escribimos por email con cada paso; el móvil, solo por si hace falta llamarte.',
+    mas: 'Añadir un comentario',
+    opcional: '(opcional)',
+    msgLbl: '¿Algo que debamos saber?',
+    msgPh: 'Por ejemplo: compré el coche el 3 de noviembre',
+    rgpd1: 'Acepto que Kivo use estos datos para contactarme sobre mi traspaso, según la ',
+    rgpd2: 'política de privacidad',
+    enviar: 'Enviar solicitud',
+    enviando: 'Enviando…',
+    fallo: 'No hemos podido enviar la solicitud. Inténtalo otra vez en un momento.',
+    trust: ['89 € cerrados, sin sorpresas', 'Sin pagar nada ahora', 'Te respondemos en menos de 24 h', 'Gestor colegiado'],
+    recibida: 'Solicitud recibida',
+    gracias: 'Gracias,',
+    finTxt1: 'Alguien del equipo de Kivo te escribirá en ',
+    finTxtB: 'menos de 24 horas',
+    finTxt2: ' para empezar tu traspaso. Mientras, puedes ir preparando las fotos de los documentos.',
+    docs: 'Ver qué documentos hacen falta',
+    docsHref: '/documentacion-traspaso-coche/',
+    otra: 'Enviar otra solicitud',
+  },
+  en: {
+    titulo: 'Request your transfer',
+    badge: 'No payment now',
+    rol: 'You are',
+    compra: 'The buyer',
+    vende: 'The seller',
+    matricula: 'Number plate',
+    nombre: 'Your name',
+    nombrePh: 'First and last name',
+    tel: 'Mobile',
+    telPh: '+34 600 000 000',
+    emailPh: 'you@email.com',
+    ayuda: 'We email you at every step; we only call if we really need to.',
+    mas: 'Add a comment',
+    opcional: '(optional)',
+    msgLbl: 'Anything we should know?',
+    msgPh: 'For example: I bought the car on 3 November',
+    rgpd1: 'I agree that Kivo may use this data to contact me about my transfer, as set out in the ',
+    rgpd2: 'privacy policy (in Spanish)',
+    enviar: 'Send request',
+    enviando: 'Sending…',
+    fallo: "We couldn't send your request. Please try again in a moment.",
+    trust: ['€89 flat fee', 'Nothing to pay now', 'Reply within 24 hours', 'Registered gestor'],
+    recibida: 'Request received',
+    gracias: 'Thank you,',
+    finTxt1: 'Someone from the Kivo team will email you ',
+    finTxtB: 'within 24 hours',
+    finTxt2: ' to get your transfer started. In the meantime you can get photos of the documents ready.',
+    docs: 'See which documents you need',
+    docsHref: '/en/#documents',
+    otra: 'Send another request',
+  },
+};
+const T = TEXTOS[lang];
+const titulo = Astro.props.titulo ?? T.titulo;
 ---
 
-<div class="calc" id="solicitud" aria-live="polite">
+<div
+  class="calc"
+  id="solicitud"
+  aria-live="polite"
+  data-lang={lang}
+  data-enviar={T.enviar}
+  data-enviando={T.enviando}
+  data-fallo={T.fallo}
+>
   <form id="h-formView" class="lead" novalidate>
     <div class="calc-head">
       <h2>{titulo}</h2>
-      <span class="badge">Sin pago ahora</span>
+      <span class="badge">{T.badge}</span>
     </div>
 
     <div class="field">
-      <span class="flbl" id="h-rolLbl">Tú eres</span>
+      <span class="flbl" id="h-rolLbl">{T.rol}</span>
       <div class="seg seg2" role="radiogroup" aria-labelledby="h-rolLbl">
         <input type="radio" name="h-rol" id="h-rol-c" value="comprador" checked />
-        <label for="h-rol-c">Quien compra</label>
+        <label for="h-rol-c">{T.compra}</label>
         <input type="radio" name="h-rol" id="h-rol-v" value="vendedor" />
-        <label for="h-rol-v">Quien vende</label>
+        <label for="h-rol-v">{T.vende}</label>
       </div>
     </div>
 
     <div class="field">
-      <label for="h-matricula">Matrícula del vehículo</label>
+      <label for="h-matricula">{T.matricula}</label>
       <input
         id="h-matricula"
         name="matricula"
@@ -48,68 +130,60 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
     </div>
 
     <div class="field">
-      <label for="h-nombre">Tu nombre</label>
-      <input id="h-nombre" name="nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="Nombre y apellidos" />
+      <label for="h-nombre">{T.nombre}</label>
+      <input id="h-nombre" name="nombre" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder={T.nombrePh} />
     </div>
 
     <div class="fields fields-pareja">
-    <div class="field">
-      <label for="h-tel">Móvil</label>
-      <input id="h-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="600 000 000" />
-    </div>
+      <div class="field">
+        <label for="h-tel">{T.tel}</label>
+        <input id="h-tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder={T.telPh} />
+      </div>
 
-    <div class="field">
-      <label for="h-email">Email</label>
-      <input id="h-email" name="email" type="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="tu@email.com" />
+      <div class="field">
+        <label for="h-email">Email</label>
+        <input id="h-email" name="email" type="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder={T.emailPh} />
+      </div>
     </div>
-    </div>
-    <span class="hint">Te escribimos por email con cada paso; el móvil, solo por si hace falta llamarte.</span>
+    <span class="hint">{T.ayuda}</span>
 
     <!-- El comentario es opcional: plegado para que el formulario no se alargue. -->
     <details class="mas" id="h-mas">
-      <summary>Añadir un comentario <span class="opt">(opcional)</span></summary>
-    <div class="field">
-      <label for="h-msg" class="visually-hidden">¿Algo que debamos saber?</label>
-      <textarea
-        id="h-msg"
-        name="mensaje"
-        rows="2"
-        placeholder="Por ejemplo: compré el coche el 3 de noviembre"></textarea>
-    </div>
+      <summary>{T.mas} <span class="opt">{T.opcional}</span></summary>
+      <div class="field">
+        <label for="h-msg" class="visually-hidden">{T.msgLbl}</label>
+        <textarea id="h-msg" name="mensaje" rows="2" placeholder={T.msgPh}></textarea>
+      </div>
     </details>
 
     <label class="consent">
       <input type="checkbox" id="h-rgpd" name="privacidad" />
-      <span
-        >Acepto que Kivo use estos datos para contactarme sobre mi traspaso, según la <a
-          href="/privacidad/">política de privacidad</a
-        >.</span
-      >
+      <span>{T.rgpd1}<a href="/privacidad/">{T.rgpd2}</a>.</span>
     </label>
 
     <p class="err" id="h-leadErr" hidden></p>
 
-    <button class="btn btn-primary btn-block" type="submit" id="h-send">Enviar solicitud</button>
+    <button class="btn btn-primary btn-block" type="submit" id="h-send">{T.enviar}</button>
     <div class="trust">
-      <span>89 € cerrados, sin sorpresas</span>
-      <span><Icono name="candado" size={13} sw={2.2} />Sin pagar nada ahora</span>
-      <span>Te respondemos en menos de 24 h</span>
-      <span>Gestor colegiado</span>
+      <span>{T.trust[0]}</span>
+      <span><Icono name="candado" size={13} sw={2.2} />{T.trust[1]}</span>
+      <span>{T.trust[2]}</span>
+      <span>{T.trust[3]}</span>
     </div>
+    <Sellos variante="mini" />
   </form>
 
   <div id="h-doneView" class="fin" hidden>
-    <span class="chip-dgt"><Icono name="check" size={14} sw={3.2} />Solicitud recibida</span>
+    <span class="chip-dgt"><Icono name="check" size={14} sw={3.2} />{T.recibida}</span>
     <span class="plate" style="font-size:18px"><i></i><span id="h-donePlate">1234 MBC</span></span>
-    <h2 style="font-size:24px">Gracias, <span id="h-doneName"></span></h2>
+    <h2 style="font-size:24px">{T.gracias} <span id="h-doneName"></span></h2>
     <p style="color:var(--tinta-suave)">
-      Alguien del equipo de Kivo te escribirá en <b>menos de 24 horas</b> para empezar tu traspaso.
-      Mientras, puedes ir preparando las fotos de los documentos.
+      {T.finTxt1}<b>{T.finTxtB}</b>{T.finTxt2}
     </p>
-    <a class="link-btn" href="/documentacion-traspaso-coche/" style="text-decoration:underline">
-      Ver qué documentos hacen falta
+    <a class="link-btn" href={T.docsHref} style="text-decoration:underline">
+      {T.docs}
     </a>
-    <button class="link-btn" type="button" id="h-restart">Enviar otra solicitud</button>
+    <button class="link-btn" type="button" id="h-restart">{T.otra}</button>
   </div>
 </div>
 
@@ -119,6 +193,12 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
   if (raiz) {
     const $ = (id: string) => document.getElementById(id)!;
     const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT;
+    const lang = raiz.dataset.lang === 'en' ? 'en' : 'es';
+    const txt = {
+      enviar: raiz.dataset.enviar!,
+      enviando: raiz.dataset.enviando!,
+      fallo: raiz.dataset.fallo!,
+    };
 
     const vistas = { form: $('h-formView'), done: $('h-doneView') };
     function show(v: keyof typeof vistas) {
@@ -136,7 +216,7 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
     $('h-formView').addEventListener('submit', async (e) => {
       e.preventDefault();
       const val = (id: string) => ($(id) as HTMLInputElement).value;
-      const { datos: lead, err, campo } = validarLead('h-');
+      const { datos: lead, err, campo } = validarLead('h-', lang);
       const { matricula: m, nombre: n, telefono: t, email: em } = lead;
       const rol = (document.querySelector('input[name="h-rol"]:checked') as HTMLInputElement).value;
 
@@ -148,7 +228,7 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
 
       const boton = $('h-send') as HTMLButtonElement;
       boton.disabled = true;
-      boton.textContent = 'Enviando…';
+      boton.textContent = txt.enviando;
 
       const datos = {
         rol,
@@ -157,6 +237,7 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
         telefono: t,
         email: em,
         mensaje: val('h-msg').trim(),
+        idioma: lang,
         pagina: location.pathname,
         origen: 'hero',
       };
@@ -171,9 +252,9 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
           if (!res.ok) throw new Error('HTTP ' + res.status);
         } catch (e) {
           boton.disabled = false;
-          boton.textContent = 'Enviar solicitud';
+          boton.textContent = txt.enviar;
           box.hidden = false;
-          box.textContent = 'No hemos podido enviar la solicitud. Inténtalo otra vez en un momento.';
+          box.textContent = txt.fallo;
           console.error('[Kivo] Fallo al enviar el formulario del hero:', e);
           return;
         }
@@ -189,7 +270,7 @@ const { titulo = 'Pide tu traspaso' } = Astro.props;
       $('h-doneName').textContent = n.split(' ')[0];
       show('done');
       boton.disabled = false;
-      boton.textContent = 'Enviar solicitud';
+      boton.textContent = txt.enviar;
     });
   }
 </script>

@@ -1,0 +1,89 @@
+---
+/**
+ * Sellos y acreditaciones oficiales (el «Colaborador Social de la Agencia
+ * Tributaria» de Taxfix). Solo los que haya en SELLOS, en site.config.mjs;
+ * sin datos no pinta nada.
+ */
+import { SELLOS } from '../../site.config.mjs';
+
+interface Props {
+  /** «pie»: tarjetas centradas. «mini»: línea compacta bajo el formulario. */
+  variante?: 'pie' | 'mini';
+}
+const { variante = 'pie' } = Astro.props;
+const sellos = (SELLOS as { titulo: string; detalle?: string }[]) ?? [];
+---
+
+{
+  sellos.length > 0 && (
+    <ul class:list={['sellos', variante]}>
+      {sellos.map((s) => (
+        <li>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />
+            <path d="M9 12l2 2 4-4" />
+          </svg>
+          <span>
+            <b>{s.titulo}</b>
+            {s.detalle && <small>{s.detalle}</small>}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .sellos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .sellos li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sellos svg {
+    flex: none;
+    color: var(--ok);
+  }
+  .sellos span {
+    display: grid;
+    line-height: 1.2;
+  }
+  .sellos b {
+    font: 700 15px/1.2 var(--f-d);
+  }
+  .sellos small {
+    color: var(--tinta-suave);
+    font-size: 13px;
+  }
+  .sellos.pie {
+    justify-content: center;
+    margin-top: 28px;
+  }
+  .sellos.pie li {
+    background: var(--surface);
+    border-radius: var(--r-md);
+    padding: 14px 20px;
+  }
+  .sellos.mini {
+    justify-content: center;
+    gap: 8px 18px;
+    margin-top: 6px;
+  }
+  .sellos.mini svg {
+    width: 18px;
+    height: 18px;
+  }
+  .sellos.mini b {
+    font-size: 13px;
+  }
+  .sellos.mini small {
+    font-size: 12px;
+  }
+</style>

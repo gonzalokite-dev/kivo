@@ -15,9 +15,32 @@ export interface Lead {
 const RE_MATRICULA = /^(\d{4}\s?[B-DF-HJ-NP-TV-Z]{3}|[A-Z]{1,2}\s?\d{4}\s?[A-Z]{0,2})$/;
 const RE_MOVIL = /^(\+34)?[67]\d{8}$/;
 const RE_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+/** En inglés también vale un móvil extranjero, con prefijo internacional. */
+const RE_MOVIL_INT = /^(\+|00)[1-9]\d{7,14}$/;
+
+const MENSAJES = {
+  es: {
+    matricula: 'Revisa la matrícula: por ejemplo 1234 MBC o M 1234 AB.',
+    nombre: 'Escribe tu nombre.',
+    tel: 'Escribe un móvil español de 9 cifras.',
+    email: 'Revisa el email.',
+    rgpd: 'Marca la casilla de privacidad para que podamos escribirte.',
+  },
+  en: {
+    matricula: 'Check the number plate: for example 1234 MBC or M 1234 AB.',
+    nombre: 'Please enter your name.',
+    tel: 'Enter a Spanish mobile, or an international one starting with +.',
+    email: 'Check your email address.',
+    rgpd: 'Tick the privacy box so we can contact you.',
+  },
+};
 
 /** Lee y valida. Devuelve el primer error y el id del campo que lo tiene. */
-export function validarLead(p: string): { datos: Lead; err: string; campo: string } {
+export function validarLead(
+  p: string,
+  lang: 'es' | 'en' = 'es'
+): { datos: Lead; err: string; campo: string } {
+  const M = MENSAJES[lang];
   const val = (id: string) => (document.getElementById(p + id) as HTMLInputElement).value;
   const datos: Lead = {
     matricula: val('matricula').trim().toUpperCase(),
@@ -29,19 +52,22 @@ export function validarLead(p: string): { datos: Lead; err: string; campo: strin
   let err = '';
   let campo = '';
   if (!RE_MATRICULA.test(datos.matricula)) {
-    err = 'Revisa la matrícula: por ejemplo 1234 MBC o M 1234 AB.';
+    err = M.matricula;
     campo = 'matricula';
   } else if (datos.nombre.length < 2) {
-    err = 'Escribe tu nombre.';
+    err = M.nombre;
     campo = 'nombre';
-  } else if (!RE_MOVIL.test(datos.telefono)) {
-    err = 'Escribe un móvil español de 9 cifras.';
+  } else if (
+    !RE_MOVIL.test(datos.telefono) &&
+    !(lang === 'en' && RE_MOVIL_INT.test(datos.telefono))
+  ) {
+    err = M.tel;
     campo = 'tel';
   } else if (!RE_EMAIL.test(datos.email)) {
-    err = 'Revisa el email.';
+    err = M.email;
     campo = 'email';
   } else if (!(document.getElementById(p + 'rgpd') as HTMLInputElement).checked) {
-    err = 'Marca la casilla de privacidad para que podamos escribirte.';
+    err = M.rgpd;
     campo = 'rgpd';
   }
   return { datos, err, campo: campo && p + campo };

@@ -3,18 +3,24 @@
  * Cierre de página: bloque asfalto con el icono, el titular y una sola
  * acción. Sobre asfalto, el botón principal es amarillo (brandbook, cap. 10).
  */
+import { WHATSAPP } from '../../site.config.mjs';
+
 interface Props {
   titulo?: string;
   texto?: string;
   cta?: string;
   etiqueta?: string;
+  /** Texto del enlace a WhatsApp (solo sale si hay número). */
+  alt?: string;
 }
 const {
   titulo = 'Haz tu transferencia sin ir a Tráfico',
   texto = '89 € de honorarios. Tu total, en 20 segundos. Recuerda: tienes 30 días desde la compra.',
   cta = '/#calculadora',
   etiqueta = 'Calcular mi precio',
+  alt = 'o escríbenos por WhatsApp',
 } = Astro.props;
+const wa = WHATSAPP ? `https://wa.me/${WHATSAPP}` : null;
 ---
 
 <section class="final">
@@ -37,7 +43,32 @@ const {
         <path d="M93.4 138.2L104.4 120.8L124.2 120.8L124.2 138.2Z M131.8 138.2L131.8 120.8L151.6 120.8L162.6 138.2Z" fill="#3D5AFE"></path>
       </svg>
       <div><h2>{titulo}</h2><p>{texto}</p></div>
-      <a class="btn" href={cta}>{etiqueta}</a>
+      <div class="final-acc">
+        <a class="btn" href={cta}>{etiqueta}</a>
+        {wa && (
+          <a class="final-alt" href={wa} target="_blank" rel="noopener">
+            {alt}
+          </a>
+        )}
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .final-acc {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+  }
+  .final-alt {
+    color: var(--on-asfalto);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  @media (max-width: 760px) {
+    .final-acc {
+      justify-items: start;
+    }
+  }
+</style>

@@ -2,10 +2,16 @@
 // Open Graph, sitemap, robots.txt, llms.txt y al mensaje para compartir.
 export const SITE_URL = 'https://gestoriakivo.com';
 
-// VALIDAR: el usuario de redes. El brandbook lo da como «a confirmar según
-// disponibilidad»: @kivo y, por orden, @kivo.es, @kivo_es, @kivotransferencias.
-// Hasta que esté confirmado no hay enlaces a redes en el pie.
-export const SOCIAL = null;
+// VALIDAR: perfiles en redes. Con el dominio gestoriakivo.com, @gestoriakivo
+// encaja si está libre. Pon la URL completa de cada perfil que exista; los que
+// sigan en null no salen. Aparecen como iconos en el pie y en el «sameAs» del
+// JSON-LD de Organization.
+export const SOCIAL = {
+  instagram: null, // 'https://www.instagram.com/gestoriakivo/'
+  tiktok: null, // 'https://www.tiktok.com/@gestoriakivo'
+  facebook: null,
+  linkedin: null,
+};
 export const SITE_NAME = 'Kivo';
 
 // VALIDAR: datos de contacto reales. Mientras sean null, no se muestran ni
@@ -19,6 +25,36 @@ export const SITE_NAME = 'Kivo';
 export const TELEFONO = null;
 export const EMAIL = null;
 export const WHATSAPP = null;
+
+// VALIDAR: horario de atención. Si hay algún canal (teléfono, email o
+// WhatsApp), sale en el pie: «Te atendemos de lunes a viernes de 9 a 18 h por…».
+// Ejemplo: 'de lunes a viernes de 9 a 18 h'
+export const HORARIO = null;
+
+// VALIDAR: la persona que lleva los expedientes. Con nombre y foto, aparece el
+// bloque «Quién lleva tu traspaso» en la portada. La foto va en public/ (por
+// ejemplo public/equipo/nombre.jpg, cuadrada, mínimo 400 px).
+// Ejemplo: { nombre: 'Nombre Apellido', cargo: 'Gestor administrativo colegiado',
+//            colegiado: 'Colegio de Gestores Administrativos de Baleares, n.º 000',
+//            foto: '/equipo/nombre.jpg',
+//            texto: 'Reviso cada expediente antes de presentarlo en la DGT.' }
+export const GESTOR = null;
+
+// VALIDAR: sellos o acreditaciones oficiales que tenga la sociedad. Salen en
+// el pie y bajo el formulario del hero. Solo los que sean reales y se puedan
+// acreditar. Ejemplo:
+//   [{ titulo: 'Colaborador Social', detalle: 'Agencia Tributaria' },
+//    { titulo: 'Gestor administrativo colegiado', detalle: 'Colegio de Baleares' }]
+export const SELLOS = [];
+
+// VALIDAR: valoración y opiniones reales (por ejemplo, de la ficha de Google
+// del despacho). Con VALORACION aparece la línea de estrellas bajo el titular
+// del hero; con al menos 3 OPINIONES, la sección de opiniones en la portada.
+// Copiarlas tal cual, con el nombre que el cliente puso en Google.
+// Ejemplo: VALORACION = { nota: 4.9, total: 120, fuente: 'Google', url: 'https://g.page/r/…' }
+//          OPINIONES = [{ nombre: 'Nombre A.', texto: '…', nota: 5 }]
+export const VALORACION = null;
+export const OPINIONES = [];
 
 // Titular de la web y del servicio: Kivo es una marca comercial de esta
 // sociedad. Sale en el pie, en Aviso legal, Privacidad y Cookies, y en el

@@ -1,0 +1,90 @@
+---
+/**
+ * «Kivo es para ti si…»: cuatro situaciones reales en las que el visitante
+ * se reconoce (patrón «te irá de perlas si…» de Taxfix). Todo lo que se
+ * promete aquí ya lo dice el resto de la web.
+ */
+import Icono from './Icono.astro';
+
+const casos = [
+  {
+    t: 'Acabas de comprar un coche de segunda mano',
+    p: 'Tienes 30 días para ponerlo a tu nombre y pagar el impuesto. Lo hacemos entero, sin que pidas cita en Tráfico.',
+  },
+  {
+    t: 'Lo has vendido y quieres dejar de ser el titular',
+    p: 'Mientras no se haga el traspaso, las multas y el impuesto de circulación te siguen llegando a ti.',
+  },
+  {
+    t: 'Vivís en ciudades distintas',
+    p: 'Cada uno envía sus fotos y firma desde su móvil. No hace falta veros ni coincidir en ningún sitio.',
+  },
+  {
+    t: 'No tenéis certificado digital ni ganas de pelearos con el 620',
+    p: 'Firmáis con un enlace y nosotros calculamos y pagamos el impuesto con el valor de tablas de Hacienda.',
+  },
+];
+---
+
+<div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">¿Es para ti?</span>
+    <h2>Kivo te viene bien si…</h2>
+  </div>
+  <ul class="parati">
+    {
+      casos.map((c) => (
+        <li>
+          <Icono name="check" size={22} sw={2.6} />
+          <div>
+            <b>{c.t}</b>
+            <p>{c.p}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .parati {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px 56px;
+    max-width: 1000px;
+    margin-inline: auto;
+  }
+  .parati li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .parati li > :global(svg) {
+    width: 40px;
+    height: 40px;
+    padding: 9px;
+    border-radius: 50%;
+    background: var(--azul-suave);
+    color: var(--azul-texto);
+    box-sizing: border-box;
+  }
+  .parati b {
+    display: block;
+    font: 700 19px/1.3 var(--f-d);
+    letter-spacing: -0.01em;
+    margin: 6px 0 6px;
+  }
+  .parati p {
+    color: var(--tinta-suave);
+  }
+  @media (max-width: 760px) {
+    .parati {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>

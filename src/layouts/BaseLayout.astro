@@ -23,6 +23,10 @@ interface Props {
   jsonld?: unknown[];
   /** Destino del botón principal del menú y de la barra fija. */
   cta?: string;
+  /** Idioma de la página. */
+  lang?: 'es' | 'en';
+  /** Versiones en otros idiomas, para los hreflang: { es: '/', en: '/en/' }. */
+  alternates?: Partial<Record<'es' | 'en', string>>;
   /** Destino, importe y etiqueta de la barra fija. */
   sticky?: { cta?: string; importe?: string; etiqueta?: string; texto?: string };
 }
@@ -35,19 +39,26 @@ const {
   jsonld = [],
   cta = '/#calculadora',
   sticky = {},
+  lang = 'es',
+  alternates,
 } = Astro.props;
 
 const canonical = abs(path);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      alternates &&
+        Object.entries(alternates).map(([l, p]) => <link rel="alternate" hreflang={l} href={abs(p!)} />)
+    }
+    {alternates?.es && <link rel="alternate" hreflang="x-default" href={abs(alternates.es)} />}
     {noindex && <meta name="robots" content="noindex,follow" />}
 
     <link rel="preload" href={jakartaLatin} as="font" type="font/woff2" crossorigin />
@@ -59,7 +70,7 @@ const canonical = abs(path);
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'es_ES'} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -81,12 +92,12 @@ const canonical = abs(path);
   </head>
 
   <body>
-    <a class="skip" href="#inicio">Saltar al contenido</a>
-    <Header actual={path} cta={cta} />
+    <a class="skip" href="#inicio">{lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}</a>
+    <Header actual={path} cta={cta} {lang} />
     <main id="inicio">
       <slot />
     </main>
-    <Footer />
+    <Footer {lang} />
     <BarraFija cta={cta} {...sticky} />
     <BotonWhatsapp />
   </body>

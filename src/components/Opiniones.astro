@@ -1,0 +1,103 @@
+---
+/**
+ * Opiniones de clientes y valoración media. Solo se pinta con datos reales
+ * en site.config.mjs (VALORACION y al menos 3 OPINIONES): no se inventan
+ * reseñas. Sin datos, el componente no pinta nada.
+ *
+ * No se marca con JSON-LD de reseñas: Google no muestra estrellas para
+ * reseñas que una empresa publica sobre sí misma.
+ */
+import { VALORACION, OPINIONES } from '../../site.config.mjs';
+
+const ops = (OPINIONES as { nombre: string; texto: string; nota?: number }[]) ?? [];
+const val = VALORACION as { nota: number; total?: number; fuente?: string; url?: string } | null;
+const mostrar = ops.length >= 3;
+const estrellas = (n = 5) => '★★★★★'.slice(0, Math.round(n)) + '☆☆☆☆☆'.slice(0, 5 - Math.round(n));
+const nota = val ? String(val.nota).replace('.', ',') : '';
+---
+
+{
+  mostrar && (
+    <section id="opiniones" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Opiniones</span>
+        <h2>Lo que dicen quienes ya lo han hecho con nosotros</h2>
+      </div>
+      <ul class="opiniones">
+        {ops.slice(0, 6).map((o) => (
+          <li>
+            <span class="op-est" aria-label={`${o.nota ?? 5} de 5 estrellas`}>
+              {estrellas(o.nota ?? 5)}
+            </span>
+            <p>«{o.texto}»</p>
+            <b>{o.nombre}</b>
+          </li>
+        ))}
+      </ul>
+      {val && (
+        <p class="op-media">
+          Valoración de {nota}/5
+          {val.total ? ` con ${val.total} opiniones` : ''}
+          {val.fuente && val.url ? (
+            <>
+              {' '}
+              en{' '}
+              <a href={val.url} target="_blank" rel="noopener">
+                {val.fuente}
+              </a>
+            </>
+          ) : val.fuente ? (
+            ` en ${val.fuente}`
+          ) : (
+            ''
+          )}
+          .
+        </p>
+      )}
+    </div>
+    </section>
+  )
+}
+
+<style>
+  .opiniones {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .opiniones li {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 28px 24px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    text-align: center;
+    justify-items: center;
+  }
+  .op-est {
+    color: #e0a800;
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+  .opiniones p {
+    color: var(--tinta);
+  }
+  .opiniones b {
+    font: 700 14px/1.2 var(--f-d);
+  }
+  .op-media {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--tinta-suave);
+  }
+  @media (max-width: 860px) {
+    .opiniones {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

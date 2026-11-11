@@ -1,47 +1,222 @@
 ---
 import Logo from './Logo.astro';
+import Sellos from './Sellos.astro';
 import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
-import { RAZON_SOCIAL, CIF, DOMICILIO_TEXTO } from '../../site.config.mjs';
+import {
+  RAZON_SOCIAL,
+  CIF,
+  DOMICILIO_TEXTO,
+  SOCIAL,
+  HORARIO,
+  WHATSAPP,
+  TELEFONO,
+  EMAIL,
+} from '../../site.config.mjs';
+
+interface Props {
+  /** Pie en inglés para /en/. */
+  lang?: 'es' | 'en';
+}
+const { lang = 'es' } = Astro.props;
+const en = lang === 'en';
+
+/** Iconos de redes: solo los perfiles con URL en site.config.mjs. */
+const ICONOS: Record<string, string> = {
+  instagram:
+    'M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.3-3.3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z',
+  tiktok:
+    'M16.6 2c.3 2.4 1.7 4 4.1 4.2v3a7.2 7.2 0 0 1-4-1.3v6.6c0 3.9-2.9 6.5-6.5 6.5S3.7 18.4 3.7 15c0-3.6 3.1-6.4 7.1-5.9v3.2c-1.9-.4-3.8.8-3.8 2.7 0 1.6 1.3 2.8 3 2.8 1.8 0 3.3-1.1 3.3-3.6V2h3.3Z',
+  facebook:
+    'M14 8h3V4.5h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v3.5h2.5V22h3.6v-7.5h3l.4-3.5h-3.4V9.4c0-.9.4-1.4.9-1.4Z',
+  linkedin:
+    'M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 8.5h3V21H3V8.5Zm5 0h2.9v1.7c.5-.9 1.7-2 3.6-2 3.1 0 4.5 2 4.5 5.4V21h-3v-6.7c0-1.7-.5-3-2.1-3-1.7 0-2.4 1.3-2.4 3V21H8V8.5Z',
+};
+const redes = Object.entries((SOCIAL ?? {}) as Record<string, string | null>).filter(
+  ([red, url]) => url && ICONOS[red]
+) as [string, string][];
+
+const canales: { label: string; href: string }[] = [];
+if (WHATSAPP) canales.push({ label: 'WhatsApp', href: `https://wa.me/${WHATSAPP}` });
+if (EMAIL) canales.push({ label: 'email', href: `mailto:${EMAIL}` });
+if (TELEFONO) canales.push({ label: en ? 'phone' : 'teléfono', href: `tel:${TELEFONO}` });
 ---
 
 <footer>
   <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <a class="brand" href="/" aria-label="Kivo, inicio"><Logo /></a>
-        <p>Traspaso de coches y motos online en toda España. 89 € de honorarios.</p>
-        <p class="foot-equipo">
-          Fundada por <a href="https://benavidesasociados.com" target="_blank" rel="noopener">Benavides</a>.
-          El traspaso lo presenta un gestor administrativo colegiado.
-          <!-- VALIDAR: confirmar el nombre del gestor o gestoría colegiada que presenta los expedientes. -->
-        </p>
-      </div>
+    {
+      en ? (
+        <div class="foot-grid foot-grid-en">
+          <div class="foot-brand">
+            <a class="brand" href="/en/" aria-label="Kivo, home">
+              <Logo />
+            </a>
+            <p>Car and motorbike ownership transfers online, anywhere in Spain. €89 flat fee.</p>
+          </div>
+          <nav aria-label="Kivo">
+            <b>Kivo</b>
+            <a href="/en/#how">How it works</a>
+            <a href="/en/#price">Price</a>
+            <a href="/en/#documents">Documents</a>
+            <a href="/en/#request">Request your transfer</a>
+          </nav>
+          <nav aria-label="Language">
+            <b>Language</b>
+            <a href="/" hreflang="es" lang="es">
+              Español
+            </a>
+            <a href="/fuentes-y-datos/" hreflang="es" lang="es">
+              Fuentes y datos
+            </a>
+            {LEGALES.map((e) => (
+              <a href={e.href} hreflang="es" lang="es">
+                {e.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      ) : (
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <a class="brand" href="/" aria-label="Kivo, inicio">
+              <Logo />
+            </a>
+            <p>Traspaso de coches y motos online en toda España. 89 € de honorarios.</p>
+            <p class="foot-equipo">
+              Fundada por{' '}
+              <a href="https://benavidesasociados.com" target="_blank" rel="noopener">Benavides</a>. El
+              traspaso lo presenta un gestor administrativo colegiado.
+              {/* VALIDAR: confirmar el nombre del gestor o gestoría colegiada que presenta los expedientes. */}
+            </p>
+          </div>
 
-      <nav aria-label="Servicio">
-        <b>Traspasos</b>
-        {COMERCIALES.map((e) => <a href={e.href}>{e.label}</a>)}
-      </nav>
+          <nav aria-label="Servicio">
+            <b>Traspasos</b>
+            {COMERCIALES.map((e) => (
+              <a href={e.href}>{e.label}</a>
+            ))}
+          </nav>
 
-      <nav aria-label="Guías">
-        <b>Guías</b>
-        <a href="/guias/">Todas las guías</a>
-        {GUIAS_PIE.map((e) => <a href={e.href}>{e.label}</a>)}
-      </nav>
+          <nav aria-label="Guías">
+            <b>Guías</b>
+            <a href="/guias/">Todas las guías</a>
+            {GUIAS_PIE.map((e) => (
+              <a href={e.href}>{e.label}</a>
+            ))}
+          </nav>
 
-      <nav aria-label="Legal">
-        <b>Legal</b>
-        {LEGALES.map((e) => <a href={e.href}>{e.label}</a>)}
-      </nav>
-    </div>
+          <nav aria-label="Legal">
+            <b>Kivo</b>
+            <a href="/fuentes-y-datos/">Fuentes y datos</a>
+            {LEGALES.map((e) => (
+              <a href={e.href}>{e.label}</a>
+            ))}
+            <a href="/en/" hreflang="en" lang="en">
+              English
+            </a>
+          </nav>
+        </div>
+      )
+    }
+
+    <Sellos />
+
+    {
+      (canales.length > 0 || redes.length > 0) && (
+        <div class="foot-contacto">
+          {canales.length > 0 && (
+            <p>
+              {en ? 'Contact us' : 'Te atendemos'}
+              {HORARIO && !en ? ` ${HORARIO}` : ''} {en ? 'by' : 'por'}{' '}
+              {canales.map((c, i) => (
+                <>
+                  {i > 0 && (i === canales.length - 1 ? (en ? ' or ' : ' o ') : ', ')}
+                  <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                    {c.label}
+                  </a>
+                </>
+              ))}
+              .
+            </p>
+          )}
+          {redes.length > 0 && (
+            <ul class="foot-redes">
+              {redes.map(([red, url]) => (
+                <li>
+                  <a href={url} target="_blank" rel="noopener me" aria-label={`Kivo en ${red}`}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d={ICONOS[red]} />
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )
+    }
 
     <div class="foot-legal">
       <p>
-        Kivo es una marca de {RAZON_SOCIAL} · CIF {CIF} · {DOMICILIO_TEXTO}.
-        <!-- VALIDAR: número de colegiado del gestor administrativo que presenta los expedientes. -->
+        {en ? 'Kivo is a brand of' : 'Kivo es una marca de'}
+        {' '}{RAZON_SOCIAL} · {en ? 'Tax ID' : 'CIF'} {CIF} · {DOMICILIO_TEXTO}.
+        {/* VALIDAR: número de colegiado del gestor administrativo que presenta los expedientes. */}
       </p>
       <p>
-        Las tasas e impuestos se pagan íntegros a la DGT y a Hacienda, sin recargo.
+        {
+          en
+            ? 'Fees and taxes are paid in full to the DGT and the tax office, with no mark-up.'
+            : 'Las tasas e impuestos se pagan íntegros a la DGT y a Hacienda, sin recargo.'
+        }
       </p>
     </div>
   </div>
 </footer>
+
+<style>
+  .foot-grid-en {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+  .foot-contacto {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .foot-contacto p {
+    color: var(--tinta-suave);
+    font-size: 14px;
+  }
+  .foot-contacto a {
+    color: var(--tinta);
+    font-weight: 600;
+  }
+  .foot-redes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+  }
+  .foot-redes a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--tinta);
+    background: var(--surface);
+  }
+  @media (max-width: 880px) {
+    .foot-grid-en {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .foot-grid-en {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

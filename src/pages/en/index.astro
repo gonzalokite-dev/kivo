@@ -1,0 +1,304 @@
+---
+/**
+ * English landing page: car ownership transfer in Spain for foreign
+ * residents (NIE holders) and anyone who prefers English. Same service, same
+ * figures as the Spanish site (from src/data/tarifas.ts), one page.
+ *
+ * Keyword: car transfer Spain. Secondary: change car ownership Spain,
+ * transfer car ownership Spain NIE, DGT transfer online.
+ *
+ * VALIDAR: que el equipo atiende en inglés. La página promete respuesta por
+ * email en inglés («We reply in English»): confirmar antes de publicarla.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormularioHero from '../../components/FormularioHero.astro';
+import Traspaso from '../../components/Traspaso.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import Icono from '../../components/Icono.astro';
+import Preguntas, { type Pregunta } from '../../components/Preguntas.astro';
+import { FEE, TASA, CCAA } from '../../data/tarifas';
+import { organizationLd, faqLd } from '../../data/seo';
+
+const path = '/en/';
+const title = 'Car ownership transfer in Spain, online | Kivo · €89';
+const description =
+  'We transfer car and motorbike ownership in Spain online: DGT registration change, transfer tax and paperwork for a €89 fee. No appointment, no digital certificate.';
+
+const eurEn = (v: number) =>
+  new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'EUR' }).format(v);
+const madrid = CCAA.find((c) => c.id === 'MAD')!;
+const ejemplo = { precio: 6000, itp: (6000 * madrid.r) / 100 };
+const total = FEE + TASA.coche + ejemplo.itp;
+const tipos = CCAA.map((c) => c.r);
+
+const preguntas: Pregunta[] = [
+  {
+    q: 'Who pays for the car transfer in Spain?',
+    a: `Usually the buyer: the DGT fee (${eurEn(TASA.coche)} in 2026 for cars and motorbikes) and the transfer tax (ITP) of the region where the buyer lives. Buyer and seller can agree otherwise between themselves.`,
+  },
+  {
+    q: 'Do I need an NIE to buy a car in Spain?',
+    a: 'Yes. To register a vehicle in your name in Spain you need an NIE (foreigner identity number). A TIE residence card, or your passport together with the NIE certificate, is valid as ID for the transfer.',
+  },
+  {
+    q: 'Do we need a Spanish digital certificate?',
+    a: 'No. You both sign the contract and the mandate on your phone with a link we email you, and we file the transfer as gestores.',
+  },
+  {
+    q: 'How long do I have to transfer the car?',
+    a: 'The buyer has 30 days from the date of the sale contract to notify the transfer to the DGT, and 30 working days to file the transfer tax (form 620). After that, the tax office applies surcharges.',
+  },
+  {
+    q: 'Why can the transfer tax be higher than I expected?',
+    a: 'The tax office calculates the ITP on the higher of the contract price and the official table value of your model, reduced by age. We confirm the exact amount with the number plate before paying anything.',
+  },
+  {
+    q: 'Can we do it if we live in different cities or countries?',
+    a: 'Yes. Each of you sends photos and signs from your own phone. You never need to meet or go to a traffic office.',
+  },
+  {
+    q: 'Do I pay anything when I send the request?',
+    a: 'No. Sending the form is free and does not commit you. Within 24 hours someone from the team emails you with the exact price and how to pay.',
+  },
+  {
+    q: 'Do you reply in English?',
+    a: 'Yes. Write to us in English and we reply in English by email at every step. Official documents (contract, DGT forms) are in Spanish, and we explain what each one is.',
+  },
+];
+
+const jsonld = [organizationLd(), faqLd(preguntas)];
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {path}
+  {jsonld}
+  lang="en"
+  alternates={{ es: '/', en: '/en/' }}
+  cta="/en/#request"
+  sticky={{ cta: '#request', texto: 'Get started', importe: '€89', etiqueta: 'flat fee, VAT included' }}
+>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">Change of ownership · 100% online · all of Spain</span>
+        <h1>Car ownership transfer in Spain, <span class="hl">without the traffic office.</span></h1>
+        <p class="lede">
+          Bought or sold a car or motorbike in Spain? <b
+            >We change the registered owner at the DGT and pay the transfer tax for you.</b
+          > You both just sign on your phone.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#request">Get started</a>
+          <a class="btn btn-ghost" href="#price">See the price</a>
+        </div>
+
+        <Traspaso lang="en" />
+
+        <ul class="checks">
+          <li><Icono name="check" size={16} sw={3} />€89 flat fee</li>
+          <li><Icono name="check" size={16} sw={3} />NIE holders welcome</li>
+          <li><Icono name="check" size={16} sw={3} />We reply in English</li>
+        </ul>
+      </div>
+
+      <div id="request" class="ancla"><FormularioHero lang="en" /></div>
+    </div>
+  </section>
+
+  <div class="trustbar">
+    <div class="wrap">
+      <ul>
+        <li><Icono name="escudo" size={22} sw={2} />Filed by a registered gestor administrativo</li>
+        <li><Icono name="reloj" size={22} sw={2} />Reply within 24 hours</li>
+        <li><Icono name="candado" size={22} sw={2} />Nothing to pay when you ask</li>
+        <li><Icono name="documento" size={22} sw={2} />Receipt for every payment</li>
+        <li><Icono name="mapa" size={22} sw={2} />All 19 regions of Spain</li>
+      </ul>
+    </div>
+  </div>
+
+  <section id="what">
+    <div class="wrap what">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">What is a car transfer?</span>
+        <h2>When a car changes hands in Spain, the owner must change at the DGT.</h2>
+        <p class="big">
+          After a private sale, <b>the DGT (Spain's traffic authority) has to register the new owner</b
+          > and the buyer has to <b>pay the transfer tax (ITP)</b> in their region. In Spanish it is
+          called <i>transferencia</i>, <i>traspaso</i> or <i>cambio de titular</i>. We do the whole
+          thing for you, online.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact"><strong>{eurEn(TASA.coche)}</strong><span>DGT fee in 2026 for cars and motorbikes. We pay it for you, with no mark-up.</span></div>
+        <div class="fact"><strong>{Math.min(...tipos)}–{Math.max(...tipos)}%</strong><span>Transfer tax depending on the buyer's region, on the value of the car.</span></div>
+        <div class="fact"><strong>30 days</strong><span>Legal deadline from the sale to put the car in the buyer's name.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="background:var(--surface)">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Your transfer in 3 stops</h2>
+        <p>From your phone. No appointments, no queues.</p>
+      </div>
+      <div class="road-wrap">
+        <div class="road" aria-hidden="true"></div>
+        <ol class="steps">
+          <li class="step"><span class="pin">1</span><span class="who">You · 2 minutes</span><h3>Send the request</h3><p>Tell us the number plate and how to reach you. We email you within 24 hours with the exact price.</p></li>
+          <li class="step"><span class="pin">2</span><span class="who">Buyer and seller</span><h3>Photos and e-signature</h3><p>ID of both, the registration certificate and the technical sheet. You sign the contract and mandate online.</p></li>
+          <li class="step"><span class="pin"><Icono name="check" size={34} sw={3} /></span><span class="who">Us</span><h3>Transferred at the DGT</h3><p>We pay the tax, file the change of owner and send you the new registration certificate.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="price">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Price</span>
+        <h2>One fixed fee for your transfer</h2>
+        <p>The DGT fee and the tax go straight to the authorities, to the cent and with no mark-up.</p>
+      </div>
+      <div class="price">
+        <div class="price-card">
+          <span class="eyebrow">Our fee, VAT included</span>
+          <span class="num">89<small>€</small></span>
+          <p>The same for any car or motorbike. You see the DGT fee and the tax before paying anything.</p>
+          <a class="btn" href="#request">Get started</a>
+        </div>
+        <div class="ej-en">
+          <b>Example: a €6,000 car, 8 years old, buyer in Madrid</b>
+          <dl class="receipt">
+            <div class="row ours"><dt>Kivo fee</dt><dd>{eurEn(FEE)}</dd></div>
+            <div class="row"><dt>DGT fee</dt><dd>{eurEn(TASA.coche)}</dd></div>
+            <div class="row"><dt>Transfer tax (ITP, {madrid.r}%)</dt><dd>{eurEn(ejemplo.itp)}</dd></div>
+            <div class="total"><dt>Total</dt><dd>{eurEn(total)}</dd></div>
+          </dl>
+          <p class="note">
+            The tax depends on the buyer's region (from {Math.min(...tipos)}% to {Math.max(...tipos)}%, with
+            fixed amounts or exemptions for older cars in some regions). Try our <a
+              href="/precio-traspaso-coche/#calculadora"
+              hreflang="es">price calculator (in Spanish)</a
+            > or send the request and we confirm the exact figure with the number plate.
+          </p>
+        </div>
+      </div>
+      <div class="guarantee">
+        <span class="seal">Money<br />back</span>
+        <div>
+          <b>If it can't be transferred, you get the €89 back.</b>
+          <p>
+            We check the DGT vehicle report before paying anything on your behalf. If a lien or an
+            embargo blocks the transfer, we tell you and refund our fee.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="documents" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Documents</span>
+        <h2>We only need 3 photos</h2>
+        <p>We prepare the contract, the tax return and the DGT fee ourselves.</p>
+      </div>
+      <div class="doc-mini">
+        <ul>
+          <li>
+            <Icono name="documento" />
+            <span class="who-tag">Buyer and seller</span>
+            <b>ID of both: DNI, NIE or TIE</b>
+            <span>Both sides, valid. A passport together with the NIE certificate is also fine.</span>
+          </li>
+          <li>
+            <Icono name="tarjeta" />
+            <span class="who-tag">Seller</span>
+            <b>Registration certificate</b>
+            <span>The <i>permiso de circulación</i>: it shows who owns the car today.</span>
+          </li>
+          <li>
+            <Icono name="sincargas" />
+            <span class="who-tag">Seller</span>
+            <b>Technical sheet with a valid ITV</b>
+            <span>The <i>ficha técnica</i>. The ITV is Spain's MOT and must be in date.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="deadline" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Don't leave it</span>
+        <h2>What happens if the transfer isn't done</h2>
+        <p>Until the DGT registers the new owner, the car still belongs to the seller for traffic and tax purposes.</p>
+      </div>
+      <div class="risk">
+        <div><strong>30 days</strong><b>Deadline from the sale</b><p>To notify the DGT and pay the tax. After that, the tax office applies surcharges.</p></div>
+        <div><strong>Fines</strong><b>Go to the seller</b><p>Traffic fines are sent to whoever is the registered owner, even if they no longer drive the car.</p></div>
+        <div><strong>1 January</strong><b>Road tax</b><p>The town hall charges the yearly road tax to whoever owns the car on that day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions about transferring a car in Spain</h2>
+        <div class="faq-en-lado">
+          <p>Something else? Add your question to the request and we reply within 24 hours, in English.</p>
+          <a class="btn btn-primary" href="#request">Get started <Icono name="flecha" size={18} sw={2.5} class="arrow" /></a>
+        </div>
+      </div>
+      <Preguntas {preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo="Transfer your car without the traffic office"
+    texto="€89 fee. The DGT fee and the tax to the cent. Remember: the buyer has 30 days from the sale."
+    cta="#request"
+    etiqueta="Get started"
+    alt="or message us on WhatsApp"
+  />
+</BaseLayout>
+
+<style>
+  .ancla {
+    scroll-margin-top: 90px;
+    min-width: 0;
+  }
+  .ej-en {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 28px;
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+  .ej-en > b {
+    font: 700 18px/1.3 var(--f-d);
+  }
+  .ej-en .receipt {
+    background: var(--bg);
+  }
+  .faq-en-lado {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    margin-top: 20px;
+    max-width: 36ch;
+  }
+  .faq-en-lado p {
+    color: var(--tinta-suave);
+  }
+</style>

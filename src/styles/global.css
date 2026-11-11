@@ -711,3 +711,10 @@ footer .wrap{display:block}
 /* Nota bajo una rejilla con título centrado: centrada también. */
 .alt.centro{margin:28px auto 0;max-width:70ch;border-left:0;padding-left:0;text-align:center}
 .share .link-btn{padding:12px 0;min-height:44px}
+
+/* Hero: valoración real bajo el titular y segundo canal de contacto. Solo
+   aparecen con datos en site.config.mjs (VALORACION, WHATSAPP o TELEFONO). */
+.hero-val{font-size:14.5px;color:var(--tinta-suave);font-weight:500}
+.hero-val span{color:#e0a800;letter-spacing:2px;font-size:16px}
+.hero-alt{font-size:15px;color:var(--tinta-suave)}
+.hero-alt a{font-weight:700}

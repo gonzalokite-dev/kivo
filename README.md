@@ -50,6 +50,31 @@ node scripts/check-lighthouse.mjs /vender-coche/        # rutas concretas
 pantalla de éxito y deja un aviso en la consola con los datos que habría
 enviado. Así se puede probar el flujo completo sin endpoint.
 
+### Bloques que aparecen solos al rellenar un dato
+
+En `site.config.mjs` hay datos que hoy están vacíos. Mientras lo estén, su
+bloque no se pinta: la web nunca enseña un teléfono, una reseña o un sello
+inventados. En cuanto se rellenan, aparecen sin tocar más código.
+
+| Dato | Qué aparece |
+| --- | --- |
+| `WHATSAPP` | Botón flotante, «¿Prefieres hablar antes?» en el hero, enlace en las FAQ y en el cierre, y en el pie. |
+| `TELEFONO`, `EMAIL` | Contacto en las FAQ, en el pie, en Aviso legal y Privacidad, y en el JSON-LD. |
+| `HORARIO` | «Te atendemos de lunes a viernes…» en el pie (si hay algún canal). |
+| `GESTOR` | Bloque «Quién lleva tu traspaso» con foto, nombre y colegiación. |
+| `SELLOS` | Sellos oficiales bajo el formulario del hero y en el pie. |
+| `VALORACION` | Línea de estrellas bajo el titular del hero. |
+| `OPINIONES` (3 o más) | Sección de opiniones en la portada. |
+| `SOCIAL` | Iconos de redes en el pie y `sameAs` en el JSON-LD. |
+| `REGISTRO_MERCANTIL` | Datos registrales en el Aviso legal. |
+
+### Versión en inglés
+
+`/en/` es una página única en inglés para residentes extranjeros con NIE, con
+el formulario en inglés (acepta móviles extranjeros con prefijo internacional),
+y enlazada con la portada mediante `hreflang`. Las páginas legales y las guías
+siguen solo en español.
+
 ## Cómo está montado
 
 - **Astro** con salida estática y `trailingSlash: 'always'`.

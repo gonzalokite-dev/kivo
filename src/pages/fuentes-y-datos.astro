@@ -1,0 +1,207 @@
+---
+/**
+ * Fuentes y datos: de dónde salen las cifras de la web (tasa de la DGT,
+ * tipos del ITP, valor fiscal, plazos) y las fuentes oficiales que citan las
+ * guías. Página de confianza enlazada en el pie, como «Fuentes y datos» en
+ * Taxfix. Todo sale de src/data/nav.ts y src/data/tarifas.ts, así que no se
+ * desincroniza de lo que usa la calculadora.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from '../components/Migas.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { FUENTES } from '../data/nav';
+import { CCAA, TASA, FEE, eur } from '../data/tarifas';
+import { breadcrumbLd, type Miga } from '../data/seo';
+
+const path = '/fuentes-y-datos/';
+const title = 'Fuentes y datos de las cifras de Kivo | Kivo';
+const description =
+  'De dónde salen las cifras de Kivo: la tasa de la DGT, el ITP de las 19 comunidades, el valor fiscal de Hacienda y los plazos, con enlace a cada fuente oficial.';
+
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: 'Fuentes y datos', href: path },
+];
+
+const tipos = CCAA.map((c) => c.r);
+const minimo = String(Math.min(...tipos)).replace('.', ',');
+const maximo = String(Math.max(...tipos)).replace('.', ',');
+
+const datos = [
+  {
+    dato: 'Honorarios de Kivo',
+    valor: `${eur(FEE)}, IVA incluido`,
+    fuente: 'Tarifa propia, igual para cualquier coche o moto.',
+    enlaces: [],
+  },
+  {
+    dato: 'Tasa de la DGT por transferencia',
+    valor: `${eur(TASA.coche)} (coches y motos) · ${eur(TASA.ciclo)} (ciclomotores)`,
+    fuente: 'Tasas de Tráfico vigentes en 2026: tasa 1.5 para la transferencia y 1.2 para ciclomotores.',
+    enlaces: [FUENTES.dgtTransferencias],
+  },
+  {
+    dato: 'Impuesto de transmisiones patrimoniales (ITP)',
+    valor: `Del ${minimo} % al ${maximo} % según la comunidad, con cuotas fijas y exenciones para vehículos antiguos`,
+    fuente:
+      'Normativa de cada comunidad autónoma para 2026. Los tipos de las 19 comunidades están en la tabla del precio y en la calculadora.',
+    enlaces: [FUENTES.aeat620],
+  },
+  {
+    dato: 'Valor fiscal del vehículo',
+    valor: 'Precios medios de venta de Hacienda, rebajados por antigüedad',
+    fuente: 'Orden HAC/1501/2025, de 17 de diciembre, en vigor desde el 1 de enero de 2026.',
+    enlaces: [FUENTES.boeOrdenPrecios, FUENTES.gestoresPrecios],
+  },
+  {
+    dato: 'Plazos',
+    valor: '30 días para comunicar la transferencia a la DGT · 30 días hábiles para el modelo 620',
+    fuente: 'Reglamento General de Vehículos e instrucciones del modelo 620.',
+    enlaces: [FUENTES.boeReglamento, FUENTES.aeat620],
+  },
+  {
+    dato: 'Notificación de venta',
+    valor: 'Trámite del vendedor, distinto de la transferencia',
+    fuente: 'Sede electrónica de la DGT.',
+    enlaces: [FUENTES.dgtNotificacion],
+  },
+];
+
+const todas = Object.values(FUENTES);
+---
+
+<BaseLayout {title} {description} {path} jsonld={[breadcrumbLd(migas)]}>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>Fuentes y datos</h1>
+      <p class="lede">
+        Cada cifra de la web sale de una fuente oficial. Aquí tienes de dónde viene cada una, para
+        que puedas comprobarla. <b>Última revisión: noviembre de 2026.</b>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Las cifras</span>
+        <h2>De dónde sale cada dato</h2>
+        <p>
+          Las mismas cifras alimentan la calculadora, la tabla del ITP y las guías: si cambia una
+          tasa, cambia en toda la web a la vez.
+        </p>
+      </div>
+
+      <div class="fd-lista">
+        {
+          datos.map((d) => (
+            <article>
+              <h3>{d.dato}</h3>
+              <p class="fd-valor">{d.valor}</p>
+              <p>{d.fuente}</p>
+              {d.enlaces.length > 0 && (
+                <ul>
+                  {d.enlaces.map((f) => (
+                    <li>
+                      <a href={f.url} target="_blank" rel="noopener">
+                        {f.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Fuentes oficiales</span>
+        <h2>Todas las fuentes que citamos</h2>
+        <p>
+          Solo enlazamos a organismos oficiales y a entidades de referencia del sector, nunca a otras
+          gestorías.
+        </p>
+      </div>
+      <ul class="fd-fuentes">
+        {
+          todas.map((f) => (
+            <li>
+              <a href={f.url} target="_blank" rel="noopener">
+                {f.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="src" style="text-align:center;margin-top:24px">
+        La calculadora da una estimación. La cifra exacta del impuesto te la confirmamos con la
+        matrícula antes de pagarlo.
+      </p>
+    </div>
+  </section>
+
+  <FinalCta />
+</BaseLayout>
+
+<style>
+  .fd-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .fd-lista article {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    padding: 26px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .fd-lista h3 {
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .fd-valor {
+    font: 700 16px/1.4 var(--f-d);
+    color: var(--azul-texto);
+  }
+  .fd-lista p:not(.fd-valor) {
+    color: var(--tinta-suave);
+    font-size: 15px;
+  }
+  .fd-lista ul,
+  .fd-fuentes {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .fd-lista a,
+  .fd-fuentes a {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .fd-fuentes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 32px;
+    max-width: 960px;
+    margin-inline: auto;
+  }
+  .fd-fuentes li {
+    border-bottom: 1px solid var(--linea);
+    padding-bottom: 10px;
+  }
+  @media (max-width: 760px) {
+    .fd-lista,
+    .fd-fuentes {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

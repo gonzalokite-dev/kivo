@@ -1,6 +1,45 @@
 ---
-/* VALIDAR: la garantía de devolución de los 89 €: condiciones exactas y
-   en qué casos aplica. */
+/* VALIDAR: las dos garantías son compromisos de negocio. Confirmar las
+   condiciones exactas y recogerlas igual en el Aviso legal:
+   1) devolución de los 89 € si no se puede tramitar;
+   2) cobertura frente a errores: si un error nuestro en la liquidación o en
+      la presentación genera un recargo o una sanción, lo pagamos nosotros. */
 ---
 
-      <div class="guarantee"><span class="seal">Garantía<br>Kivo</span><div><b>Si no se puede tramitar, te devolvemos los 89 €.</b><p>Revisamos el informe de la DGT antes de pagar nada en tu nombre. Si una carga o un embargo impide la transferencia, te lo decimos y te devolvemos los honorarios.</p></div></div>
+<div class="guarantee">
+  <span class="seal">Garantía<br />Kivo</span>
+  <div class="guarantee-list">
+    <div>
+      <b>Si no se puede tramitar, te devolvemos los 89 €.</b>
+      <p>
+        Revisamos el informe de la DGT antes de pagar nada en tu nombre. Si una carga o un embargo
+        impide la transferencia, te lo decimos y te devolvemos los honorarios.
+      </p>
+    </div>
+    <div>
+      <b>Si nos equivocamos nosotros, lo pagamos nosotros.</b>
+      <p>
+        Si un error nuestro al liquidar el impuesto o al presentar la transferencia genera un recargo
+        o una sanción, corre de nuestra cuenta. Tú no pagas por nuestros fallos.
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .guarantee-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 32px;
+  }
+  .guarantee-list > div {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+  }
+  @media (max-width: 760px) {
+    .guarantee-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,93 @@
+---
+/**
+ * «Y lo último que queremos que sepas»: las promesas de Kivo juntas en un
+ * bloque antes del cierre (patrón de Taxfix). Solo compromisos que la web
+ * ya hace en otras secciones.
+ */
+import Icono from './Icono.astro';
+
+const lista = [
+  {
+    b: 'El precio que te damos es el que pagas.',
+    t: '89 € de honorarios, IVA incluido. La tasa de la DGT y el impuesto, al céntimo, sin margen y con justificante.',
+  },
+  {
+    b: 'Detrás hay personas, no un robot.',
+    t: 'Te escribe alguien del equipo en menos de 24 horas y la transferencia la presenta un gestor administrativo colegiado.',
+  },
+  {
+    b: 'Hablamos claro.',
+    t: 'Sin jerga de ventanilla. Si tienes que hacer algo, te lo decimos en la primera línea del email.',
+  },
+  {
+    b: 'No pagas nada hasta saber el precio exacto.',
+    t: 'Primero lo comprobamos con la matrícula; si una carga impide el traspaso, te devolvemos los honorarios.',
+  },
+];
+---
+
+<div class="wrap">
+  <div class="promesas">
+    <h2>Y lo último que queremos que sepas…</h2>
+    <ul>
+      {
+        lista.map((x) => (
+          <li>
+            <Icono name="check" size={20} sw={3} />
+            <p>
+              <b>{x.b}</b> {x.t}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .promesas {
+    background: var(--azul-suave);
+    border-radius: 28px;
+    padding: 56px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 48px;
+    align-items: start;
+  }
+  .promesas h2 {
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .promesas ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  .promesas li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .promesas li :global(svg) {
+    color: var(--ok);
+    margin-top: 3px;
+  }
+  .promesas p {
+    color: var(--tinta-suave);
+  }
+  .promesas p b {
+    color: var(--tinta);
+  }
+  @media (max-width: 860px) {
+    .promesas {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 28px 22px;
+    }
+  }
+</style>

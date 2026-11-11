@@ -1,4 +1,7 @@
-import { SITE_URL, SITE_NAME, TELEFONO, EMAIL, CIF, DOMICILIO, RAZON_SOCIAL } from '../../site.config.mjs';
+import { SITE_URL, SITE_NAME, TELEFONO, EMAIL, CIF, DOMICILIO, RAZON_SOCIAL, SOCIAL } from '../../site.config.mjs';
+
+/** Perfiles en redes con URL, para el sameAs de Organization. */
+const perfiles = Object.values((SOCIAL ?? {}) as Record<string, string | null>).filter(Boolean) as string[];
 
 export { SITE_URL, SITE_NAME };
 
@@ -48,6 +51,7 @@ export const organizationLd = () => ({
   slogan: ORG.slogan,
   areaServed: { '@type': 'Country', name: 'España' },
   founder: { '@type': 'Organization', name: 'Benavides', url: 'https://benavidesasociados.com' },
+  ...(perfiles.length ? { sameAs: perfiles } : {}),
   ...(TELEFONO ? { telephone: TELEFONO } : {}),
   ...(EMAIL ? { email: EMAIL } : {}),
   legalName: RAZON_SOCIAL,

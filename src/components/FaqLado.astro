@@ -1,0 +1,79 @@
+---
+/**
+ * Columna izquierda de las preguntas frecuentes, debajo del título: en vez
+ * de dejarla vacía, una salida para quien sigue con dudas (patrón de webs
+ * de servicio online tipo Taxfix). Los canales extra (WhatsApp, teléfono,
+ * email) solo salen si están en site.config.mjs.
+ */
+import { WHATSAPP, TELEFONO, EMAIL } from '../../site.config.mjs';
+import Icono from './Icono.astro';
+
+interface Props {
+  cta?: string;
+  etiqueta?: string;
+}
+const { cta = '/#solicitud', etiqueta = 'Pedir mi traspaso' } = Astro.props;
+const wa = WHATSAPP
+  ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent('Hola, tengo una duda sobre el traspaso de mi coche.')}`
+  : null;
+---
+
+<div class="faq-lado">
+  <p>
+    ¿Tu duda no está aquí? Envía la solicitud con tu pregunta en el comentario: te contesta una
+    persona del equipo en menos de 24 horas y no te compromete a nada.
+  </p>
+  <a class="btn btn-primary" href={cta}>
+    {etiqueta}
+    <Icono name="flecha" size={18} sw={2.5} class="arrow" />
+  </a>
+  {
+    (wa || TELEFONO || EMAIL) && (
+      <p class="faq-canales">
+        O escríbenos
+        {wa && (
+          <>
+            {' '}
+            <a href={wa} target="_blank" rel="noopener">
+              por WhatsApp
+            </a>
+          </>
+        )}
+        {EMAIL && (
+          <>
+            {wa ? ', ' : ' '}a <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+          </>
+        )}
+        {TELEFONO && (
+          <>
+            {wa || EMAIL ? ' o llama al ' : ' llamando al '}
+            <a href={`tel:${TELEFONO}`}>{TELEFONO}</a>
+          </>
+        )}
+        .
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .faq-lado {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    margin-top: 20px;
+    max-width: 36ch;
+  }
+  .faq-lado p {
+    color: var(--tinta-suave);
+  }
+  .faq-canales a {
+    font-weight: 600;
+  }
+  @media (max-width: 860px) {
+    .faq-lado {
+      max-width: none;
+      margin-bottom: 12px;
+    }
+  }
+</style>

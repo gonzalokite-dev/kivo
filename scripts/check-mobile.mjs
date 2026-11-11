@@ -130,6 +130,8 @@ const RUTAS = [
   '/traspaso-moto/',
   '/vender-coche/',
   '/guias/',
+  '/en/',
+  '/fuentes-y-datos/',
   '/guias/como-hacer-traspaso-coche/',
   '/guias/quien-paga-traspaso-coche/',
   '/guias/plazo-traspaso-coche/',
@@ -425,6 +427,37 @@ try {
   for (const [nombre, ok, det] of pruebas) {
     console.log(`    ${ok ? 'ok ' : 'NO '} ${nombre.padEnd(44)} ${det}`);
     if (!ok) errores.push(`Móvil y conversión: falla «${nombre}» (${det})`);
+  }
+
+  // --- 6) la versión en inglés ---------------------------------------------
+  console.log('\n  Versión en inglés');
+  await cdp.goto(`http://127.0.0.1:${PUERTO}/en/`);
+  const en = await cdp.eval(`(async () => {
+    const espera = (ms) => new Promise(r => setTimeout(r, ms));
+    const v = (id, val) => document.getElementById(id).value = val;
+    const enviar = () => document.getElementById('h-formView').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    v('h-matricula', '1234 MBC'); v('h-nombre', 'John Smith'); v('h-tel', '123'); v('h-email', 'john@example.com');
+    document.getElementById('h-rgpd').checked = true;
+    enviar(); await espera(60);
+    const errTel = document.getElementById('h-leadErr').textContent;
+    v('h-tel', '+44 7700 900123');
+    enviar(); await espera(300);
+    return {
+      lang: document.documentElement.lang,
+      hreflang: [...document.querySelectorAll('link[rel=alternate]')].map(l => l.hreflang).join(','),
+      errTel,
+      exito: !document.getElementById('h-doneView').hidden,
+      gracias: document.querySelector('#h-doneView h2').textContent.trim(),
+    };
+  })()`);
+  const pruebasEn = [
+    ['lang="en" y hreflang es/en', en.lang === 'en' && en.hreflang.includes('es') && en.hreflang.includes('en'), en.hreflang],
+    ['error del móvil en inglés', /mobile/i.test(en.errTel), en.errTel],
+    ['acepta un móvil británico (+44)', en.exito, en.gracias],
+  ];
+  for (const [nombre, ok, det] of pruebasEn) {
+    console.log(`    ${ok ? 'ok ' : 'NO '} ${nombre.padEnd(44)} ${det}`);
+    if (!ok) errores.push(`Inglés: falla «${nombre}» (${det})`);
   }
 
   ws.close();

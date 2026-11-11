@@ -18,6 +18,7 @@ import FinalCta from '../components/FinalCta.astro';
 import Icono from '../components/Icono.astro';
 import { breadcrumbLd, faqLd, serviceLd, type Miga } from '../data/seo';
 import { CCAA, FEE, TASA, eur, itpFor, total } from '../data/tarifas';
+import FaqLado from '../components/FaqLado.astro';
 
 const path = '/precio-traspaso-coche/';
 const title = '¿Cuánto cuesta el traspaso de un coche en 2026? | Kivo';
@@ -313,6 +314,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
       <div class="sec-head" style="margin:0">
         <span class="eyebrow">Preguntas</span>
         <h2>Preguntas frecuentes sobre el precio</h2>
+        <FaqLado cta="#calculadora" etiqueta="Calcular y pedirla" />
       </div>
       <Preguntas {preguntas} />
     </div>
