@@ -48,7 +48,7 @@ export const GET: APIRoute = async () => {
     '',
     '## Guías',
     '',
-    `Diez guías en ${abs('/guias/')}, agrupadas en tres bloques:`,
+    `${guias.length} guías en ${abs('/guias/')}, agrupadas en tres bloques:`,
     '',
     ...grupos.flatMap((grupo) => [
       `### ${grupo}`,

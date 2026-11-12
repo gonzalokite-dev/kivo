@@ -36,6 +36,10 @@ const DOMINIOS_OFICIALES = [
   'clave.gob.es',
 ];
 
+/** Webs propias: el despacho que hay detrás de Kivo. Se permite enlazarlas
+ *  (sin nofollow), pero no cuentan como fuente oficial. Una por guía como mucho. */
+const DOMINIOS_PROPIOS = ['benavidesasociados.com'];
+
 const COMERCIALES = [
   '/',
   '/precio-traspaso-coche/',
@@ -177,7 +181,11 @@ for (const { file, url } of guias) {
 
   const salientes = hrefs.filter((h) => h.startsWith('http'));
   const oficiales = salientes.filter((h) => DOMINIOS_OFICIALES.some((d) => h.includes(`//${d}/`)));
-  const ajenos = salientes.filter((h) => !DOMINIOS_OFICIALES.some((d) => h.includes(`//${d}/`)));
+  const propios = salientes.filter((h) => DOMINIOS_PROPIOS.some((d) => h.includes(`//${d}/`)));
+  const ajenos = salientes.filter(
+    (h) => !DOMINIOS_OFICIALES.some((d) => h.includes(`//${d}/`)) && !propios.includes(h)
+  );
+  if (propios.length > 1) err(url, `${propios.length} enlaces a webs propias, máximo 1 por guía`);
 
   if (oficiales.length < LIMITES.salientesMin)
     err(url, `${oficiales.length} enlaces salientes oficiales en el texto, mínimo ${LIMITES.salientesMin}`);

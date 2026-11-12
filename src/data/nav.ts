@@ -62,7 +62,11 @@ export const DOMINIOS_OFICIALES = [
   'clave.gob.es',
 ] as const;
 
-/** Las fuentes ya comprobadas, por clave, para no repetir URLs en 10 guías. */
+/** El despacho que hay detrás de Kivo: se enlaza como mucho una vez por guía,
+ *  a la página de su web que trate el mismo tema. No es una fuente oficial. */
+export const DOMINIOS_PROPIOS = ['benavidesasociados.com'] as const;
+
+/** Las fuentes ya comprobadas, por clave, para no repetir URLs en todas las guías. */
 export const FUENTES = {
   dgtTransferencias: {
     label: 'DGT · Transferencias de vehículos',
@@ -107,6 +111,10 @@ export const FUENTES = {
   boeOrdenPrecios: {
     label: 'BOE · Orden HAC/1501/2025, precios medios de venta para 2026',
     url: 'https://www.boe.es/eli/es/o/2025/12/17/hac1501',
+  },
+  boeCodigoCivil: {
+    label: 'BOE · Código Civil (saneamiento por vicios ocultos, arts. 1484 a 1490)',
+    url: 'https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763',
   },
   aeatSede: {
     label: 'AEAT · Sede electrónica',
