@@ -1,0 +1,75 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/precio-traspaso-coche",
+      "destination": "/calcular-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/precio-traspaso-coche/",
+      "destination": "/calcular-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/gestoria-traspaso-coche",
+      "destination": "/gestoria-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/gestoria-traspaso-coche/",
+      "destination": "/gestoria-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/documentacion-traspaso-coche",
+      "destination": "/documentacion-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/documentacion-traspaso-coche/",
+      "destination": "/documentacion-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/traspaso-moto",
+      "destination": "/transferencia-moto/",
+      "permanent": true
+    },
+    {
+      "source": "/traspaso-moto/",
+      "destination": "/transferencia-moto/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/como-hacer-traspaso-coche",
+      "destination": "/guias/como-hacer-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/como-hacer-traspaso-coche/",
+      "destination": "/guias/como-hacer-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/quien-paga-traspaso-coche",
+      "destination": "/guias/quien-paga-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/quien-paga-traspaso-coche/",
+      "destination": "/guias/quien-paga-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/plazo-traspaso-coche",
+      "destination": "/guias/plazo-transferencia-coche/",
+      "permanent": true
+    },
+    {
+      "source": "/guias/plazo-traspaso-coche/",
+      "destination": "/guias/plazo-transferencia-coche/",
+      "permanent": true
+    }
+  ]
+}

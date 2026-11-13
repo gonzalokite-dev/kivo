@@ -117,7 +117,7 @@ siguen solo en español.
 ### La tabla del ITP, en un solo sitio
 
 `src/data/tarifas.ts` es la única fuente de verdad. De ahí salen a la vez la
-tabla estática de `/precio-traspaso-coche/` (renderizada en el build, no
+tabla estática de `/calcular-transferencia-coche/` (renderizada en el build, no
 generada por JavaScript) y los datos que usa la calculadora en el navegador.
 Los tipos, las cuotas fijas y las exenciones vienen de
 `referencia/kivo-landing.html` y no se han tocado.

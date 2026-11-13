@@ -42,11 +42,11 @@ const DOMINIOS_PROPIOS = ['benavidesasociados.com'];
 
 const COMERCIALES = [
   '/',
-  '/precio-traspaso-coche/',
-  '/documentacion-traspaso-coche/',
-  '/traspaso-moto/',
+  '/calcular-transferencia-coche/',
+  '/documentacion-transferencia-coche/',
+  '/transferencia-moto/',
   '/vender-coche/',
-  '/gestoria-traspaso-coche/',
+  '/gestoria-transferencia-coche/',
 ];
 
 const errores = [];
@@ -134,7 +134,7 @@ for (const { file, url } of todas) {
   // /en/ es la portada en inglés: como la portada, sin migas de pan.
   const esPortada = url === '/' || url === '/en/';
   const es404 = url === '/404.html';
-  const esPrecio = url === '/precio-traspaso-coche/';
+  const esPrecio = url === '/calcular-transferencia-coche/';
   // El @type de Organization puede ir solo o en array (["Organization","ProfessionalService"]).
   const tieneTipo = (tipo) => new RegExp(`"@type":(?:"${tipo}"|\\[[^\\]]*"${tipo}"[^\\]]*\\])`).test(html);
   if (!esPortada && !es404 && !tieneTipo('BreadcrumbList'))

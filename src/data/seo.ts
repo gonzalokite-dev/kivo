@@ -83,7 +83,7 @@ export const serviceLd = () => ({
     priceCurrency: 'EUR',
     description: 'Honorarios de Kivo, IVA incluido, para cualquier coche o moto.',
     availability: 'https://schema.org/InStock',
-    url: abs('/precio-traspaso-coche/'),
+    url: abs('/calcular-transferencia-coche/'),
   },
 });
 

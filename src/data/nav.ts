@@ -8,28 +8,28 @@ export interface Enlace {
 /** Menú principal. El botón «Calcular mi precio» va aparte, en el componente. */
 export const MENU: Enlace[] = [
   { href: '/#como', label: 'Cómo funciona' },
-  { href: '/precio-traspaso-coche/', label: 'Precio' },
-  { href: '/documentacion-traspaso-coche/', label: 'Documentos' },
-  { href: '/traspaso-moto/', label: 'Motos' },
+  { href: '/calcular-transferencia-coche/', label: 'Precio' },
+  { href: '/documentacion-transferencia-coche/', label: 'Documentos' },
+  { href: '/transferencia-moto/', label: 'Motos' },
   { href: '/vender-coche/', label: 'Si vendes' },
   { href: '/guias/', label: 'Guías' },
 ];
 
 /** Las 5 comerciales, para el pie y para los enlaces internos. */
 export const COMERCIALES: Enlace[] = [
-  { href: '/', label: 'Traspaso de coche' },
-  { href: '/gestoria-traspaso-coche/', label: 'Gestoría de traspasos' },
-  { href: '/precio-traspaso-coche/', label: 'Cuánto cuesta' },
-  { href: '/documentacion-traspaso-coche/', label: 'Documentos' },
-  { href: '/traspaso-moto/', label: 'Traspaso de moto' },
+  { href: '/', label: 'Transferencia de coche' },
+  { href: '/gestoria-transferencia-coche/', label: 'Gestoría de transferencias' },
+  { href: '/calcular-transferencia-coche/', label: 'Cuánto cuesta' },
+  { href: '/documentacion-transferencia-coche/', label: 'Documentos' },
+  { href: '/transferencia-moto/', label: 'Transferencia de moto' },
   { href: '/vender-coche/', label: 'Si vendes tu coche' },
 ];
 
 /** Las 4 guías principales que van en el pie. */
 export const GUIAS_PIE: Enlace[] = [
-  { href: '/guias/como-hacer-traspaso-coche/', label: 'Cómo hacerla paso a paso' },
-  { href: '/guias/quien-paga-traspaso-coche/', label: 'Quién la paga' },
-  { href: '/guias/plazo-traspaso-coche/', label: 'Plazos' },
+  { href: '/guias/como-hacer-transferencia-coche/', label: 'Cómo hacerla paso a paso' },
+  { href: '/guias/quien-paga-transferencia-coche/', label: 'Quién la paga' },
+  { href: '/guias/plazo-transferencia-coche/', label: 'Plazos' },
   { href: '/guias/traspaso-coche-sin-certificado-digital/', label: 'Sin certificado digital' },
 ];
 

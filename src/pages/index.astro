@@ -1,11 +1,12 @@
 ---
 /**
  * Portada.
- * Palabra clave: traspaso coche.
- * Secundarias: transferencia coche, traspaso de coche online,
- * cambio de nombre coche.
- * «Gestoría traspaso coche» la ataca /gestoria-traspaso-coche/: la portada
- * la enlaza con ese ancla y no la persigue, para no canibalizarla.
+ * Palabra clave: transferencia coche online (y «transferencia coche»).
+ * Secundarias: traspaso de coche online, cambio de titularidad, cambio de
+ * nombre coche. Según el keyword research de noviembre de 2026, se busca
+ * diez veces más «transferencia» que «traspaso».
+ * «Gestoría transferencia coche» la ataca /gestoria-transferencia-coche/: la
+ * portada la enlaza con ese ancla y no la persigue, para no canibalizarla.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Calculadora from '../components/Calculadora.astro';
@@ -38,28 +39,28 @@ import FaqLado from '../components/FaqLado.astro';
 
 const path = '/';
 
-const title = 'Traspaso de coche online, sin ir a Tráfico | Kivo · 89 €';
+const title = 'Transferencia de coche online, sin ir a Tráfico | Kivo · 89 €';
 const description =
-  'Hacemos el traspaso de tu coche online: cambio de titular en la DGT, impuesto y papeleo por 89 €. Calcula tu total y te escribimos en menos de 24 h.';
+  'Hacemos la transferencia de tu coche online: cambio de titular en la DGT, impuesto y papeleo por 89 €. Calcula tu total y te escribimos en menos de 24 h.';
 
 const preguntas: Pregunta[] = [
   {
     q: '¿Quién paga el traspaso del coche?',
     a: 'Normalmente el comprador: la tasa de la DGT (55,70 € en 2026 para coches y motos) y el ITP de su comunidad. Podéis pactar otra cosa entre vosotros.',
     html:
-      'Normalmente el comprador: la tasa de la DGT (55,70 € en 2026 para coches y motos) y el ITP de su comunidad. Podéis pactar otra cosa entre vosotros. Lo detallamos en la guía de <a href="/guias/quien-paga-traspaso-coche/">quién paga la transferencia de un coche</a>.',
+      'Normalmente el comprador: la tasa de la DGT (55,70 € en 2026 para coches y motos) y el ITP de su comunidad. Podéis pactar otra cosa entre vosotros. Lo detallamos en la guía de <a href="/guias/quien-paga-transferencia-coche/">quién paga la transferencia de un coche</a>.',
   },
   {
     q: '¿Cómo se hace el traspaso de un coche?',
     a: 'Con Kivo: calculas tu precio, envías la solicitud y te escribimos en menos de 24 horas. Después enviáis tres fotos y firmáis desde el móvil; nosotros pagamos el impuesto y presentamos el cambio de titular en la DGT.',
     html:
-      'Con Kivo: calculas tu precio, envías la solicitud y te escribimos en menos de 24 horas. Después enviáis tres fotos y firmáis desde el móvil; nosotros pagamos el impuesto y presentamos el cambio de titular en la DGT. Si prefieres hacerlo tú, tienes los cinco pasos en la guía de <a href="/guias/como-hacer-traspaso-coche/">cómo hacer la transferencia de un coche</a>.',
+      'Con Kivo: calculas tu precio, envías la solicitud y te escribimos en menos de 24 horas. Después enviáis tres fotos y firmáis desde el móvil; nosotros pagamos el impuesto y presentamos el cambio de titular en la DGT. Si prefieres hacerlo tú, tienes los cinco pasos en la guía de <a href="/guias/como-hacer-transferencia-coche/">cómo hacer la transferencia de un coche</a>.',
   },
   {
     q: '¿Cuánto tiempo tengo para hacer el traspaso?',
     a: 'El comprador tiene 30 días desde la firma del contrato para comunicar la transferencia a la DGT, y 30 días hábiles para presentar el modelo 620 del impuesto. Fuera de plazo, Hacienda aplica recargos.',
     html:
-      'El comprador tiene 30 días desde la firma del contrato para comunicar la transferencia a la DGT, y 30 días hábiles para presentar el modelo 620 del impuesto. Fuera de plazo, Hacienda aplica recargos. Tienes los dos plazos explicados en la guía del <a href="/guias/plazo-traspaso-coche/">plazo de la transferencia</a>.',
+      'El comprador tiene 30 días desde la firma del contrato para comunicar la transferencia a la DGT, y 30 días hábiles para presentar el modelo 620 del impuesto. Fuera de plazo, Hacienda aplica recargos. Tienes los dos plazos explicados en la guía del <a href="/guias/plazo-transferencia-coche/">plazo de la transferencia</a>.',
   },
   {
     q: '¿Necesitamos certificado digital?',
@@ -75,7 +76,7 @@ const preguntas: Pregunta[] = [
     q: '¿Qué documentos hacen falta?',
     a: 'Fotos del DNI o NIE de comprador y vendedor por las dos caras, del permiso de circulación y de la ficha técnica con la ITV en vigor.',
     html:
-      'Fotos del DNI o NIE de comprador y vendedor por las dos caras, del permiso de circulación y de la ficha técnica con la ITV en vigor. Lo tienes todo, con ejemplos, en <a href="/documentacion-traspaso-coche/">los documentos para la transferencia</a>.',
+      'Fotos del DNI o NIE de comprador y vendedor por las dos caras, del permiso de circulación y de la ficha técnica con la ITV en vigor. Lo tienes todo, con ejemplos, en <a href="/documentacion-transferencia-coche/">los documentos para la transferencia</a>.',
   },
   {
     q: '¿Y si el coche tiene una carga o un embargo?',
@@ -101,7 +102,7 @@ const preguntas: Pregunta[] = [
     q: '¿Hacéis motos y ciclomotores?',
     a: 'Sí, con los mismos documentos. En ciclomotores la tasa de la DGT es de 27,85 €.',
     html:
-      'Sí, con los mismos documentos. En ciclomotores la tasa de la DGT es de 27,85 €. Tienes los detalles en <a href="/traspaso-moto/">transferencia de moto</a>.',
+      'Sí, con los mismos documentos. En ciclomotores la tasa de la DGT es de 27,85 €. Tienes los detalles en <a href="/transferencia-moto/">transferencia de moto</a>.',
   },
   {
     q: 'Soy el vendedor, ¿tengo que hacer algo más?',
@@ -139,7 +140,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
     <div class="wrap">
       <div class="hero-copy">
         <span class="eyebrow">Cambio de titular · 100 % online · toda España</span>
-        <h1>Traspaso de coche online, <span class="hl">sin ir a Tráfico.</span></h1>
+        <h1>Transferencia de coche online, <span class="hl">sin ir a Tráfico.</span></h1>
         <p class="lede">
           ¿Has comprado o vendido un coche? <b
             >Cambiamos el titular en la DGT y pagamos el impuesto por ti.</b
@@ -196,7 +197,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
       <Garantia />
       <p class="src" style="margin-top:16px">
         ¿Quieres el desglose completo, con el impuesto de las 19 comunidades y tres ejemplos de total?
-        Está en <a href="/precio-traspaso-coche/">cuánto cuesta la transferencia de un coche</a>.
+        Está en <a href="/calcular-transferencia-coche/">cuánto cuesta la transferencia de un coche</a>.
       </p>
     </div>
   </section>
@@ -207,7 +208,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
 
   <section id="que-es">
     <QueEs
-      respuesta="Kivo hace el traspaso de tu coche online: cambiamos el titular en la DGT, liquidamos el impuesto y presentamos el cambio por ti. Cuesta <b>89 € de honorarios</b>, fijos para cualquier coche o moto, más la tasa de la DGT (55,70 €) y el ITP de tu comunidad. Envías el formulario y te escribimos en menos de 24 horas, sin pagar nada hasta entonces."
+      respuesta="Kivo hace la transferencia de tu coche online: cambiamos el titular en la DGT, liquidamos el impuesto y presentamos el cambio por ti. Cuesta <b>89 € de honorarios</b>, fijos para cualquier coche o moto, más la tasa de la DGT (55,70 €) y el ITP de tu comunidad. Envías el formulario y te escribimos en menos de 24 horas, sin pagar nada hasta entonces."
     />
   </section>
 
@@ -287,7 +288,7 @@ const jsonld = [organizationLd(), serviceLd(), faqLd(preguntas)];
       <p class="alt centro">
         <b>Y la firma.</b> Comprador y vendedor firman el contrato y el mandato desde el móvil, con
         un enlace que enviamos por email. Tienes los ejemplos ilustrados, cómo hacer las fotos y los
-        casos especiales en <a href="/documentacion-traspaso-coche/"
+        casos especiales en <a href="/documentacion-transferencia-coche/"
           >los documentos para la transferencia de un coche</a
         >.
       </p>

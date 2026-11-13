@@ -1,8 +1,9 @@
 ---
 /**
  * Documentación.
- * Palabra clave: documentos traspaso coche.
- * Secundarias: documentos transferencia coche, papeles para cambiar el nombre de un coche.
+ * Palabra clave: documentos transferencia coche.
+ * Secundarias: qué se necesita para hacer una transferencia de coche,
+ * documentos traspaso coche, papeles para cambiar el nombre de un coche.
  */
 import { ANIO } from '../../site.config.mjs';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -15,8 +16,8 @@ import FinalCta from '../components/FinalCta.astro';
 import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
 import FaqLado from '../components/FaqLado.astro';
 
-const path = '/documentacion-traspaso-coche/';
-const title = `Documentos para el traspaso de un coche (${ANIO}) | Kivo`;
+const path = '/documentacion-transferencia-coche/';
+const title = `Documentos para la transferencia de un coche (${ANIO}) | Kivo`;
 const description =
   'Los papeles para cambiar el nombre de un coche: DNI de los dos, permiso de circulación y ficha técnica. Con ejemplos ilustrados y cómo hacer las fotos.';
 
@@ -59,7 +60,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>Documentos para el traspaso de un coche</h1>
+      <h1>Documentos para la transferencia de un coche</h1>
       <p class="lede">
         Son <b>tres fotos y una firma</b>. Aquí tienes qué envía cada uno, ejemplos de cada documento
         y cómo hacer las fotos para que valgan a la primera.

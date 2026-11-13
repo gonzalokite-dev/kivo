@@ -1,8 +1,9 @@
 ---
 /**
  * Motos.
- * Palabra clave: traspaso moto.
- * Secundarias: transferencia moto, cambio de nombre moto, traspaso ciclomotor.
+ * Palabra clave: transferencia moto.
+ * Secundarias: precio cambio de nombre moto, precio de transferencia de
+ * moto, traspaso moto, transferencia ciclomotor.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Migas from '../components/Migas.astro';
@@ -17,14 +18,14 @@ import { breadcrumbLd, faqLd, type Miga } from '../data/seo';
 import { FEE, TASA, eur } from '../data/tarifas';
 import FaqLado from '../components/FaqLado.astro';
 
-const path = '/traspaso-moto/';
-const title = 'Traspaso de moto online, sin ir a Tráfico | Kivo';
+const path = '/transferencia-moto/';
+const title = 'Transferencia de moto online, sin ir a Tráfico | Kivo';
 const description =
   'Cambio de nombre de tu moto sin ir a Tráfico: cambiamos el titular en la DGT, impuesto y papeleo por 89 €. Tasa de 55,70 €, y 27,85 € en ciclomotores.';
 
 const migas: Miga[] = [
   { label: 'Inicio', href: '/' },
-  { label: 'Traspaso de moto', href: path },
+  { label: 'Transferencia de moto', href: path },
 ];
 
 const preguntas: Pregunta[] = [
@@ -42,7 +43,7 @@ const preguntas: Pregunta[] = [
     q: '¿Hacen falta los mismos documentos que para un coche?',
     a: 'Sí: DNI o NIE de comprador y vendedor por las dos caras, permiso de circulación de la moto y ficha técnica con la ITV en vigor cuando le corresponda.',
     html:
-      'Sí: DNI o NIE de comprador y vendedor por las dos caras, permiso de circulación de la moto y ficha técnica con la ITV en vigor cuando le corresponda. Los tienes con ejemplos en <a href="/documentacion-traspaso-coche/">los documentos de la transferencia</a>.',
+      'Sí: DNI o NIE de comprador y vendedor por las dos caras, permiso de circulación de la moto y ficha técnica con la ITV en vigor cuando le corresponda. Los tienes con ejemplos en <a href="/documentacion-transferencia-coche/">los documentos de la transferencia</a>.',
   },
   {
     q: 'Mi ciclomotor tiene placa pero no ITV, ¿se puede transferir?',
@@ -72,7 +73,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>Traspaso de moto online</h1>
+      <h1>Transferencia de moto online</h1>
       <p class="lede">
         Motos y ciclomotores, con los <b>mismos 89 € de honorarios</b> que un coche. Cambiamos el
         titular en la DGT y pagamos el impuesto por ti.
@@ -172,7 +173,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
       <p class="alt" style="margin-top:24px">
         <b>Los ciclomotores, igual.</b> Si tu ciclomotor tiene placa y permiso, los documentos son
         los mismos. Tienes los ejemplos ilustrados y cómo hacer las fotos en <a
-          href="/documentacion-traspaso-coche/">los documentos de la transferencia</a
+          href="/documentacion-transferencia-coche/">los documentos de la transferencia</a
         >.
       </p>
     </div>
@@ -215,7 +216,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
           >Illes Balears y en Navarra los ciclomotores están exentos del ITP</b
         >, así que un ciclomotor allí paga solo los honorarios y la tasa. Y en Navarra también están
         exentos los vehículos de 10 años o más. Los tipos de las 19 comunidades están en <a
-          href="/precio-traspaso-coche/">cuánto cuesta la transferencia</a
+          href="/calcular-transferencia-coche/">cuánto cuesta la transferencia</a
         >.
       </div>
     </div>

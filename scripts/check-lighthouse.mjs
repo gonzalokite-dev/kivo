@@ -30,10 +30,10 @@ const RUTAS = process.argv.slice(2).length
   ? process.argv.slice(2)
   : [
       '/',
-      '/precio-traspaso-coche/',
-      '/documentacion-traspaso-coche/',
+      '/calcular-transferencia-coche/',
+      '/documentacion-transferencia-coche/',
       '/guias/',
-      '/guias/como-hacer-traspaso-coche/',
+      '/guias/como-hacer-transferencia-coche/',
       '/guias/valor-fiscal-coche-hacienda/',
     ];
 

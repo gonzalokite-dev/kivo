@@ -1,9 +1,10 @@
 ---
 /**
  * Gestoría para el traspaso de un coche.
- * Palabra clave: gestoría traspaso coche.
- * Secundarias: gestoría transferencia coche, gestoría online traspaso coche,
- * cuánto cobra una gestoría por un traspaso, gestor administrativo traspaso.
+ * Palabra clave: gestoría para transferencia de coche.
+ * Secundarias: precio transferencia coche gestoría (200/mes), gestoría
+ * transferencia coche, coste o gastos de gestoría, gestoría barata,
+ * gestoría traspaso coche.
  *
  * Intención distinta de la portada: aquí busca quien ya ha decidido que se
  * lo haga una gestoría y compara (qué hace, cuánto cobra, online o
@@ -26,14 +27,14 @@ import { FEE, TASA, CCAA, eur } from '../data/tarifas';
 import { ANIO } from '../../site.config.mjs';
 import { breadcrumbLd, faqLd, serviceLd, type Miga } from '../data/seo';
 
-const path = '/gestoria-traspaso-coche/';
-const title = 'Gestoría de traspaso de coche online: 89 € + tasas | Kivo';
+const path = '/gestoria-transferencia-coche/';
+const title = 'Gestoría para transferencia de coche online: 89 € | Kivo';
 const description =
-  'Gestoría online para el traspaso de tu coche: cambio de titular en la DGT, ITP y papeleo por 89 €. Gestor colegiado, sin cita y sin ir a ninguna oficina.';
+  'Gestoría online para la transferencia de tu coche: cambio de titular en la DGT, ITP y papeleo por 89 €. Gestor colegiado, sin cita y sin ir a la oficina.';
 
 const migas: Miga[] = [
   { label: 'Inicio', href: '/' },
-  { label: 'Gestoría de traspasos', href: path },
+  { label: 'Gestoría de transferencias', href: path },
 ];
 
 const tareas = [
@@ -55,7 +56,7 @@ const preguntas: Pregunta[] = [
     q: '¿Cuánto cobra una gestoría por un traspaso de coche?',
     a: 'Cada gestoría fija sus honorarios y algunas cobran aparte el informe del vehículo o los envíos. A eso se suman siempre la tasa de la DGT y el ITP, que son iguales vayas donde vayas. En Kivo los honorarios son 89 €, IVA incluido, para cualquier coche o moto.',
     html:
-      'Cada gestoría fija sus honorarios y algunas cobran aparte el informe del vehículo o los envíos. A eso se suman siempre la tasa de la DGT y el ITP, que son iguales vayas donde vayas. En Kivo los honorarios son 89 €, IVA incluido, para cualquier coche o moto; tienes el desglose en <a href="/precio-traspaso-coche/">cuánto cuesta el traspaso de un coche</a>.',
+      'Cada gestoría fija sus honorarios y algunas cobran aparte el informe del vehículo o los envíos. A eso se suman siempre la tasa de la DGT y el ITP, que son iguales vayas donde vayas. En Kivo los honorarios son 89 €, IVA incluido, para cualquier coche o moto; tienes el desglose en <a href="/calcular-transferencia-coche/">cuánto cuesta el traspaso de un coche</a>.',
   },
   {
     q: '¿Tengo que ir a la gestoría en persona?',
@@ -95,7 +96,7 @@ const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>Gestoría para el traspaso de tu coche, 100 % online</h1>
+      <h1>Gestoría para la transferencia de tu coche, 100 % online</h1>
       <p class="lede">
         Hacemos lo mismo que una gestoría de barrio, <b>sin que tengas que ir a la oficina</b>:
         revisamos el coche, preparamos el contrato, pagamos el impuesto y presentamos el cambio de
@@ -134,7 +135,7 @@ const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
         </ol>
         <p class="alt" style="margin-top:24px">
           <b>Tú solo envías tres fotos y firmas.</b> Qué documentos son y cómo hacer las fotos está en{' '}
-          <a href="/documentacion-traspaso-coche/">los documentos para el traspaso de un coche</a>.
+          <a href="/documentacion-transferencia-coche/">los documentos para el traspaso de un coche</a>.
         </p>
       </div>
       <FormularioHero />
@@ -145,7 +146,7 @@ const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">Precio</span>
-        <h2>¿Cuánto cobra una gestoría por un traspaso?</h2>
+        <h2>¿Cuánto cuesta la transferencia de un coche en una gestoría?</h2>
         <p>
           Hay dos partes: los honorarios de la gestoría, que cada una fija a su manera, y la tasa de
           la DGT y el impuesto, que son iguales vayas donde vayas.
@@ -171,7 +172,7 @@ const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
           <b>Impuesto (ITP)</b>
           <p>
             Del {itpMin} % al {itpMax} % según la comunidad del comprador, sobre el valor de tablas de Hacienda. Lo
-            calculas en <a href="/precio-traspaso-coche/">cuánto cuesta el traspaso de un coche</a>.
+            calculas en <a href="/calcular-transferencia-coche/">cuánto cuesta el traspaso de un coche</a>.
           </p>
         </div>
       </div>
@@ -184,7 +185,7 @@ const jsonld = [breadcrumbLd(migas), serviceLd(), faqLd(preguntas)];
         <span class="eyebrow">Nuestros honorarios</span>
         <h2>89 € cerrados, con todo incluido</h2>
       </div>
-      <PrecioCard cta="/precio-traspaso-coche/#calculadora" />
+      <PrecioCard cta="/calcular-transferencia-coche/#calculadora" />
       <Garantia />
     </div>
   </section>

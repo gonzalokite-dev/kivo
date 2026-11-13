@@ -136,16 +136,16 @@ async function esperaWs(intentos = 60) {
 // --- rutas a comprobar -----------------------------------------------------
 const RUTAS = [
   '/',
-  '/precio-traspaso-coche/',
-  '/documentacion-traspaso-coche/',
-  '/traspaso-moto/',
+  '/calcular-transferencia-coche/',
+  '/documentacion-transferencia-coche/',
+  '/transferencia-moto/',
   '/vender-coche/',
   '/guias/',
   '/en/',
   '/fuentes-y-datos/',
-  '/guias/como-hacer-traspaso-coche/',
-  '/guias/quien-paga-traspaso-coche/',
-  '/guias/plazo-traspaso-coche/',
+  '/guias/como-hacer-transferencia-coche/',
+  '/guias/quien-paga-transferencia-coche/',
+  '/guias/plazo-transferencia-coche/',
   '/guias/traspaso-coche-sin-certificado-digital/',
   '/guias/traspaso-coche-entre-familiares/',
   '/guias/traspaso-coche-herencia/',
@@ -303,7 +303,7 @@ try {
 
   // --- 3) los botones de la tabla del ITP ---------------------------------
   console.log('\n  Tabla del ITP → calculadora');
-  await cdp.goto(`http://127.0.0.1:${PUERTO}/precio-traspaso-coche/`);
+  await cdp.goto(`http://127.0.0.1:${PUERTO}/calcular-transferencia-coche/`);
   const tabla = await cdp.eval(`(() => {
     const b = document.querySelector('[data-ccaa="GAL"]');
     if (!b) return { error: 'no hay botón para Galicia' };

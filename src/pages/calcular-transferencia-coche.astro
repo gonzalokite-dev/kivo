@@ -1,8 +1,11 @@
 ---
 /**
  * Precio.
- * Palabra clave: cuánto cuesta el traspaso de un coche.
- * Secundarias: cuánto cuesta la transferencia de un coche, coste traspaso coche, precio cambio de nombre coche.
+ * Palabra clave: calcular transferencia coche (1.700/mes, dificultad 0).
+ * Secundarias: precio transferencia coche, coste transferencia coche,
+ * cuánto cuesta la transferencia de un coche, tabla precio transferencia
+ * coche, cuánto cuesta cambiar de nombre un coche. Google agrupa todas en
+ * el mismo tema: una sola página para el grupo del precio.
  */
 import { ANIO } from '../../site.config.mjs';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -21,10 +24,10 @@ import { breadcrumbLd, faqLd, serviceLd, type Miga } from '../data/seo';
 import { CCAA, FEE, TASA, eur, itpFor, total } from '../data/tarifas';
 import FaqLado from '../components/FaqLado.astro';
 
-const path = '/precio-traspaso-coche/';
-const title = `¿Cuánto cuesta el traspaso de un coche en ${ANIO}? | Kivo`;
+const path = '/calcular-transferencia-coche/';
+const title = `Calcular transferencia de coche: precio y tabla ${ANIO} | Kivo`;
 const description =
-  'Cuánto cuesta el traspaso o cambio de nombre de un coche: 89 € de honorarios, tasa de la DGT de 55,70 € e ITP de tu comunidad. Calcula tu total exacto.';
+  'Calcula cuánto cuesta la transferencia de tu coche: 89 € de honorarios, tasa de la DGT de 55,70 € y la tabla del ITP de las 19 comunidades. Total exacto.';
 
 const migas: Miga[] = [
   { label: 'Inicio', href: '/' },
@@ -75,7 +78,7 @@ const preguntas: Pregunta[] = [
     q: '¿Quién paga la transferencia de un coche, el comprador o el vendedor?',
     a: 'El ITP lo paga el comprador por ley: es el sujeto pasivo del impuesto. La tasa de la DGT también la paga quien pone el coche a su nombre. Entre vosotros podéis pactar otro reparto, pero ante Hacienda responde el comprador.',
     html:
-      'El ITP lo paga el comprador por ley: es el sujeto pasivo del impuesto. La tasa de la DGT también la paga quien pone el coche a su nombre. Entre vosotros podéis pactar otro reparto, pero ante Hacienda responde el comprador. Lo desarrollamos en la guía de <a href="/guias/quien-paga-traspaso-coche/">quién paga la transferencia de un coche</a>.',
+      'El ITP lo paga el comprador por ley: es el sujeto pasivo del impuesto. La tasa de la DGT también la paga quien pone el coche a su nombre. Entre vosotros podéis pactar otro reparto, pero ante Hacienda responde el comprador. Lo desarrollamos en la guía de <a href="/guias/quien-paga-transferencia-coche/">quién paga la transferencia de un coche</a>.',
   },
   {
     q: '¿Cuánto es la tasa de la DGT en 2026?',
@@ -118,7 +121,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>¿Cuánto cuesta el traspaso de un coche en {ANIO}?</h1>
+      <h1>Calcula cuánto cuesta la transferencia de tu coche en {ANIO}</h1>
       <p class="lede">
         Tres conceptos y ni uno más: <b>89 € de honorarios</b>, la tasa de la DGT y el impuesto de tu
         comunidad. Aquí los ves por separado y calculas tu total exacto.
@@ -246,7 +249,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
     <div class="wrap itp-wrap">
       <div class="sec-head" style="margin:0">
         <span class="eyebrow">Impuesto por comunidad</span>
-        <h2>ITP por comunidad autónoma</h2>
+        <h2>Tabla del ITP por comunidad autónoma</h2>
         <p>
           Lo paga el comprador en la comunidad donde vive, sobre el mayor entre el precio de compra y
           el valor de tablas de Hacienda. Pulsa «Calcular» y la calculadora se pone con tu comunidad.

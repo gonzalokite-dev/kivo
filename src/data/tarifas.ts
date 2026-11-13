@@ -2,7 +2,7 @@
  * Tarifas e ITP por comunidad.
  *
  * Única fuente de verdad: de aquí salen a la vez la tabla estática de
- * `/precio-traspaso-coche/` (HTML renderizado en el build, no generado
+ * `/calcular-transferencia-coche/` (HTML renderizado en el build, no generado
  * por JavaScript) y los datos que usa la calculadora en el cliente.
  *
  * Los tipos, las cuotas fijas y las exenciones vienen de
