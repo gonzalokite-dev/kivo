@@ -86,7 +86,7 @@ export const FUENTES = {
   },
   dgtNotificacion: {
     label: 'DGT · Notificación de venta',
-    url: 'https://sede.dgt.gob.es/es/vehiculos/transferencias-de-vehiculos/notificacion-de-venta/',
+    url: 'https://sede.dgt.gob.es/es/vehiculos/notificacion-de-venta/',
   },
   boeReglamento: {
     label: 'BOE · Reglamento General de Vehículos (RD 2822/1998)',
@@ -115,6 +115,14 @@ export const FUENTES = {
   boeCodigoCivil: {
     label: 'BOE · Código Civil (saneamiento por vicios ocultos, arts. 1484 a 1490)',
     url: 'https://www.boe.es/buscar/act.php?id=BOE-A-1889-4763',
+  },
+  dgtInforme: {
+    label: 'DGT · Informe de un vehículo',
+    url: 'https://sede.dgt.gob.es/es/vehiculos/informacion-de-vehiculos/informe-de-un-vehiculo/',
+  },
+  boeHaciendasLocales: {
+    label: 'BOE · Ley Reguladora de las Haciendas Locales (impuesto de circulación, arts. 92 a 99)',
+    url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2004-4214',
   },
   aeatSede: {
     label: 'AEAT · Sede electrónica',
