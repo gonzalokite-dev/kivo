@@ -66,12 +66,32 @@ export const organizationLd = () => ({
   },
 });
 
+/** JSON-LD de Service para una página local: la misma oferta, con la
+ *  comunidad autónoma como zona de servicio. */
+export const localServiceLd = (comunidad: string, path: string) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': abs(path) + '#servicio',
+  name: `Transferencia de coche online en ${comunidad}`,
+  serviceType: 'Cambio de titular de vehículo en la DGT',
+  provider: { '@id': abs('/') + '#organizacion' },
+  areaServed: { '@type': 'AdministrativeArea', name: comunidad },
+  offers: {
+    '@type': 'Offer',
+    price: '89',
+    priceCurrency: 'EUR',
+    description: 'Honorarios de Kivo, IVA incluido. La tasa de la DGT y el ITP se pagan aparte, sin recargo.',
+    availability: 'https://schema.org/InStock',
+    url: abs(path),
+  },
+});
+
 /** JSON-LD de Service con la oferta de 89 € para la portada. */
 export const serviceLd = () => ({
   '@context': 'https://schema.org',
   '@type': 'Service',
   '@id': abs('/') + '#servicio',
-  name: 'Traspaso de coche y moto online',
+  name: 'Transferencia de coche y moto online',
   serviceType: 'Cambio de titular de vehículo en la DGT',
   description:
     'Cambio de titular en la DGT, liquidación del impuesto de transmisiones patrimoniales (ITP) y papeleo del traspaso, todo online.',

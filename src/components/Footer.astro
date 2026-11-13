@@ -2,7 +2,7 @@
 import Logo from './Logo.astro';
 import Sellos from './Sellos.astro';
 import { waLink } from '../data/whatsapp';
-import { COMERCIALES, GUIAS_PIE, LEGALES } from '../data/nav';
+import { COMERCIALES, GUIAS_PIE, LEGALES, LOCALES } from '../data/nav';
 import {
   RAZON_SOCIAL,
   CIF,
@@ -94,6 +94,9 @@ if (TELEFONO) canales.push({ label: en ? 'phone' : 'teléfono', href: `tel:${TEL
             <b>Traspasos</b>
             {COMERCIALES.map((e) => (
               <a href={e.href}>{e.label}</a>
+            ))}
+            {LOCALES.map((e) => (
+              <a href={e.href}>Transferencia en {e.label}</a>
             ))}
           </nav>
 

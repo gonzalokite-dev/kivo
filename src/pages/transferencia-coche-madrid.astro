@@ -1,0 +1,140 @@
+---
+/**
+ * Transferencia de coche en Madrid.
+ * Palabra clave: transferencia coche Madrid.
+ * Secundarias: cómo hacer la transferencia de un coche en Madrid (60/mes,
+ * la más buscada del grupo), precio transferencia coche Madrid, cuánto
+ * cuesta el traspaso de un coche en Madrid, gestoría transferencia Madrid.
+ * Por eso esta página lleva el paso a paso en la Comunidad de Madrid.
+ */
+import PaginaLocal from '../components/PaginaLocal.astro';
+import type { Pregunta } from '../components/Preguntas.astro';
+import { ANIO } from '../../site.config.mjs';
+import { TASA, eur } from '../data/tarifas';
+
+const path = '/transferencia-coche-madrid/';
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Cómo se hace la transferencia de un coche en Madrid?',
+    a: 'Firmáis el contrato de compraventa, el comprador paga el ITP del 4 % ante la Comunidad de Madrid con el modelo 620, se paga la tasa de la DGT y se presenta el cambio de titular: online, con cita en la Jefatura de Tráfico de Madrid o a través de una gestoría.',
+  },
+  {
+    q: '¿Cuánto cuesta la transferencia de un coche en Madrid?',
+    a: `La tasa de la DGT (${eur(TASA.coche)}), el ITP del 4 % sobre el mayor entre el precio y el valor de tablas de Hacienda y, si lo encargas, los honorarios de la gestoría (en Kivo, 89 €). Un coche de 6.000 € y 8 años sale por 384,70 €.`,
+  },
+  {
+    q: '¿Dónde se paga el ITP de un coche en Madrid?',
+    a: 'En la administración tributaria de la Comunidad de Madrid, si el comprador vive en la Comunidad. Se presenta el modelo 620 en 30 días hábiles desde la fecha del contrato.',
+  },
+  {
+    q: '¿Necesito cita en la Jefatura de Tráfico de Madrid?',
+    a: 'Solo si haces la transferencia en persona. Online con certificado digital o Cl@ve, o a través de una gestoría con mandato, no hay que pedir cita ni ir a Tráfico.',
+  },
+  {
+    q: '¿Hay cuota fija o exención para coches antiguos en Madrid?',
+    a: 'No. En la Comunidad de Madrid se aplica el 4 % a cualquier antigüedad. Lo que baja con los años es el valor de tablas de Hacienda, y con él el impuesto.',
+  },
+];
+---
+
+<PaginaLocal
+  {path}
+  title={`Transferencia de coche en Madrid: cómo hacerla y precio ${ANIO} | Kivo`}
+  description="Cómo hacer la transferencia de un coche en Madrid sin pedir cita en Tráfico: ITP del 4 %, tasa de la DGT y 89 € de honorarios. Firmáis desde el móvil."
+  ccaa="MAD"
+  nombre="Madrid"
+  h1="Transferencia de coche en Madrid, sin pedir cita en Tráfico"
+  lede="¿Has comprado o vendido un coche en Madrid? Cambiamos el titular en la DGT y pagamos el ITP en la <b>Comunidad de Madrid</b> por ti. Sin cita en la Jefatura y sin colas: firmáis desde el móvil."
+  respuesta="Para hacer la transferencia de un coche en Madrid hay que pagar el ITP del <b>4 %</b> ante la Comunidad de Madrid, la tasa de la DGT de 55,70 € y presentar el cambio de titular en Tráfico. Con Kivo cuesta 89 € de honorarios y no hay que pedir cita: para un coche de 6.000 € el total es 384,70 €."
+  checks={['ITP del 4 % en Madrid', 'Sin cita en la Jefatura', 'Toda la Comunidad de Madrid']}
+  calcTitulo="Calcula tu transferencia en Madrid"
+  calcPuntos={[
+    ['El 4 % de la Comunidad de Madrid', 'Sobre el mayor entre tu precio y el valor de tablas de Hacienda.'],
+    ['Lo pagamos en la Comunidad de Madrid', 'Presentamos el modelo 620 y te mandamos el justificante.'],
+    ['Cifra exacta antes de pagar', 'Te la confirmamos con la matrícula antes de liquidar el impuesto.'],
+  ]}
+  ejemplos={[
+    { titulo: 'Coche de 6.000 €', detalle: '8 años · comprador en Madrid capital', edad: 8, precio: 6000, nota: 'El ejemplo de referencia: el 4 % de 6.000 €.' },
+    { titulo: 'Coche de 18.000 €', detalle: '2 años · comprador en Alcalá de Henares', edad: 2, precio: 18000, nota: 'Coche casi nuevo: el 4 % sobre un precio alto.' },
+    { titulo: 'Coche de 3.000 €', detalle: '14 años · comprador en Móstoles', edad: 14, precio: 3000, nota: 'En Madrid no hay cuota fija por antigüedad: también el 4 %.' },
+  ]}
+  {preguntas}
+  faqTitulo="Preguntas sobre la transferencia en Madrid"
+>
+  <section id="como-en-madrid" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Paso a paso</span>
+        <h2>Cómo hacer la transferencia de un coche en Madrid</h2>
+        <p>Si el comprador vive en la Comunidad de Madrid, estos son los pasos, por este orden.</p>
+      </div>
+      <ol class="pasos-madrid">
+        <li>
+          <b>Firmar el contrato de compraventa.</b>
+          <span
+            >Con fecha y hora, matrícula y bastidor. Desde ese día corren los plazos. Qué debe llevar está
+            en la guía del <a href="/guias/contrato-compraventa-coche/">contrato de compraventa</a>.</span
+          >
+        </li>
+        <li>
+          <b>Pagar el ITP en la Comunidad de Madrid.</b>
+          <span
+            >El 4 % con el <a href="/guias/modelo-620-coche/">modelo 620</a>, ante la administración
+            tributaria de la Comunidad de Madrid, en 30 días hábiles.</span
+          >
+        </li>
+        <li>
+          <b>Pagar la tasa de la DGT.</b>
+          <span>{eur(TASA.coche)} en {ANIO} para coches y motos, igual que en el resto de España.</span>
+        </li>
+        <li>
+          <b>Presentar el cambio de titular.</b>
+          <span
+            >Online, con certificado digital o Cl@ve; en persona, con cita previa en la Jefatura de
+            Tráfico de Madrid y los originales, o a través de una gestoría con mandato.</span
+          >
+        </li>
+        <li>
+          <b>Recibir el permiso de circulación nuevo.</b>
+          <span
+            >Ya a nombre del comprador. El plazo para comunicar la transferencia es de 30 días desde el
+            contrato: los dos plazos están en la guía del <a href="/guias/plazo-transferencia-coche/"
+              >plazo de la transferencia</a
+            >.</span
+          >
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="cita-o-online" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Cita en Tráfico o online</span>
+        <h2>¿Jefatura de Tráfico de Madrid o desde el móvil?</h2>
+        <p>El trámite y su resultado son los mismos. Cambia cuánto tiempo te cuesta a ti.</p>
+      </div>
+      <div class="vs-local">
+        <div>
+          <b>Por tu cuenta</b>
+          <p>
+            Liquidas el ITP en la Comunidad de Madrid, pagas la tasa y pides cita previa en la Jefatura
+            de Tráfico de Madrid, donde basta con que vaya el comprador con el contrato firmado y los
+            originales. Online también se puede, si tenéis identificación electrónica.
+          </p>
+        </div>
+        <div class="vs-kivo">
+          <b>Con Kivo</b>
+          <p>
+            Sin cita y sin desplazamientos. Nos mandáis tres fotos, firmáis desde el móvil y nosotros
+            pagamos el impuesto y presentamos el cambio de titular, vivas en Madrid capital o en
+            cualquier municipio de la Comunidad. Lo que hace una <a href="/gestoria-transferencia-coche/"
+              >gestoría de transferencias</a
+            >, sin ir a la oficina.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</PaginaLocal>

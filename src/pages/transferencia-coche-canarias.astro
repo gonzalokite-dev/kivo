@@ -1,0 +1,169 @@
+---
+/**
+ * Transferencia de coche en Canarias.
+ * Palabra clave: transferencia coche Canarias.
+ * Secundarias: cuánto cuesta el traspaso de un coche en Canarias (30/mes),
+ * traspaso de coche precio en Canarias, traspaso coche Tenerife precio,
+ * transferencia coche Las Palmas / Gran Canaria / Fuerteventura.
+ * Es la demanda local más clara del primer keyword research, y Canarias
+ * tiene reglas propias: 5,5 % y cuota fija para coches de 10 años o más.
+ */
+import PaginaLocal from '../components/PaginaLocal.astro';
+import type { Pregunta } from '../components/Preguntas.astro';
+import { ANIO } from '../../site.config.mjs';
+import { CCAA, TASA, eur } from '../data/tarifas';
+
+const path = '/transferencia-coche-canarias/';
+const can = CCAA.find((c) => c.id === 'CAN')!;
+// Los tramos de la cuota fija salen de tarifas.ts: los mismos que usa la calculadora.
+const tramos = can.old!.t.map(([cc, cuota], i, t) => ({
+  rango: i === 0 ? `Hasta ${cc.toLocaleString('es-ES')} cc` : `De ${(t[i - 1][0] + 1).toLocaleString('es-ES')} a ${cc.toLocaleString('es-ES')} cc`,
+  cuota: eur(cuota),
+}));
+const ccMax = can.old!.t[can.old!.t.length - 1][0].toLocaleString('es-ES');
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Cuánto cuesta el traspaso de un coche en Canarias?',
+    a: `La tasa de la DGT (${eur(TASA.coche)}), el ITP de Canarias y, si lo encargas, los honorarios de la gestoría (en Kivo, 89 €). El ITP es el 5,5 % del valor del coche, o una cuota fija de 40 € a 115 € si tiene 10 años o más y hasta ${ccMax} cc.`,
+  },
+  {
+    q: '¿Qué es la cuota fija del ITP para coches de más de 10 años en Canarias?',
+    a: `Para coches de 10 años o más, Canarias no aplica el 5,5 %: cobra una cantidad fija según la cilindrada, de 40 € hasta 1.000 cc a 115 € hasta ${ccMax} cc. Por encima de esa cilindrada se vuelve al 5,5 %.`,
+  },
+  {
+    q: '¿Dónde se paga el impuesto de la transferencia en Canarias?',
+    a: 'En la Agencia Tributaria Canaria, si el comprador vive en Canarias. Se presenta el modelo 620 en 30 días hábiles desde la fecha del contrato.',
+  },
+  {
+    q: '¿Y si compro el coche a un concesionario en Canarias?',
+    a: 'Si el vendedor es un profesional, la venta lleva IGIC en la factura, el impuesto canario que sustituye al IVA, y no se paga ITP. La transferencia la suele hacer el propio concesionario.',
+  },
+  {
+    q: '¿Tengo que ir a la Jefatura de Tráfico de Las Palmas o de Santa Cruz de Tenerife?',
+    a: 'Solo si haces la transferencia en persona. Online o con una gestoría con mandato, no hace falta ir a Tráfico, vivas en la isla que vivas.',
+  },
+];
+---
+
+<PaginaLocal
+  {path}
+  title={`Transferencia de coche en Canarias: precio e ITP ${ANIO} | Kivo`}
+  description="Cuánto cuesta el traspaso de un coche en Canarias: ITP del 5,5 % o cuota fija si tiene más de 10 años, tasa de la DGT y 89 €. Online, desde cualquier isla."
+  ccaa="CAN"
+  nombre="Canarias"
+  h1="Transferencia de coche en Canarias, desde cualquier isla"
+  lede="¿Has comprado o vendido un coche en Tenerife, Gran Canaria o cualquier otra isla? Cambiamos el titular en la DGT y pagamos el ITP en la <b>Agencia Tributaria Canaria</b> por ti. Sin ir a Tráfico: firmáis desde el móvil."
+  respuesta="El traspaso de un coche en Canarias cuesta la tasa de la DGT (55,70 €), el ITP canario, que es el <b>5,5 %</b> del valor del coche o una <b>cuota fija de 40 € a 115 €</b> si tiene 10 años o más, y 89 € de honorarios si lo haces con Kivo. Un coche de 6.000 € y 8 años sale por 474,70 €."
+  checks={['ITP del 5,5 % o cuota fija', 'Todas las islas', 'Sin ir a Tráfico']}
+  calcTitulo="Calcula tu transferencia en Canarias"
+  calcPuntos={[
+    ['El 5,5 % o la cuota fija canaria', 'La calculadora aplica la cuota fija si el coche tiene 10 años o más.'],
+    ['Lo pagamos en la Agencia Tributaria Canaria', 'Presentamos el modelo 620 y te mandamos el justificante.'],
+    ['Cifra exacta antes de pagar', 'Te la confirmamos con la matrícula antes de liquidar el impuesto.'],
+  ]}
+  ejemplos={[
+    { titulo: 'Coche de 6.000 €', detalle: '8 años · comprador en Santa Cruz de Tenerife', edad: 8, precio: 6000, nota: 'Menos de 10 años: el 5,5 % de 6.000 €.' },
+    { titulo: 'Coche de 5.000 €', detalle: '12 años · 1.400 cc · comprador en Las Palmas', edad: 12, cc: 1400, precio: 5000, nota: 'Más de 10 años y hasta 1.500 cc: cuota fija de 70 €.' },
+    { titulo: 'Coche de 3.500 €', detalle: '11 años · 1.000 cc · comprador en Fuerteventura', edad: 11, cc: 1000, precio: 3500, nota: 'Más de 10 años y hasta 1.000 cc: cuota fija de 40 €.' },
+  ]}
+  {preguntas}
+  faqTitulo="Preguntas sobre la transferencia en Canarias"
+>
+  <section id="itp-canarias" style="padding-top:0">
+    <div class="wrap what">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">El impuesto en Canarias</span>
+        <h2>El ITP de un coche en Canarias: 5,5 % o cuota fija</h2>
+        <p class="big">
+          Si el comprador vive en Canarias, el impuesto de la compraventa se paga en la <b
+            >Agencia Tributaria Canaria</b
+          >, con el modelo 620 y en 30 días hábiles desde el contrato. El tipo general es el <b
+            >5,5 %</b
+          >, sobre el mayor entre el precio y el valor de tablas de Hacienda.
+        </p>
+        <p class="big" style="margin-top:12px">
+          Pero si el coche tiene <b>10 años o más</b>, Canarias cambia el porcentaje por una <b
+            >cuota fija según la cilindrada</b
+          >. Para muchos coches de segunda mano, eso hace que el
+          impuesto baje a unas decenas de euros. Cómo se presenta está en la guía del <a
+            href="/guias/modelo-620-coche/">modelo 620</a
+          >.
+        </p>
+      </div>
+      <div class="tbl cuota-fija">
+        <table>
+          <caption class="visually-hidden">Cuota fija del ITP en Canarias para coches de 10 años o más</caption>
+          <thead>
+            <tr><th scope="col">Cilindrada (10 años o más)</th><th scope="col">ITP</th></tr>
+          </thead>
+          <tbody>
+            {
+              tramos.map((t) => (
+                <tr>
+                  <th scope="row">{t.rango}</th>
+                  <td><b>{t.cuota}</b></td>
+                </tr>
+              ))
+            }
+            <tr><th scope="row">Más de {ccMax} cc</th><td><b>5,5 %</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="islas" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Todas las islas</span>
+        <h2>Transferencia en Tenerife, Gran Canaria, Lanzarote, Fuerteventura y el resto de islas</h2>
+        <p>
+          El impuesto es el mismo en todo el archipiélago. Lo que cambia es la Jefatura de Tráfico a la
+          que tendrías que ir si lo hicieras en persona: la de Las Palmas o la de Santa Cruz de Tenerife,
+          según la provincia.
+        </p>
+      </div>
+      <div class="vs-local">
+        <div>
+          <b>Por tu cuenta</b>
+          <p>
+            Liquidas el ITP en la Agencia Tributaria Canaria, pagas la tasa de la DGT y pides cita en la
+            Jefatura de Tráfico de tu provincia, o lo presentas online si tenéis certificado digital o
+            Cl@ve. Si comprador y vendedor viven en islas distintas, coordinar las firmas es lo que más
+            cuesta.
+          </p>
+        </div>
+        <div class="vs-kivo">
+          <b>Con Kivo</b>
+          <p>
+            Cada uno envía sus fotos y firma desde su móvil, aunque viváis en islas distintas. Nosotros
+            pagamos el impuesto en Canarias y presentamos el cambio de titular en la DGT. Lo que hace una <a
+              href="/gestoria-transferencia-coche/">gestoría de transferencias</a
+            >, sin coger un barco ni un avión.
+          </p>
+        </div>
+      </div>
+      <p class="src" style="text-align:center;margin-top:20px">
+        ¿Compras a un concesionario? En Canarias la venta lleva IGIC en lugar de IVA y no se paga ITP:
+        normalmente la transferencia la hace el propio vendedor.
+      </p>
+    </div>
+  </section>
+</PaginaLocal>
+
+<style>
+  .cuota-fija {
+    align-self: center;
+  }
+  .cuota-fija table {
+    min-width: 0;
+  }
+  .cuota-fija th,
+  .cuota-fija td {
+    white-space: nowrap;
+  }
+  .cuota-fija thead th:first-child {
+    width: 70%;
+  }
+</style>

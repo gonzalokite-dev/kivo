@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { SITE_URL, SITE_NAME } from '../../site.config.mjs';
 import { ORG } from '../data/seo';
+import { LOCALES } from '../data/nav';
 
 /**
  * llms.txt — guía de la web pensada para que un asistente de IA la lea en
@@ -45,6 +46,8 @@ export const GET: APIRoute = async () => {
     '',
     `- [Car ownership transfer in Spain](${abs('/en/')}): la misma oferta en inglés, para residentes extranjeros con NIE.`,
     `- [Fuentes y datos](${abs('/fuentes-y-datos/')}): de dónde sale cada cifra de la web, con enlace a la fuente oficial.`,
+    '',
+    ...LOCALES.map((l) => `- [Transferencia de coche en ${l.label}](${abs(l.href)}): precio, ITP y cómo hacerla en ${l.label}, con la calculadora de la comunidad.`),
     '',
     '## Guías',
     '',

@@ -1,0 +1,185 @@
+---
+/**
+ * Estructura común de las páginas locales (/transferencia-coche-<comunidad>/):
+ * cabecera, calculadora con la comunidad ya elegida, el contenido propio de
+ * la comunidad (slot), ejemplos calculados con sus reglas, preguntas y
+ * cierre. El texto que hace única a cada página va en la propia página: aquí
+ * solo hay la maqueta y los cálculos, para no repetir código.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Migas from './Migas.astro';
+import RespuestaDirecta from './RespuestaDirecta.astro';
+import Calculadora from './Calculadora.astro';
+import CtaBanda from './CtaBanda.astro';
+import FinalCta from './FinalCta.astro';
+import FaqLado from './FaqLado.astro';
+import Icono from './Icono.astro';
+import Preguntas, { type Pregunta } from './Preguntas.astro';
+import { CCAA, FEE, TASA, eur, pct, itpFor, type Vehiculo } from '../data/tarifas';
+import { breadcrumbLd, faqLd, localServiceLd, type Miga } from '../data/seo';
+
+export interface Ejemplo {
+  titulo: string;
+  detalle: string;
+  veh?: Vehiculo;
+  /** Años del vehículo. */
+  edad: number;
+  /** Cilindrada en cc (solo cuenta si hay cuota fija). */
+  cc?: number;
+  precio: number;
+  nota: string;
+}
+
+interface Props {
+  path: string;
+  title: string;
+  description: string;
+  /** Id de la comunidad en tarifas.ts. */
+  ccaa: string;
+  /** Nombre corto para textos: «Andalucía», «Madrid», «Canarias». */
+  nombre: string;
+  h1: string;
+  /** HTML permitido. */
+  lede: string;
+  /** HTML permitido. */
+  respuesta: string;
+  checks: [string, string, string];
+  calcTitulo: string;
+  calcPuntos: [string, string][];
+  ejemplos: Ejemplo[];
+  preguntas: Pregunta[];
+  faqTitulo: string;
+}
+
+const p = Astro.props;
+const c = CCAA.find((x) => x.id === p.ccaa)!;
+const migas: Miga[] = [
+  { label: 'Inicio', href: '/' },
+  { label: `Transferencia en ${p.nombre}`, href: p.path },
+];
+const ejemplos = p.ejemplos.map((e) => {
+  const veh = e.veh ?? 'coche';
+  const r = itpFor(c, veh, e.edad, e.cc ?? 1400, e.precio);
+  return { ...e, veh, itp: r.itp, total: FEE + TASA[veh] + r.itp };
+});
+const jsonld = [breadcrumbLd(migas), localServiceLd(c.n, p.path), faqLd(p.preguntas)];
+---
+
+<BaseLayout
+  title={p.title}
+  description={p.description}
+  path={p.path}
+  {jsonld}
+  sticky={{ cta: '#calculadora', texto: 'Calcular mi precio' }}
+>
+  <section class="phead">
+    <div class="wrap">
+      <Migas {migas} />
+      <h1>{p.h1}</h1>
+      <p class="lede" set:html={p.lede} />
+      <RespuestaDirecta texto={p.respuesta} />
+      <ul class="checks">
+        {
+          p.checks.map((t) => (
+            <li>
+              <Icono name="check" size={16} sw={3} />
+              {t}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="calcular">
+    <div class="wrap calc-layout">
+      <div>
+        <div class="sec-head">
+          <span class="eyebrow">Calculadora · {p.nombre}</span>
+          <h2>{p.calcTitulo}</h2>
+          <p>
+            Viene con {c.n} elegida: {pct(c.r)} de ITP{c.old || c.exentoOld ? ', con sus reglas para coches antiguos' : ''}.
+            Cambia el precio y la antigüedad y ves tu total.
+          </p>
+        </div>
+        <ul class="calc-points">
+          {
+            p.calcPuntos.map(([b, t]) => (
+              <li>
+                <Icono name="check" size={20} sw={3} />
+                <span>
+                  <b>{b}</b>
+                  {t}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <Calculadora ccaa={p.ccaa} titulo={`Tu transferencia en ${p.nombre}`} />
+    </div>
+  </section>
+
+  <slot />
+
+  <section id="ejemplos" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Ejemplos</span>
+        <h2>Cuánto cuesta la transferencia en {p.nombre}: tres ejemplos</h2>
+        <p>Calculados con las mismas reglas que la calculadora. La tasa de la DGT es igual en toda España.</p>
+      </div>
+      <div class="cases">
+        {
+          ejemplos.map((e) => (
+            <div class="case">
+              <div class="case-top">
+                <b>{e.titulo}</b>
+                <span>{e.detalle}</span>
+              </div>
+              <dl>
+                <div class="row"><dt>Honorarios Kivo</dt><dd>{eur(FEE)}</dd></div>
+                <div class="row"><dt>Tasa DGT</dt><dd>{eur(TASA[e.veh])}</dd></div>
+                <div class="row"><dt>Impuesto (ITP)</dt><dd>{eur(e.itp)}</dd></div>
+                <div class="tot">
+                  <dt>Total</dt>
+                  <dd>{eur(e.total)}</dd>
+                </div>
+              </dl>
+              <p class="src" style="margin:0">{e.nota}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="src" style="text-align:center;margin-top:16px">
+        El impuesto se calcula sobre el mayor entre el precio y el valor de tablas de Hacienda: te
+        confirmamos la cifra exacta con la matrícula antes de pagar nada. Todas las comunidades, en la
+        <a href="/calcular-transferencia-coche/">tabla del ITP por comunidad</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaBanda
+    titulo={`Tu transferencia en ${p.nombre}, sin ir a Tráfico`}
+    texto="Envías la solicitud y te escribimos en menos de 24 horas. Sin pagar nada ahora."
+    cta="/#solicitud"
+    etiqueta="Pedir mi transferencia"
+  />
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Preguntas</span>
+        <h2>{p.faqTitulo}</h2>
+        <FaqLado />
+      </div>
+      <Preguntas preguntas={p.preguntas} />
+    </div>
+  </section>
+
+  <FinalCta
+    titulo={`Transferencia de coche en ${p.nombre}, 100 % online`}
+    texto="89 € de honorarios. La tasa y el impuesto, al céntimo y sin margen."
+    cta="#calculadora"
+  />
+</BaseLayout>

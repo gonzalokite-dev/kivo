@@ -25,6 +25,15 @@ export const COMERCIALES: Enlace[] = [
   { href: '/vender-coche/', label: 'Si vendes tu coche' },
 ];
 
+/** Páginas locales por comunidad autónoma, por id de tarifas.ts. Salen en el
+ *  pie, en la tabla del ITP y en llms.txt. Solo las comunidades con demanda
+ *  medida en el keyword research (noviembre de 2026). */
+export const LOCALES: (Enlace & { ccaa: string })[] = [
+  { href: '/transferencia-coche-andalucia/', label: 'Andalucía', ccaa: 'AND' },
+  { href: '/transferencia-coche-madrid/', label: 'Madrid', ccaa: 'MAD' },
+  { href: '/transferencia-coche-canarias/', label: 'Canarias', ccaa: 'CAN' },
+];
+
 /** Las 4 guías principales que van en el pie. */
 export const GUIAS_PIE: Enlace[] = [
   { href: '/guias/como-hacer-transferencia-coche/', label: 'Cómo hacerla paso a paso' },

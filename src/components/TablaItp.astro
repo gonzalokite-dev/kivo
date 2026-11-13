@@ -5,6 +5,10 @@
  * HTML estático. Los botones «Calcular» ponen la comunidad en la calculadora.
  */
 import { ccaaOrdenadas, nombreTabla, pct } from '../data/tarifas';
+import { LOCALES } from '../data/nav';
+
+/** Comunidades con página propia: su nombre enlaza a ella. */
+const local = Object.fromEntries(LOCALES.map((l) => [l.ccaa, l.href]));
 
 interface Props {
   /** Si no hay calculadora en la página, se oculta la columna de acción. */
@@ -32,7 +36,7 @@ const comunidades = ccaaOrdenadas();
       {
         comunidades.map((c) => (
           <tr>
-            <th scope="row">{nombreTabla(c)}</th>
+            <th scope="row">{local[c.id] ? <a href={local[c.id]}>{nombreTabla(c)}</a> : nombreTabla(c)}</th>
             <td class="rate">{pct(c.r)}</td>
             <td class="nt">{c.nota}</td>
             {

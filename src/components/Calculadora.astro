@@ -9,7 +9,7 @@
  * Las opciones del selector de comunidad se renderizan en el build, así que
  * los tipos del ITP están en el HTML estático, no solo en el JavaScript.
  */
-import { CCAA, FEE, TASA, eur, ccaaSelector, CCAA_POR_DEFECTO, type Vehiculo } from '../data/tarifas';
+import { CCAA, FEE, TASA, eur, pct, itpFor, ccaaSelector, CCAA_POR_DEFECTO, type Vehiculo } from '../data/tarifas';
 import Icono from './Icono.astro';
 
 interface Props {
@@ -17,11 +17,15 @@ interface Props {
   veh?: Vehiculo;
   /** Título de la tarjeta. */
   titulo?: string;
+  /** Comunidad preseleccionada (id de tarifas.ts), para las páginas locales. */
+  ccaa?: string;
 }
 
-const { veh = 'coche', titulo = '¿Cuánto cuesta tu transferencia?' } = Astro.props;
+const { veh = 'coche', titulo = '¿Cuánto cuesta tu transferencia?', ccaa = CCAA_POR_DEFECTO } = Astro.props;
 const comunidades = ccaaSelector();
-const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
+const porDefecto = CCAA.find((c) => c.id === ccaa) ?? CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
+// Lo que se ve antes de que cargue el JavaScript: coche de 6.000 €, 8 años.
+const itpInicial = itpFor(porDefecto, veh, 8, 1400, 6000).itp;
 ---
 
 <div class="calc" id="calculadora" data-veh={veh} aria-live="polite">
@@ -46,7 +50,7 @@ const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
         <select id="ccaa">
           {
             comunidades.map((c) => (
-              <option value={c.id} selected={c.id === CCAA_POR_DEFECTO}>
+              <option value={c.id} selected={c.id === porDefecto.id}>
                 {c.n}
               </option>
             ))
@@ -94,16 +98,16 @@ const porDefecto = CCAA.find((c) => c.id === CCAA_POR_DEFECTO)!;
       <div class="row"><dt id="tasaLbl">Tasa DGT</dt><dd id="tasa">{eur(TASA[veh])}</dd></div>
       <div class="row">
         <dt>Impuesto de la compraventa (ITP)</dt>
-        <dd id="itp">{eur((6000 * porDefecto.r) / 100)}</dd>
+        <dd id="itp">{eur(itpInicial)}</dd>
       </div>
       <div class="total">
         <dt>Total de tu transferencia</dt>
-        <dd id="total">{eur(FEE + TASA[veh] + (6000 * porDefecto.r) / 100)}</dd>
+        <dd id="total">{eur(FEE + TASA[veh] + itpInicial)}</dd>
       </div>
     </dl>
 
     <p class="note" id="itpNote">
-      Estimación al 4 % de la Comunidad de Madrid. <b
+      Estimación al {pct(porDefecto.r)} de {porDefecto.n}. <b
         >Hacienda usa el mayor entre tu precio y el valor de tablas del modelo</b
       >; te confirmamos la cifra exacta con la matrícula antes de pagar el impuesto.
     </p>

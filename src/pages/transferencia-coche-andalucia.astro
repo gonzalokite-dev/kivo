@@ -1,0 +1,126 @@
+---
+/**
+ * Transferencia de coche en Andalucía.
+ * Palabra clave: transferencia coche Andalucía.
+ * Secundarias: cuánto cuesta la transferencia de un coche en Andalucía,
+ * precio transferencia coche Junta de Andalucía, transferencia coche
+ * Córdoba / Sevilla / Almería / Málaga.
+ * Es la comunidad con más demanda local en el keyword research (~120/mes
+ * sumando las provincias).
+ */
+import PaginaLocal from '../components/PaginaLocal.astro';
+import type { Pregunta } from '../components/Preguntas.astro';
+import { ANIO } from '../../site.config.mjs';
+import { TASA, eur } from '../data/tarifas';
+
+const path = '/transferencia-coche-andalucia/';
+
+const preguntas: Pregunta[] = [
+  {
+    q: '¿Cuánto cuesta la transferencia de un coche en Andalucía?',
+    a: `Tres conceptos: la tasa de la DGT (${eur(TASA.coche)}), el ITP de Andalucía, que es el 4 % del mayor entre el precio y el valor de tablas de Hacienda, y los honorarios si lo haces con una gestoría (en Kivo, 89 €). Para un coche de 6.000 €, unos 384,70 € en total.`,
+  },
+  {
+    q: '¿Dónde se paga el impuesto de la transferencia en Andalucía?',
+    a: 'En la Agencia Tributaria de Andalucía, si el comprador vive en Andalucía. Se presenta el modelo 620 en 30 días hábiles desde el contrato, online o en una oficina.',
+  },
+  {
+    q: '¿Hay exención o cuota fija para coches antiguos en Andalucía?',
+    a: 'No. En Andalucía se aplica el 4 % sea cual sea la antigüedad del coche. Lo que baja con los años es el valor de tablas de Hacienda, y con él la base del impuesto.',
+  },
+  {
+    q: 'Vivo en Sevilla y compro el coche en Madrid, ¿dónde pago el ITP?',
+    a: 'En Andalucía. El impuesto se paga en la comunidad donde vive el comprador, no donde está el coche ni donde vive el vendedor.',
+  },
+  {
+    q: '¿Tengo que ir a la Jefatura de Tráfico de mi provincia?',
+    a: 'Solo si lo haces en persona. Online, o con una gestoría que presente por ti con un mandato, no hace falta pedir cita ni ir a ninguna Jefatura.',
+  },
+];
+---
+
+<PaginaLocal
+  {path}
+  title={`Transferencia de coche en Andalucía: precio e ITP ${ANIO} | Kivo`}
+  description="Precio de la transferencia de un coche en Andalucía: ITP del 4 %, tasa de la DGT y 89 € de honorarios. Online, sin cita en Tráfico, en sus 8 provincias."
+  ccaa="AND"
+  nombre="Andalucía"
+  h1="Transferencia de coche en Andalucía, online y sin ir a Tráfico"
+  lede="¿Has comprado o vendido un coche en Andalucía? Cambiamos el titular en la DGT y pagamos el ITP en la <b>Agencia Tributaria de Andalucía</b> por ti. Desde Sevilla, Málaga, Córdoba o Almería, igual: firmáis desde el móvil."
+  respuesta="La transferencia de un coche en Andalucía cuesta la tasa de la DGT (55,70 €), el ITP andaluz, que es el <b>4 % del valor del coche</b> sin excepciones por antigüedad, y 89 € de honorarios si la haces con Kivo. Para un coche de 6.000 € el total es 384,70 €."
+  checks={['ITP del 4 % en Andalucía', 'Las 8 provincias', 'Sin cita en Tráfico']}
+  calcTitulo="Calcula tu transferencia en Andalucía"
+  calcPuntos={[
+    ['El 4 % andaluz, bien aplicado', 'Sobre el mayor entre tu precio y el valor de tablas de Hacienda.'],
+    ['Lo pagamos en la Agencia Tributaria de Andalucía', 'Con su justificante, para que la DGT acepte el cambio.'],
+    ['Cifra exacta antes de pagar', 'Te la confirmamos con la matrícula antes de liquidar el impuesto.'],
+  ]}
+  ejemplos={[
+    { titulo: 'Coche de 6.000 €', detalle: '8 años · comprador en Sevilla', edad: 8, precio: 6000, nota: 'El 4 % de 6.000 €, si el valor de tablas es menor que el precio.' },
+    { titulo: 'Coche de 14.000 €', detalle: '3 años · comprador en Málaga', edad: 3, precio: 14000, nota: 'Coche casi nuevo: el 4 % sobre un precio alto.' },
+    { titulo: 'Coche de 2.500 €', detalle: '16 años · comprador en Córdoba', edad: 16, precio: 2500, nota: 'En Andalucía no hay cuota fija por antigüedad: también el 4 %.' },
+  ]}
+  {preguntas}
+  faqTitulo="Preguntas sobre la transferencia en Andalucía"
+>
+  <section id="itp-andalucia" style="padding-top:0">
+    <div class="wrap what">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">El impuesto en Andalucía</span>
+        <h2>El ITP de un coche en Andalucía: 4 %, sin excepciones por antigüedad</h2>
+        <p class="big">
+          Si el comprador vive en Andalucía, el impuesto de la compraventa se paga en la <b
+            >Agencia Tributaria de Andalucía</b
+          >, con el modelo 620 y en 30 días hábiles desde el contrato. El tipo es el <b>4 %</b> y,
+          a diferencia de otras comunidades, no hay cuota fija ni exención para coches antiguos.
+        </p>
+        <p class="big" style="margin-top:12px">
+          La base es el mayor entre el precio del contrato y el <b>valor de tablas de Hacienda</b>,
+          que baja con los años de uso. Por eso un coche antiguo y barato paga poco, pero nunca cero.
+          Cómo se calcula ese valor está en la guía del <a href="/guias/valor-fiscal-coche-hacienda/"
+            >valor fiscal de un coche</a
+          >, y cómo se presenta el impuesto, en la del <a href="/guias/modelo-620-coche/">modelo 620</a>.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact"><strong>4 %</strong><span>ITP en Andalucía para coches y motos usados entre particulares.</span></div>
+        <div class="fact"><strong>{eur(TASA.coche)}</strong><span>Tasa de la DGT en {ANIO}, igual en toda España.</span></div>
+        <div class="fact"><strong>30 días</strong><span>Para comunicar la transferencia a la DGT desde el contrato.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="provincias" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Las 8 provincias</span>
+        <h2>Transferencia en Sevilla, Málaga, Córdoba, Granada, Almería, Cádiz, Huelva o Jaén</h2>
+        <p>
+          El impuesto es el mismo en toda Andalucía. Lo único que cambia de una provincia a otra es la
+          Jefatura de Tráfico a la que tendrías que ir si lo hicieras en persona.
+        </p>
+      </div>
+      <div class="vs-local">
+        <div>
+          <b>Por tu cuenta</b>
+          <p>
+            Pides cita en la Jefatura Provincial de Tráfico de tu provincia, vas con los originales y
+            antes liquidas el ITP en la Agencia Tributaria de Andalucía. Online también se puede, si los
+            dos tenéis certificado digital o Cl@ve.
+          </p>
+        </div>
+        <div class="vs-kivo">
+          <b>Con Kivo</b>
+          <p>
+            Nadie va a ninguna Jefatura. Nos mandáis tres fotos, firmáis desde el móvil y nosotros
+            pagamos el impuesto en Andalucía y presentamos el cambio de titular en la DGT, vivas en la
+            provincia que vivas. Es lo que hace una <a href="/gestoria-transferencia-coche/"
+              >gestoría de transferencias</a
+            >, pero online.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</PaginaLocal>
+

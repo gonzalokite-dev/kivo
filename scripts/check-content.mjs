@@ -47,6 +47,9 @@ const COMERCIALES = [
   '/transferencia-moto/',
   '/vender-coche/',
   '/gestoria-transferencia-coche/',
+  '/transferencia-coche-andalucia/',
+  '/transferencia-coche-madrid/',
+  '/transferencia-coche-canarias/',
 ];
 
 const errores = [];
