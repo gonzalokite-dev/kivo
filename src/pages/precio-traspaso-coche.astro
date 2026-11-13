@@ -24,7 +24,7 @@ import FaqLado from '../components/FaqLado.astro';
 const path = '/precio-traspaso-coche/';
 const title = `¿Cuánto cuesta el traspaso de un coche en ${ANIO}? | Kivo`;
 const description =
-  'Honorarios de 89 €, tasa de la DGT de 55,70 € y el ITP de tu comunidad. Calcula el total exacto del traspaso de tu coche o moto en 20 segundos.';
+  'Cuánto cuesta el traspaso o cambio de nombre de un coche: 89 € de honorarios, tasa de la DGT de 55,70 € e ITP de tu comunidad. Calcula tu total exacto.';
 
 const migas: Miga[] = [
   { label: 'Inicio', href: '/' },
@@ -96,6 +96,14 @@ const preguntas: Pregunta[] = [
     a: 'Sí. Antes de liquidar nada comprobamos en la DGT que no haya cargas, embargos ni precintos y que la ITV esté en vigor. Va incluido en los 89 €.',
   },
   {
+    q: '¿Cuánto cuesta cambiar de nombre un coche?',
+    a: 'Cambiar de nombre un coche es lo mismo que hacer el traspaso o la transferencia, así que cuesta lo mismo: la tasa de la DGT (55,70 € en coches y motos), el ITP de la comunidad del comprador y, si lo encargas, los honorarios de la gestoría. En Kivo son 89 €, IVA incluido.',
+  },
+  {
+    q: '¿Cómo calculo cuánto me sale el traspaso?',
+    a: 'Necesitas tres datos: la comunidad donde vive el comprador, el precio de compra y la antigüedad del coche. Con ellos, la calculadora de esta página te da el impuesto, la tasa y el total. El impuesto exacto depende además del valor de tablas del modelo, que confirmamos con la matrícula antes de pagar.',
+  },
+  {
     q: '¿Y si el impuesto me sale a 0 €?',
     a: 'Pasa en algunas comunidades con coches antiguos y con ciclomotores. Entonces pagas solo los 89 € de honorarios y la tasa de la DGT: 144,70 € en total para un coche o una moto.',
   },
@@ -110,13 +118,13 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>¿Cuánto cuesta el traspaso de un coche en 2026?</h1>
+      <h1>¿Cuánto cuesta el traspaso de un coche en {ANIO}?</h1>
       <p class="lede">
         Tres conceptos y ni uno más: <b>89 € de honorarios</b>, la tasa de la DGT y el impuesto de tu
         comunidad. Aquí los ves por separado y calculas tu total exacto.
       </p>
       <RespuestaDirecta
-        texto="El traspaso de un coche cuesta tres cosas: <b>89 € de honorarios</b> de Kivo, 55,70 € de tasa de la DGT y el ITP de tu comunidad (del 3 % al 6 % del valor del coche). Para un coche de 6.000 €, de 8 años, en la Comunidad de Madrid, el total es 384,70 €."
+        texto="El traspaso de un coche cuesta tres cosas: <b>89 € de honorarios</b> de Kivo, 55,70 € de tasa de la DGT y el ITP de tu comunidad (del 2 % al 6 % del valor del coche). Para un coche de 6.000 €, de 8 años, en la Comunidad de Madrid, el total es 384,70 €."
       />
     </div>
   </section>
@@ -172,7 +180,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas), serviceLd()];
       <div>
       <div class="sec-head">
         <span class="eyebrow">Calculadora</span>
-        <h2>Calcula tu total</h2>
+        <h2>Calcula cuánto te sale el traspaso</h2>
         <p>
           Elige el vehículo, la comunidad del comprador, el precio y la antigüedad. Aplicamos las
           cuotas fijas y las exenciones de cada comunidad.

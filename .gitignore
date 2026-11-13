@@ -3,3 +3,6 @@ dist/
 .astro/
 .env
 .DS_Store
+
+# Exportaciones de keyword research (Ahrefs, etc.): datos internos, no se publican.
+*.csv
