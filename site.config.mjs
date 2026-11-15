@@ -37,6 +37,7 @@ export const WHATSAPP = '34663482301'; // +34 663 48 23 01
 export const LEAD_DESTINATARIOS = [
   'gbenavides@benavidesasociados.com',
   'vbenavides@benavidesasociados.com',
+  'gblopezdeayala@gmail.com',
 ];
 
 // Mensaje que aparece ya escrito al abrir WhatsApp desde la web. El usuario
