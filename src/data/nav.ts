@@ -133,6 +133,14 @@ export const FUENTES = {
     label: 'BOE · Ley Reguladora de las Haciendas Locales (impuesto de circulación, arts. 92 a 99)',
     url: 'https://www.boe.es/buscar/act.php?id=BOE-A-2004-4214',
   },
+  dgtCitaPrevia: {
+    label: 'DGT · Solicitud de cita previa',
+    url: 'https://sede.dgt.gob.es/es/otros-tramites/cita-previa/',
+  },
+  dgtTasas: {
+    label: 'DGT · Pago y actualización de tasas',
+    url: 'https://sede.dgt.gob.es/es/otros-tramites/compra-y-actualizacion-de-tasas/',
+  },
   aeatSede: {
     label: 'AEAT · Sede electrónica',
     url: 'https://sede.agenciatributaria.gob.es/',
