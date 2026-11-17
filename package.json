@@ -11,7 +11,8 @@
     "check:content": "node scripts/check-content.mjs",
     "check:mobile": "node scripts/check-mobile.mjs",
     "check": "npm run build && npm run check:links && npm run check:content && npm run check:mobile",
-    "og:image": "node scripts/convertir-og.mjs"
+    "og:image": "node scripts/convertir-og.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.3",

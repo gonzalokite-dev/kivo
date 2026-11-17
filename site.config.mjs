@@ -14,6 +14,11 @@ export const SOCIAL = {
 };
 export const SITE_NAME = 'Kivo';
 
+// Clave de IndexNow (Bing y compañía). Es pública: se sirve en
+// public/<clave>.txt. Si la cambias, renombra también ese archivo.
+// Uso: `npm run indexnow` después de desplegar.
+export const INDEXNOW_KEY = 'd4590e225c4f4700c7bedcd98ffb87bb';
+
 // Año de las tarifas y de los títulos SEO («… en 2026»). Cámbialo en enero,
 // cuando estén actualizadas la tasa de la DGT, el ITP y la orden de precios
 // medios: se propaga a los <title> de las páginas y de las guías ({año}).

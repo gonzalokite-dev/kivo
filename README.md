@@ -36,6 +36,19 @@ node scripts/check-lighthouse.mjs                       # muestra representativa
 node scripts/check-lighthouse.mjs /vender-coche/        # rutas concretas
 ```
 
+## IndexNow (Bing)
+
+Después de cada despliegue, avisa a Bing (y a Yandex, Seznam, Naver…) de las
+URLs nuevas o cambiadas para que las rastree en minutos:
+
+```bash
+npm run indexnow                                      # todo el sitemap
+npm run indexnow -- /guias/plazo-transferencia-coche/  # rutas concretas
+```
+
+La clave está en `INDEXNOW_KEY` (`site.config.mjs`) y publicada en
+`public/<clave>.txt`; el script comprueba que esté desplegada antes de enviar.
+
 ## Configuración
 
 | Dónde | Qué |
