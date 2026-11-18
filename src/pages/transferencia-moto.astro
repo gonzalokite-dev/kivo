@@ -6,6 +6,7 @@
  * moto, traspaso moto, transferencia ciclomotor.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { ANIO } from '../../site.config.mjs';
 import Migas from '../components/Migas.astro';
 import RespuestaDirecta from '../components/RespuestaDirecta.astro';
 import Calculadora from '../components/Calculadora.astro';
@@ -19,9 +20,9 @@ import { FEE, TASA, eur } from '../data/tarifas';
 import FaqLado from '../components/FaqLado.astro';
 
 const path = '/transferencia-moto/';
-const title = 'Transferencia de moto online, sin ir a Tráfico | Kivo';
+const title = `Transferencia de moto: precio ${ANIO} y calculadora | Kivo`;
 const description =
-  'Cambio de nombre de tu moto sin ir a Tráfico: cambiamos el titular en la DGT, impuesto y papeleo por 89 €. Tasa de 55,70 €, y 27,85 € en ciclomotores.';
+  '¿Cuánto cuesta la transferencia de una moto? Calcula el total: ITP de tu comunidad, tasa DGT de 55,70 € (27,85 € ciclomotor) y 89 € sin ir a Tráfico.';
 
 const migas: Miga[] = [
   { label: 'Inicio', href: '/' },
@@ -73,7 +74,7 @@ const jsonld = [breadcrumbLd(migas), faqLd(preguntas)];
   <section class="phead">
     <div class="wrap">
       <Migas {migas} />
-      <h1>Transferencia de moto online</h1>
+      <h1>Transferencia de moto online: precio y cambio de nombre</h1>
       <p class="lede">
         Motos y ciclomotores, con los <b>mismos 89 € de honorarios</b> que un coche. Cambiamos el
         titular en la DGT y pagamos el impuesto por ti.
