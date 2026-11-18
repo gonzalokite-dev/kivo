@@ -48,6 +48,8 @@ npm run indexnow -- /guias/plazo-transferencia-coche/  # rutas concretas
 
 La clave está en `INDEXNOW_KEY` (`site.config.mjs`) y publicada en
 `public/<clave>.txt`; el script comprueba que esté desplegada antes de enviar.
+En Git Bash, pasa las rutas sin la barra inicial (`guias/x/`): si no, las
+convierte en rutas de Windows.
 
 ## Configuración
 

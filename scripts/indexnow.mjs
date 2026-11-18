@@ -44,6 +44,14 @@ async function main() {
 
   // 2. URLs: las pasadas como argumento o todas las del sitemap.
   const args = process.argv.slice(2);
+  // Git Bash convierte «/guias/x/» en «C:/Program Files/Git/guias/x/».
+  const mal = args.find((a) => /^[A-Za-z]:[\\/]/.test(a));
+  if (mal) {
+    return fallar(
+      `«${mal}» parece una ruta de Windows: Git Bash ha convertido la URL.\n` +
+        'Pásala sin la barra inicial (guias/x/) o lanza el comando desde PowerShell.',
+    );
+  }
   const urlList = args.length
     ? args.map((a) => new URL(a, SITE_URL).href)
     : await urlsDelSitemap(`${SITE_URL}/sitemap-index.xml`);
